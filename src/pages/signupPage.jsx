@@ -10,27 +10,30 @@ import {
   IconButton,
 } from '@mui/material';
 import {Visibility, VisibilityOff} from '@mui/icons-material';
-import {colors} from '../constants/colors';
+import {colors, palette} from '../constants/colors';
 
 function LoginPage() {
   const [values, setValues] = useState({
+    fullname: '',
     email: '',
     password: '',
+    confirmPassword: '',
   });
+
+  const handleChange = (event) => {
+    const {name, value} = event.target;
+    setValues({...values, [name]: value});
+  };
+
   const [showPassword, setShowPassword] = useState(false);
-  // const [tab, setTab] = useState('mentor');
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   const handleTogglePassword = () => {
     setShowPassword(!showPassword);
   };
 
-  // const handleTabChange = (selectedTab) => {
-  //   setTab(selectedTab);
-  // };
-
-  const handleChange = (event) => {
-    const {name, value} = event.target;
-    setValues({...values, [name]: value});
+  const handleToggleConfirmPassword = () => {
+    setShowConfirmPassword(!showConfirmPassword);
   };
 
   const handleSubmit = (event) => {
@@ -43,34 +46,26 @@ function LoginPage() {
       <div className="brand-logo">
         {/* <img src={loginPic} alt="login picture" /> */}
       </div>
-      <div className="login-container">
+      <div className="signup-container">
         <section>
           <form
-            className="login-form"
+            className="signup-form"
             onSubmit={(event) => handleSubmit(event)}
           >
-            <h1>Đăng nhập</h1>
-            {/* <Tabs>
-              <a
-                className="tab"
-                onClick={() => handleTabChange('mentee')}
-                isActive={tab === 'mentee'}
-              >
-                I'm a mentee
-              </a>
-              <a
-                className="tab"
-                onClick={() => handleTabChange('mentor')}
-                isActive={tab === 'mentor'}
-              >
-                I'm a mentor
-              </a>
-            </Tabs> */}
+            <h1>Đăng ký làm mentee</h1>
+            <TextField
+              name="fullName"
+              onChange={(event) => handleChange(event)}
+              autoComplete="off"
+              label="Họ và tên"
+              variant="outlined"
+              sx={{width: '100%', fontSize: '1rem'}}
+            />
             <TextField
               name="email"
               onChange={(event) => handleChange(event)}
               autoComplete="off"
-              label="Tên đăng nhập hoặc email"
+              label="Email"
               variant="outlined"
               sx={{width: '100%', fontSize: '1rem'}}
             />
@@ -97,16 +92,36 @@ function LoginPage() {
                 label="Mật khẩu"
               />
             </FormControl>
-            <button className="login-btn" type="submit">
-              Đăng nhập
+            <FormControl variant="outlined">
+              <InputLabel htmlFor="outlined-adornment-password">
+                Nhập lại mật khẩu
+              </InputLabel>
+              <OutlinedInput
+                name="confirmPassword"
+                onChange={(event) => handleChange(event)}
+                type={showConfirmPassword ? 'text' : 'password'}
+                endAdornment={
+                  <InputAdornment position="end">
+                    <IconButton
+                      aria-label="toggle password visibility"
+                      onClick={handleToggleConfirmPassword}
+                      onMouseDown={(e) => e.preventDefault()}
+                      edge="end"
+                    >
+                      {showConfirmPassword ? <Visibility /> : <VisibilityOff />}
+                    </IconButton>
+                  </InputAdornment>
+                }
+                label="Nhập lại mật khẩu"
+              />
+            </FormControl>
+            <button className="signup-btn" type="submit">
+              Đăng ký
             </button>
             <span>
-              <Link to="/forgot-password">Quên mật khẩu?</Link>
-            </span>
-            <span>
-              Chưa có tài khoản?
-              <br /> <Link to="/auth/signup">Đăng kí làm mentee</Link> hoặc{' '}
-              <Link to="/mentor">Nộp đơn làm mentor</Link>
+              Đã có tài khoản? <Link to="/auth/login">Đăng nhập</Link>
+              <br />
+              Muốn trở thành mentor? <Link to="/mentor">Nộp đơn ngay</Link>
             </span>
           </form>
         </section>
@@ -123,18 +138,18 @@ const Container = styled.div`
     width: 33%;
     background-color: ${colors.ui.secondary};
   }
-  .login-container {
+  .signup-container {
     background-color: ${colors.ui.primary};
     width: 67%;
     section {
       padding: 4rem 2rem;
-      .login-form {
+      .signup-form {
         max-width: 24rem;
         margin: auto;
         display: flex;
         flex-direction: column;
         gap: 1.2rem;
-        .login-btn {
+        .signup-btn {
           background-color: ${colors.button.primary};
           color: white;
           border: none;
@@ -174,29 +189,5 @@ const Container = styled.div`
     }
   }
 `;
-
-// const Tabs = styled.div`
-//   border-bottom: 2px solid #e5e7eb;
-//   display: flex;
-//   justify-content: space-between;
-//   margin-bottom: 1rem;
-//   .tab {
-//     width: 50%;
-//     display: flex;
-//     justify-content: center;
-//     padding: 0.5rem 1rem;
-//     font-size: 1rem;
-//     cursor: pointer;
-//     text-decoration: none;
-//     color: ${(props) => (props.isActive ? '#000' : '#6B7280')};
-//     border-bottom: ${(props) =>
-//       props.isActive ? '2px solid #06B6D4' : 'none'};
-//     transition: color 0.2s, border-bottom 0.2s;
-//     &:hover {
-//       color: #1e3a8a;
-//       border-bottom: 2px solid #1e3a8a;
-//     }
-//   }
-// `;
 
 export default LoginPage;
