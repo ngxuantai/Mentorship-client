@@ -1,8 +1,9 @@
-import React from 'react';
 import {BrowserRouter as Router, Routes, Route} from 'react-router-dom';
+import React from 'react';
+import HomePage from './pages/HomePage';
 import Login from './pages/LoginPage';
 import SignUp from './pages/SignupPage';
-import HomePage from './pages/HomePage/HomePage';
+import Search from './pages/SearchPage';
 
 function App() {
   return (
@@ -11,6 +12,7 @@ function App() {
         <Route path="/" element={<HomePage />} />
         <Route path="/auth/login" element={<Login />} />
         <Route path="/auth/signup" element={<SignUp />} />
+        <Route path="/search" element={<Search />} />
       </Routes>
     </Router>
   );
