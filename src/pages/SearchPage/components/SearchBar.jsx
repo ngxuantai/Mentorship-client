@@ -9,7 +9,7 @@ import {
 import "../css/SearchBar.css";
 export default function SearchBar() {
   return (
-    <Container className="mt-5">
+    <Container style={{}} className="mt-5">
       <Row>
         <Col sm={4}>
           <Form className="d-flex">
