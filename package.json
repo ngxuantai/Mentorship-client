@@ -23,8 +23,14 @@
     "react-dom": "^18.2.0",
     "react-icons": "^4.11.0",
     "react-router-dom": "^6.16.0",
+<<<<<<< HEAD
+=======
+    "react-scripts": "5.0.1",
+    "react-slick": "^0.29.0",
+>>>>>>> 28e48b880c2a64e0e5d09842d9f5697729c59fb8
     "react-tabs": "^6.0.2",
     "redux": "^4.2.1",
+    "slick-carousel": "^1.8.1",
     "styled-components": "^6.1.0",
     "vite": "^4.5.0",
     "vite-plugin-svgr": "^4.1.0",
