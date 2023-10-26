@@ -5,7 +5,7 @@ import react from "@vitejs/plugin-react-swc";
 export default defineConfig({
   base: "/",
   esbuild: {
-    loader: { js: "jsx" },
+    loader: "",
 
     include: [
       // Add these lines to allow all .js files to contain JSX

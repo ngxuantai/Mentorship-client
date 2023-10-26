@@ -4,7 +4,7 @@ import Login from "./pages/loginPage";
 // import SignUp from "./pages/signupPage";
 import Search from "./pages/SearchPage";
 import DashBoard from "./pages/Mentee/DashBoard";
-
+import HomePage from "./pages/HomePage";
 function App() {
   return (
     <Router>
