@@ -56,11 +56,11 @@ function MentorItem() {
             <SkillTag>.NET</SkillTag>
           </Col>
           <Button
-            variant="secondary" // Chọn biến thể màu xám
+            variant="secondary"
             style={{
-              fontWeight: "bold", // Độ đậm của chữ
-              borderRadius: "4px", // Độ cong của góc
-              textAlign: "center", // Căn giữa theo chiều ngang
+              fontWeight: "bold",
+              borderRadius: "4px",
+              textAlign: "center",
               alignSelf: "flex-start",
             }}
           >

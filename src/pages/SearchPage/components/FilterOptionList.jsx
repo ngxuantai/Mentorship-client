@@ -7,13 +7,12 @@ import {
   Col,
   Button,
 } from "react-bootstrap";
-import "../css/SearchBar.css";
 import { useRef, useState } from "react";
 import { useEffect } from "react";
 import { AiFillCloseCircle } from "react-icons/ai";
 import FilterBar from "./FilterBar";
 
-export default function SearchBar({}) {
+export default function FilterOptionList({ forwardRef }) {
   const [searchInput, setSearchInput] = useState("");
 
   const timeoutRef = useRef();
@@ -45,39 +44,39 @@ export default function SearchBar({}) {
     console.log("clicked");
   };
   return (
-    <Container style={{}}>
+    <Container
+      onClick={(e) => e.stopPropagation()}
+      ref={forwardRef}
+      style={{
+        minWidth: 200,
+        position: "absolute",
+        maxHeight: 600,
+        top: "100%",
+        border: "1px solid rgb(236, 236, 236)",
+        borderRadius: 4,
+        marginTop: 10,
+        left: 0,
+        padding: 12,
+        backgroundColor: "white",
+      }}
+    >
       <Row>
-        <Col sm={4}>
-          <Form className="d-flex">
-            <InputGroup>
-              <FormControl
-                onChange={handleSearchInputChange}
-                type="search"
-                value={searchInput}
-                placeholder="Search"
-                className="me-2 search-input"
-              />
-            </InputGroup>
-          </Form>
-        </Col>
+        <Form className="d-flex">
+          <InputGroup>
+            <FormControl
+              onChange={handleSearchInputChange}
+              type="search"
+              value={searchInput}
+              placeholder="Search"
+              className="me-2 search-input"
+            />
+          </InputGroup>
+        </Form>
       </Row>
-
-      <FilterBar></FilterBar>
-      <div
-        style={{
-          marginTop: 8,
-          display: "inline-flex",
-          flexDirection: "row",
-          alignItems: "center",
-          justifyContent: "start",
-          width: "auto",
-        }}
-        className="button-effect"
-        onClick={clearAllFilters}
-      >
-        <AiFillCloseCircle fontSize={24}></AiFillCloseCircle>
-        <p style={{ margin: 0, marginLeft: 8 }}>Reset all filters</p>
-      </div>
+      <Row style={{ display: "inline-flex" }}>
+        <p style={{ backgroundColor: "gray" }}>Skill 1 </p>
+        <p>Skill 2 </p>
+      </Row>
     </Container>
   );
 }
