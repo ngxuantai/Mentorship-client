@@ -117,9 +117,14 @@ function Profile() {
             </Col>
             <Col></Col>
           </Row>
-          <Row>
-            <h3>What mentees say</h3>
-            <Comment></Comment>
+          <hr style={{position: 'relative', zIndex: '-1'}}/>
+          <Row sm={4} className='d-flex justify-content-center'>
+            <Col sm={6}>
+              <h3>What mentees say</h3>
+              <Comment></Comment>
+            </Col>
+            <Col></Col>
+            
           </Row>
         </div>
 
