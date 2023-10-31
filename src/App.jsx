@@ -5,6 +5,8 @@ import Login from "./pages/loginPage";
 import Search from "./pages/SearchPage";
 import DashBoard from "./pages/Mentee/DashBoard";
 import HomePage from "./pages/HomePage";
+import InformationForm from "./pages/Mentee/ApplyProcess/InformationForm";
+import ApplyProcess from "./pages/Mentee/ApplyProcess/";
 function App() {
   return (
     <Router>
@@ -14,6 +16,8 @@ function App() {
         {/* <Route path="/auth/signup" element={<SignUp />} /> */}
         <Route path="/search" element={<Search />} />
         <Route path="/mentee" element={<DashBoard />} />
+        <Route path="/mentee1" element={<InformationForm />} />
+        <Route path="/mentee2" element={<ApplyProcess />} />
       </Routes>
     </Router>
   );
