@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled from 'styled-components';
 export const SkillTag = styled.div`
   border-radius: 12px;
   margin: 4px 4px;

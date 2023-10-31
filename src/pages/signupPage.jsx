@@ -10,9 +10,9 @@ import {
   IconButton,
 } from '@mui/material';
 import {Visibility, VisibilityOff} from '@mui/icons-material';
-import {colors, palette} from '../constants/colors';
+import {colors} from '../constants/colors';
 
-function LoginPage() {
+function SignupPage() {
   const [values, setValues] = useState({
     fullname: '',
     email: '',
@@ -54,7 +54,7 @@ function LoginPage() {
           >
             <h1>Đăng ký làm mentee</h1>
             <TextField
-              name="fullName"
+              name="fullname"
               onChange={(event) => handleChange(event)}
               autoComplete="off"
               label="Họ và tên"
@@ -181,13 +181,13 @@ const Container = styled.div`
       display: none;
     }
 
-    .login-container {
+    .signup-container {
       width: 100%;
-      .login-form {
+      .signup-form {
         max-width: 24rem;
       }
     }
   }
 `;
 
-export default LoginPage;
+export default SignupPage;

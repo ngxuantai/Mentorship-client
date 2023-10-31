@@ -1,20 +1,20 @@
-import { defineConfig } from "vite";
-import react from "@vitejs/plugin-react-swc";
+import {defineConfig} from 'vite';
+import react from '@vitejs/plugin-react-swc';
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  base: "/",
+  base: '/',
   esbuild: {
-    loader: "",
+    loader: '',
 
     include: [
       // Add these lines to allow all .js files to contain JSX
-      "src/**/*.js",
-      "node_modules/**/*.js",
+      'src/**/*.js',
+      'node_modules/**/*.js',
 
       // Add these lines to allow all .ts files to contain JSX
-      "src/**/*.ts",
-      "node_modules/**/*.ts",
+      'src/**/*.ts',
+      'node_modules/**/*.ts',
     ],
   },
   plugins: [react()],
