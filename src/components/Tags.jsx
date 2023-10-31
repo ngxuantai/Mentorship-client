@@ -1,7 +1,7 @@
 import styled from "styled-components";
 export const SkillTag = styled.div`
   border-radius: 12px;
-  margin: 0px 4px;
+  margin: 4px 4px;
   font-weight: bold;
 
   display: inline-block;
