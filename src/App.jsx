@@ -7,6 +7,8 @@ import DashBoard from './pages/Mentee/DashBoard';
 import HomePage from './pages/HomePage';
 import Settings from './pages/Mentee/Settings';
 import Profile from './pages/ProfilePage';
+import InformationForm from './pages/Mentee/ApplyProcess/InformationForm';
+import ApplyProcess from './pages/Mentee/ApplyProcess/';
 function App() {
   return (
     <Router>
@@ -18,6 +20,8 @@ function App() {
         <Route path="/mentee" element={<DashBoard />} />
         <Route path="/profile" element={<Profile />} />
         <Route path="/settings" element={<Settings />} />
+        <Route path="/mentee1" element={<InformationForm />} />
+        <Route path="/mentee2" element={<ApplyProcess />} />
       </Routes>
     </Router>
   );

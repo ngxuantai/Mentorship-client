@@ -11,29 +11,22 @@ import { useRef, useState } from "react";
 import { useEffect } from "react";
 import { BsChevronDown } from "react-icons/bs";
 
-export default function FilterOptionItem({}) {
+export default function FilterOptionItem({ onItemClick }) {
   return (
     <div
+      onClick={() => onItemClick("Skill")}
       style={{
-        marginRight: 24,
         display: "inline-flex",
         flexDirection: "row",
         alignItems: "center",
         padding: 10,
-        paddingRight: 18,
-        paddingLeft: 18,
-        borderRadius: 24,
         justifyContent: "start",
-        border: "1px solid gray",
-        width: "auto",
+        width: "100%",
       }}
+      onMouseOver={(e) => e.stopPropagation()}
       className="button-effect"
-      onClick={null}
     >
-      <p style={{ margin: 0, marginRight: 8, fontWeight: "bold" }}>
-        Filter name
-      </p>
-      <BsChevronDown fontSize={16}></BsChevronDown>
+      <p style={{ margin: 0 }}>Skill </p>
     </div>
   );
 }

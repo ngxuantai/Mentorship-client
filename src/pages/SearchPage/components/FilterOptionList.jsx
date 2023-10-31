@@ -11,8 +11,14 @@ import { useRef, useState } from "react";
 import { useEffect } from "react";
 import { AiFillCloseCircle } from "react-icons/ai";
 import FilterBar from "./FilterBar";
+import FilterOptionItem from "./FilterOptionItem";
 
-export default function FilterOptionList({ forwardRef }) {
+export default function FilterOptionList({
+  forwardRef,
+  setShowOptions,
+  setSelectedItem,
+  setOptionListHovered,
+}) {
   const [searchInput, setSearchInput] = useState("");
 
   const timeoutRef = useRef();
@@ -43,9 +49,19 @@ export default function FilterOptionList({ forwardRef }) {
   const clearAllFilters = () => {
     console.log("clicked");
   };
+  const onItemClick = (item) => {
+    setSelectedItem(item);
+    setShowOptions(false);
+  };
   return (
     <Container
       onClick={(e) => e.stopPropagation()}
+      onMouseEnter={() => {
+        setOptionListHovered(true);
+      }}
+      onMouseLeave={() => {
+        setOptionListHovered(false);
+      }}
       ref={forwardRef}
       style={{
         minWidth: 200,
@@ -68,13 +84,13 @@ export default function FilterOptionList({ forwardRef }) {
               type="search"
               value={searchInput}
               placeholder="Search"
-              className="me-2 search-input"
+              className="search-input"
             />
           </InputGroup>
         </Form>
       </Row>
-      <Row style={{ display: "inline-flex" }}>
-        <p style={{ backgroundColor: "gray" }}>Skill 1 </p>
+      <Row style={{ display: "flex", marginTop: 12 }}>
+        <FilterOptionItem onItemClick={onItemClick}></FilterOptionItem>
         <p>Skill 2 </p>
       </Row>
     </Container>

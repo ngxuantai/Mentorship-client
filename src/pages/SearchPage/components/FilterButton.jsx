@@ -14,7 +14,9 @@ import FilterOptionList from "./FilterOptionList";
 
 export default function FilterButton({}) {
   const [searchInput, setSearchInput] = useState("");
+  const [selectedItem, setSelectedItem] = useState("Select filter");
   const [showOptions, setShowOptions] = useState(false);
+  const [isOptionListHovered, setOptionListHovered] = useState(false);
   const filterOptionListRef = useRef(null);
   const timeoutRef = useRef();
   useEffect(() => {
@@ -50,7 +52,6 @@ export default function FilterButton({}) {
   };
 
   const closeOptionsOnClickOutside = (e) => {
-    console.log("filterOptionListRef", e.target, filterOptionListRef.current);
     if (
       filterOptionListRef.current &&
       !filterOptionListRef.current.contains(e.target)
@@ -67,6 +68,7 @@ export default function FilterButton({}) {
   return (
     <div
       style={{
+        minWidth: 150,
         marginRight: 24,
         display: "inline-flex",
         flexDirection: "row",
@@ -76,19 +78,24 @@ export default function FilterButton({}) {
         paddingLeft: 18,
         position: "relative",
         borderRadius: 24,
-        justifyContent: "start",
+        justifyContent: "space-between",
         border: "1px solid gray",
         width: "auto",
       }}
-      className="button-effect"
+      className={`${!isOptionListHovered ? "button-effect" : ""}`}
       onClick={showMenuOption}
     >
       <p style={{ margin: 0, marginRight: 8, fontWeight: "bold" }}>
-        Filter name
+        {selectedItem}
       </p>
       <BsChevronDown fontSize={16}></BsChevronDown>
       {showOptions && (
-        <FilterOptionList forwardRef={filterOptionListRef}> </FilterOptionList>
+        <FilterOptionList
+          setSelectedItem={setSelectedItem}
+          setShowOptions={setShowOptions}
+          setOptionListHovered={setOptionListHovered}
+          forwardRef={filterOptionListRef}
+        ></FilterOptionList>
       )}
     </div>
   );
