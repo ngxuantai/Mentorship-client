@@ -3,7 +3,7 @@ import styled from 'styled-components'
 import { Row, Col, Container, Button } from "react-bootstrap";
 import { List, ListItem, ListItemIcon, ListItemText } from '@mui/material';
 import { Call, Message, WatchLater, Work, Check, Whatshot } from '@mui/icons-material';
-import {colors, palette} from './../../../constants/colors';
+import {colors} from './../../../constants/colors';
 
 const StyledContainer = styled(Container)`
   border: 1px solid black;

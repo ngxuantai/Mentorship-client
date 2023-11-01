@@ -5,6 +5,9 @@ import Login from "./pages/loginPage";
 import Search from "./pages/SearchPage";
 import DashBoard from "./pages/Mentee/DashBoard";
 import HomePage from "./pages/HomePage";
+import Profile from "./pages/ProfilePage/Profile";
+import Mentor from "./pages/MentorPage";
+
 function App() {
   return (
     <Router>
@@ -12,8 +15,11 @@ function App() {
         <Route path="/" element={<HomePage />} />
         <Route path="/auth/login" element={<Login />} />
         {/* <Route path="/auth/signup" element={<SignUp />} /> */}
-        <Route path="/search" element={<Search />} />
+        <Route path="/search" element={<Search />} /> 
         <Route path="/mentee" element={<DashBoard />} />
+        <Route path="/profile" element={<Profile />} />
+        <Route path="/mentor" element={<Mentor />} />
+        
       </Routes>
     </Router>
   );

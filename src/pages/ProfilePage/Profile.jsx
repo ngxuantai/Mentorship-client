@@ -2,7 +2,7 @@ import React from 'react'
 import styled from 'styled-components'
 import PlanItem from './components/PlanItem'
 import Comment from './components/Comment';
-import {colors, palette} from './../../constants/colors';
+import {colors} from './../../constants/colors';
 import { Row, Col, Button, Badge } from "react-bootstrap";
 import { List, ListItem, ListItemIcon, ListItemText } from '@mui/material';
 import { Place, Star, WatchLater,Task, PlayArrow, Favorite, Bolt } from '@mui/icons-material';
