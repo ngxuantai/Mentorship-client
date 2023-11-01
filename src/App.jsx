@@ -9,7 +9,6 @@ import Settings from './pages/Mentee/Settings';
 import Profile from './pages/ProfilePage';
 import InformationForm from './pages/Mentee/ApplyProcess/InformationForm';
 import ApplyProcess from './pages/Mentee/ApplyProcess/';
-import Profile from "./pages/ProfilePage/Profile";
 import Mentor from "./pages/MentorPage";
 
 function App() {
@@ -25,7 +24,6 @@ function App() {
         <Route path="/settings" element={<Settings />} />
         <Route path="/mentee1" element={<InformationForm />} />
         <Route path="/mentee2" element={<ApplyProcess />} />
-        <Route path="/profile" element={<Profile />} />
         <Route path="/mentor" element={<Mentor />} />
         
       </Routes>
