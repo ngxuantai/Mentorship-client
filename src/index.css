@@ -17,6 +17,9 @@ code {
   transition: background-color 0.4s;
 }
 
+p {
+  margin: 0;
+}
 .button-effect:hover {
   background-color: rgb(236, 236, 236);
 }
