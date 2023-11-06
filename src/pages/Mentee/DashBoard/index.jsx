@@ -1,9 +1,9 @@
-import React, { useState } from "react";
-import styled from "styled-components";
-import { Link } from "react-router-dom";
-import { Row, Col, Container, Button } from "react-bootstrap";
-import Header from "./components/Header";
-import RecommendList from "./components/RecommendList";
+import React, {useState, useEffect} from 'react';
+import styled from 'styled-components';
+import {Link, useNavigate} from 'react-router-dom';
+import {Row, Col, Container, Button} from 'react-bootstrap';
+import Header from './components/Header';
+import RecommendList from './components/RecommendList';
 // import { CenteredRow, CenteredCol } from "@src/components/sharedComponents";
 const StyledContainer = styled.div`
   padding: 0;
@@ -30,30 +30,74 @@ const Content = styled.div`
   height: 500;
 `;
 function DashBoard() {
+  const navigate = useNavigate();
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    if (!token) {
+      navigate('/');
+    }
+    setIsLoading(false);
+  }, []);
+
   return (
-    <StyledContainer fluid>
-      <Header></Header>
+    <>
+      {isLoading ? (
+        <div></div>
+      ) : (
+        <StyledContainer fluid>
+          <Header></Header>
 
-      <Content>
-        <h2>Welcome, Khánh! Browse</h2>
-        <p>
-          Start connecting with mentors and get ready to take your career to the
-          next level!
-        </p>
-        <Button
-          variant="secondary"
-          style={{
-            fontWeight: "bold",
-            borderRadius: "4px",
-            textAlign: "center",
-          }}
-        >
-          Find Mentor
-        </Button>
-      </Content>
+          <Content>
+            <h2>Welcome, Khánh! Browse</h2>
+            <p>
+              Start connecting with mentors and get ready to take your career to
+              the next level!
+            </p>
+            <Button
+              variant="secondary"
+              style={{
+                fontWeight: 'bold',
+                borderRadius: '4px',
+                textAlign: 'center',
+              }}
+            >
+              Find Mentor
+            </Button>
+          </Content>
 
-      <RecommendList></RecommendList>
-    </StyledContainer>
+          <RecommendList></RecommendList>
+        </StyledContainer>
+      )}
+    </>
+    //   {isLoading ? (<div></div>) :(
+    //     <>
+    //     <StyledContainer fluid>
+    //     <Header></Header>
+
+    //     <Content>
+    //       <h2>Welcome, Khánh! Browse</h2>
+    //       <p>
+    //         Start connecting with mentors and get ready to take your career to the
+    //         next level!
+    //       </p>
+    //       <Button
+    //         variant="secondary"
+    //         style={{
+    //           fontWeight: 'bold',
+    //           borderRadius: '4px',
+    //           textAlign: 'center',
+    //         }}
+    //       >
+    //         Find Mentor
+    //       </Button>
+    //     </Content>
+
+    //     <RecommendList></RecommendList>
+    //   </StyledContainer></>
+    //   )
+    // }
   );
 }
 

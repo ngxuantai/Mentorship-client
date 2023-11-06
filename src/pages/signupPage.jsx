@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import styled from 'styled-components';
-import {Link} from 'react-router-dom';
+import {Link, useNavigate} from 'react-router-dom';
 import {
   TextField,
   FormControl,
@@ -11,8 +11,10 @@ import {
 } from '@mui/material';
 import {Visibility, VisibilityOff} from '@mui/icons-material';
 import {colors} from '../constants/colors';
+import useAuthStore from '../store/authStore';
 
 function SignupPage() {
+  const navigate = useNavigate();
   const [values, setValues] = useState({
     fullname: '',
     email: '',
@@ -38,7 +40,10 @@ function SignupPage() {
 
   const handleSubmit = (event) => {
     event.preventDefault();
+    setAuth(values);
+    localStorage.setItem('token', '123456');
     console.log(values);
+    navigate('/mentee');
   };
 
   return (

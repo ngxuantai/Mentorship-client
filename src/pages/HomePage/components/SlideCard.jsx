@@ -7,10 +7,10 @@ import 'slick-carousel/slick/slick-theme.css';
 export default function SlideCard() {
   const settings = {
     infinite: true,
-    speed: 1000,
+    speed: 3000,
     slidesToShow: 6,
     spaceBetween: 20,
-    slidesToScroll: 6,
+    slidesToScroll: 1,
     autoplay: true,
     autoplaySpeed: 0,
     centerMode: true,

@@ -1,7 +1,7 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {BrowserRouter as Router, Routes, Route} from 'react-router-dom';
-import Login from './pages/loginPage';
-import SignUp from './pages/signupPage';
+import Login from './pages/LoginPage';
+import SignUp from './pages/SignupPage';
 import Search from './pages/SearchPage';
 import DashBoard from './pages/Mentee/DashBoard';
 import HomePage from './pages/HomePage';
@@ -9,7 +9,18 @@ import Settings from './pages/Mentee/Settings';
 import Profile from './pages/ProfilePage';
 import InformationForm from './pages/Mentee/ApplyProcess/InformationForm';
 import ApplyProcess from './pages/Mentee/ApplyProcess/';
+import useAuthStore from '../src/store/authStore';
+
 function App() {
+  const setAuth = useAuthStore.getState().login;
+
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    if (token) {
+      setAuth(token);
+    }
+  }, []);
+
   return (
     <Router>
       <Routes>
