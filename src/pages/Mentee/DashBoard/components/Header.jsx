@@ -21,9 +21,10 @@ function Header() {
             style={{ alignItems: "center", fontWeight: "bold", height: 50 }}
           >
             <Nav.Link href="#home">Home</Nav.Link>
-            <Nav.Link href="#1">Inquiries</Nav.Link>
-            <Nav.Link href="#2">Wishlist</Nav.Link>
-            <Nav.Link href="#3">Settings</Nav.Link>
+            <Nav.Link href="/mentee/applications">Applications</Nav.Link>
+            <Nav.Link href="/mentee/inquires">Inquiries</Nav.Link>
+            <Nav.Link href="/mentee/wishlist">Wishlist</Nav.Link>
+            <Nav.Link href="/settings">Settings</Nav.Link>
           </Nav>
           <Nav
             className="ml-auto"

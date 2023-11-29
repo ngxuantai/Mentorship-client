@@ -11,6 +11,9 @@ import InformationForm from './pages/Mentee/ApplyProcess/InformationForm';
 import ApplyProcess from './pages/Mentee/ApplyProcess/';
 import useAuthStore from '../src/store/authStore';
 import Mentor from './pages/MentorPage';
+import Applications from './pages/Mentee/Applications'
+import Inquires from './pages/Mentee/Inquires'
+import Wishlist from './pages/Mentee/Wishlist';
 
 function App() {
   const setAuth = useAuthStore.getState().login;
@@ -35,6 +38,9 @@ function App() {
         <Route path="/mentee1" element={<InformationForm />} />
         <Route path="/mentee2" element={<ApplyProcess />} />
         <Route path="/mentor" element={<Mentor />} />
+        <Route path="/mentee/applications" element={<Applications />} />
+        <Route path="/mentee/inquires" element={<Inquires />} />
+        <Route path="/mentee/wishlist" element={<Wishlist />} />
       </Routes>
     </Router>
   );
