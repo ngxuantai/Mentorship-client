@@ -1,26 +1,26 @@
-import React, {useEffect} from 'react';
-import {BrowserRouter as Router, Routes, Route} from 'react-router-dom';
-import Login from './pages/LoginPage';
-import SignUp from './pages/SignupPage';
-import Search from './pages/SearchPage';
-import DashBoard from './pages/Mentee/DashBoard';
-import HomePage from './pages/HomePage';
-import Settings from './pages/Mentee/Settings';
-import Profile from './pages/ProfilePage';
-import InformationForm from './pages/Mentee/ApplyProcess/InformationForm';
-import ApplyProcess from './pages/Mentee/ApplyProcess/';
-import useAuthStore from '../src/store/authStore';
-import Mentor from './pages/Mentor/MentorPage';
-import ApplyMentor from './pages/Mentor/ApplyMentor';
-import Applications from './pages/Mentee/Applications'
-import Inquires from './pages/Mentee/Inquires'
-import Wishlist from './pages/Mentee/Wishlist';
+import { useEffect } from "react";
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import useAuthStore from "../src/store/authStore";
+import HomePage from "./pages/HomePage";
+import Login from "./pages/LoginPage";
+import Applications from "./pages/Mentee/Applications";
+import ApplyProcess from "./pages/Mentee/ApplyProcess/";
+import InformationForm from "./pages/Mentee/ApplyProcess/InformationForm";
+import DashBoard from "./pages/Mentee/DashBoard";
+import Inquires from "./pages/Mentee/Inquires";
+import Settings from "./pages/Mentee/Settings";
+import Wishlist from "./pages/Mentee/Wishlist";
+import ApplyMentor from "./pages/Mentor/ApplyMentor";
+import Mentor from "./pages/Mentor/MentorPage";
+import Profile from "./pages/ProfilePage";
+import Search from "./pages/SearchPage";
+import SignUp from "./pages/SignupPage";
 
 function App() {
   const setAuth = useAuthStore.getState().login;
 
   useEffect(() => {
-    const token = localStorage.getItem('token');
+    const token = localStorage.getItem("token");
     if (token) {
       setAuth(token);
     }

@@ -65,7 +65,7 @@ export default function AboutYou({onButtonClick}) {
     event.preventDefault();
     onButtonClick('pagetwo');
   };
-
+  
   return (
     <Container>
       <ContentContainer>

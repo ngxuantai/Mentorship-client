@@ -1,6 +1,6 @@
-import React, {useState} from 'react';
-import styled from 'styled-components';
-import {Link, useNavigate} from 'react-router-dom';
+import React, { useState } from "react";
+import styled from "styled-components";
+import { Link, useNavigate } from "react-router-dom";
 import {
   TextField,
   FormControl,
@@ -8,23 +8,23 @@ import {
   InputAdornment,
   OutlinedInput,
   IconButton,
-} from '@mui/material';
-import {Visibility, VisibilityOff} from '@mui/icons-material';
-import {colors} from '../constants/colors';
-import useAuthStore from '../store/authStore';
+} from "@mui/material";
+import { Visibility, VisibilityOff } from "@mui/icons-material";
+import { colors } from "../constants/colors";
+import useAuthStore from "../store/authStore";
 
 function SignupPage() {
   const navigate = useNavigate();
   const [values, setValues] = useState({
-    fullname: '',
-    email: '',
-    password: '',
-    confirmPassword: '',
+    fullname: "",
+    email: "",
+    password: "",
+    confirmPassword: "",
   });
 
   const handleChange = (event) => {
-    const {name, value} = event.target;
-    setValues({...values, [name]: value});
+    const { name, value } = event.target;
+    setValues({ ...values, [name]: value });
   };
 
   const [showPassword, setShowPassword] = useState(false);
@@ -41,9 +41,9 @@ function SignupPage() {
   const handleSubmit = (event) => {
     event.preventDefault();
     setAuth(values);
-    localStorage.setItem('token', '123456');
+    localStorage.setItem("token", "123456");
     console.log(values);
-    navigate('/mentee');
+    navigate("/mentee");
   };
 
   return (
@@ -64,7 +64,7 @@ function SignupPage() {
               autoComplete="off"
               label="Họ và tên"
               variant="outlined"
-              sx={{width: '100%', fontSize: '1rem'}}
+              sx={{ width: "100%", fontSize: "1rem" }}
             />
             <TextField
               name="email"
@@ -72,7 +72,7 @@ function SignupPage() {
               autoComplete="off"
               label="Email"
               variant="outlined"
-              sx={{width: '100%', fontSize: '1rem'}}
+              sx={{ width: "100%", fontSize: "1rem" }}
             />
             <FormControl variant="outlined">
               <InputLabel htmlFor="outlined-adornment-password">
@@ -81,7 +81,7 @@ function SignupPage() {
               <OutlinedInput
                 name="password"
                 onChange={(event) => handleChange(event)}
-                type={showPassword ? 'text' : 'password'}
+                type={showPassword ? "text" : "password"}
                 endAdornment={
                   <InputAdornment position="end">
                     <IconButton
@@ -104,7 +104,7 @@ function SignupPage() {
               <OutlinedInput
                 name="confirmPassword"
                 onChange={(event) => handleChange(event)}
-                type={showConfirmPassword ? 'text' : 'password'}
+                type={showConfirmPassword ? "text" : "password"}
                 endAdornment={
                   <InputAdornment position="end">
                     <IconButton

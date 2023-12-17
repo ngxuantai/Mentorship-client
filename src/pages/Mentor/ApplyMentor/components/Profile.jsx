@@ -1,7 +1,7 @@
-import React, {useRef, useState, useEffect} from 'react';
-import styled from 'styled-components';
-import PrivacyTipIcon from '@mui/icons-material/PrivacyTip';
-import InfoIcon from '@mui/icons-material/Info';
+import React, { useRef, useState, useEffect } from "react";
+import styled from "styled-components";
+import PrivacyTipIcon from "@mui/icons-material/PrivacyTip";
+import InfoIcon from "@mui/icons-material/Info";
 import {
   TextField,
   Avatar,
@@ -9,33 +9,33 @@ import {
   InputLabel,
   Select,
   MenuItem,
-} from '@mui/material';
+} from "@mui/material";
 
-export default function Profile({onButtonClick}) {
+export default function Profile({ onButtonClick }) {
   const [values, setValues] = useState({
-    category: '',
-    skill: '',
-    bio: '',
-    linkedin: '',
-    twitter: '',
-    personalWebsite: '',
+    category: "",
+    skill: "",
+    bio: "",
+    linkedin: "",
+    twitter: "",
+    personalWebsite: "",
   });
 
   const handleChange = (event) => {
-    const {name, value} = event.target;
-    setValues({...values, [name]: value});
+    const { name, value } = event.target;
+    setValues({ ...values, [name]: value });
   };
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    onButtonClick('pagethree');
+    onButtonClick("pagethree");
   };
 
   return (
     <Container>
       <ContentContainer>
         <InforContainer onSubmit={handleSubmit}>
-          <FormControl style={{width: '50%'}}>
+          <FormControl style={{ width: "50%" }}>
             <InputLabel size="small">Category</InputLabel>
             <Select
               name="category"
@@ -59,8 +59,8 @@ export default function Profile({onButtonClick}) {
               variant="outlined"
               size="small"
               sx={{
-                width: '100%',
-                fontSize: '1rem',
+                width: "100%",
+                fontSize: "1rem",
               }}
               required
               helperText="Comma-separated list of your skills (keep it below 10). Mentees will use this to find you."
@@ -75,11 +75,11 @@ export default function Profile({onButtonClick}) {
             variant="outlined"
             size="small"
             sx={{
-              width: '100%',
-              fontSize: '1rem',
-              '& textarea': {
-                minHeight: '8rem',
-                resize: 'vertical',
+              width: "100%",
+              fontSize: "1rem",
+              "& textarea": {
+                minHeight: "8rem",
+                resize: "vertical",
               },
             }}
             required
@@ -95,8 +95,8 @@ export default function Profile({onButtonClick}) {
               variant="outlined"
               size="small"
               sx={{
-                width: '100%',
-                fontSize: '1rem',
+                width: "100%",
+                fontSize: "1rem",
               }}
               required
             />
@@ -109,14 +109,14 @@ export default function Profile({onButtonClick}) {
               variant="outlined"
               size="small"
               sx={{
-                width: '100%',
-                fontSize: '1rem',
+                width: "100%",
+                fontSize: "1rem",
               }}
             />
           </div>
           <div
             className="content"
-            style={{width: '50%', paddingRight: '0.5rem'}}
+            style={{ width: "50%", paddingRight: "0.5rem" }}
           >
             <TextField
               name="personalWebsite"
@@ -126,23 +126,23 @@ export default function Profile({onButtonClick}) {
               variant="outlined"
               size="small"
               sx={{
-                width: '100%',
-                fontSize: '1rem',
+                width: "100%",
+                fontSize: "1rem",
               }}
               helperText="You can add your blog, GitHub profile or similar here"
             />
           </div>
           <div
             style={{
-              width: '100%',
-              display: 'flex',
-              justifyContent: 'space-between',
-              flexDirection: 'row',
+              width: "100%",
+              display: "flex",
+              justifyContent: "space-between",
+              flexDirection: "row",
             }}
           >
             <button
               onClick={() => {
-                onButtonClick('pageone');
+                onButtonClick("pageone");
               }}
             >
               Previous step
