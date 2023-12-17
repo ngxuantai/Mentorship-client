@@ -11,6 +11,7 @@ import {
   Whatshot,
 } from '@mui/icons-material';
 import {colors} from './../../../constants/colors';
+import {Link, useNavigate} from 'react-router-dom';
 
 const StyledContainer = styled(Container)`
   border: 1px solid black;
@@ -36,6 +37,12 @@ const StyledButton = styled(Button)`
 `;
 
 function PlanItem() {
+  const navigate = useNavigate();
+
+  const handleApply = () => {
+    navigate('/mentor/apply');
+  };
+
   return (
     <Container>
       <StyledContainer>
@@ -73,7 +80,11 @@ function PlanItem() {
           </List>
         </Row>
         <Row>
-          <Button className="my-2" variant="secondary">
+          <Button
+            className="my-2"
+            variant="secondary"
+            onClick={() => handleApply()}
+          >
             Apply now
           </Button>
           <List>

@@ -1,10 +1,17 @@
 import {Avatar} from '@mui/material';
 import React from 'react';
 import styled from 'styled-components';
+import {Link, useNavigate} from 'react-router-dom';
 
 export default function CardInfor({name, role}) {
+  const navigate = useNavigate();
+
+  const handleNavigateMentorProflie = () => {
+    navigate('/mentor/profile');
+  };
+
   return (
-    <CardContainer>
+    <CardContainer onClick={() => handleNavigateMentorProflie()}>
       {/* <Avatar alt="Image Avatar" src={imageAvatar} /> */}
       <Avatar sx={{width: '60px', height: '60px'}}>N</Avatar>
       <div className="name">

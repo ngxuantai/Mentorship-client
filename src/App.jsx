@@ -12,8 +12,8 @@ import ApplyProcess from './pages/Mentee/ApplyProcess/';
 import useAuthStore from '../src/store/authStore';
 import Mentor from './pages/Mentor/MentorPage';
 import ApplyMentor from './pages/Mentor/ApplyMentor';
-import Applications from './pages/Mentee/Applications'
-import Inquires from './pages/Mentee/Inquires'
+import Applications from './pages/Mentee/Applications';
+import Inquires from './pages/Mentee/Inquires';
 import Wishlist from './pages/Mentee/Wishlist';
 
 function App() {
@@ -34,7 +34,7 @@ function App() {
         <Route path="/auth/signup" element={<SignUp />} />
         <Route path="/search" element={<Search />} />
         <Route path="/mentee" element={<DashBoard />} />
-        <Route path="/profile" element={<Profile />} />
+        <Route path="/mentor/profile" element={<Profile />} />
         <Route path="/settings" element={<Settings />} />
         <Route path="/mentee1" element={<InformationForm />} />
         <Route path="/mentee2" element={<ApplyProcess />} />
