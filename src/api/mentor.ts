@@ -22,13 +22,9 @@ const mentorApi = {
       return null;
     }
   },
-  searchMentor: async (
-    name = "",
-    skillIds = [],
-    minPrice = null,
-    maxPrice = null
-  ) => {
+  searchMentor: async (name = "", filters = {}) => {
     try {
+      const { skill = null, minPrice = null, maxPrice = null } = filters;
       let url = "/api/mentor/search";
       let firstParamAdded = false;
       if (name) {
@@ -43,10 +39,12 @@ const mentorApi = {
         url += `${firstParamAdded ? "&" : "?"}maxPrice=${maxPrice}`;
         firstParamAdded = true;
       }
-      if (skillIds.length > 0) {
-        url += `${firstParamAdded ? "&" : "?"}skillIds=${skillIds.join(",")}`;
+      if (skill !== null) {
+        url += `${firstParamAdded ? "&" : "?"}skillId=${skill.id}`;
       }
+      console.log("search filters", url, filters);
       const res = await axiosClient.get(url);
+      console.log("search result", res.data.data);
       return res.data.data;
     } catch (error) {
       console.error(error);

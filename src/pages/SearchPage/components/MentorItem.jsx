@@ -14,14 +14,14 @@ const Text = styled.p`
   border-bottom: 1px solid gray;
 `;
 
-function MentorItem() {
+function MentorItem({ mentor }) {
   return (
     <StyledContainer fluid>
       <Row className="justify-content-between align-items-start">
         <Col>
           <img
             style={{ borderRadius: 12 }}
-            src="https://picsum.photos/200"
+            src={mentor.avatar || "https://picsum.photos/200/300"}
             alt="random image"
           ></img>
         </Col>
@@ -30,13 +30,12 @@ function MentorItem() {
           className="d-flex justify-content-center align-items-center flex-column"
         >
           <Row style={{ borderBottom: 1 }}>
-            <h2>Ahmed Sadman Muhib</h2>
-            <p>Software Engineer at Optimizely</p>
-            <p>
-              Software Engineer | Lead Instructor | Career Mentor | Helped 100+
-              learners to achieve their goals
-            </p>
-            <p>* * * * * 5.0 (38 reviews)</p>
+            <h2>
+              {mentor.firstName} {mentor.lastName}
+            </h2>
+            <p>{mentor.jobTitle}</p>
+            <p>{mentor.introduction || ""}</p>
+            <p>* * * * * {mentor.rating} (38 reviews)</p>
           </Row>
           <Row>
             <p>
@@ -48,9 +47,9 @@ function MentorItem() {
             </p>
           </Row>
           <Col style={{ alignSelf: "flex-start", marginBottom: 20 }}>
-            <SkillTag>React</SkillTag>
-            <SkillTag>Java</SkillTag>
-            <SkillTag>.NET</SkillTag>
+            {mentor.skills.map((skill) => (
+              <SkillTag key={skill.id}>{skill.name}</SkillTag>
+            ))}
           </Col>
           <Button
             variant="secondary"
@@ -61,14 +60,15 @@ function MentorItem() {
               alignSelf: "flex-start",
             }}
           >
-            View Profile
+            Xem hồ sơ
           </Button>
         </Col>
         <Col className="d-flex justify-content-end align-items-center flex-column">
-          <SkillTag style={{ alignSelf: "flex-end" }}>React</SkillTag>
+          <SkillTag style={{ alignSelf: "flex-end" }}>
+            7 ngày học thử miễn phí
+          </SkillTag>
           <Text> What can I expect from this mentor?</Text>
           <Text>
-            {" "}
             Unlimited chat, e-mail or text with mentor, within boundaries.
           </Text>
           <Text>Weekly calls, per agreement with mentor</Text>

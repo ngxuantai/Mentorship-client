@@ -8,48 +8,66 @@ import {
   Row,
 } from "react-bootstrap";
 import { AiFillCloseCircle } from "react-icons/ai";
+import { isEmptyObject } from "../../../utils/dataHelper";
 import "../css/SearchBar.css";
 import FilterBar from "./FilterBar";
 
-export default function SearchBar({ onSearch }) {
+export default function SearchBar({ onSearch, resetSearch }) {
   const [searchInput, setSearchInput] = useState("");
   const [filters, setFilters] = useState({});
+  const [isShow, setIsShow] = useState(false);
 
   useEffect(() => {
     const ref = setTimeout(() => {
-      if (searchInput.trim() !== "") {
+      if (searchInput.trim() !== "" || !isEmptyObject(filters)) {
         onSearch(searchInput, filters);
       } else {
-        onSearch("");
+        resetSearch();
       }
     }, 500);
     return () => {
       clearTimeout(ref);
     };
   }, [searchInput, filters]);
+
   const handleSearchInputChange = (e) => {
     setSearchInput(e.target.value);
   };
-  const handleFilterChange = ({ type, filter }) => {
+  const handleFilterChange = (type, value) => {
+    console.log("TYPE", type, value);
     switch (type) {
       case "skill": {
-        setFilters({ ...filters, skill: filter });
+        setFilters(() => ({ ...filters, skill: value }));
         break;
       }
       case "price": {
-        setFilters({ ...filters, price: filter });
+        setFilters(() => ({
+          ...filters,
+          minValue: value.min,
+          maxValue: value.max,
+        }));
         break;
       }
+
       default:
-        console.log("filter is invalid");
+        console.log("value is invalid");
     }
   };
-
-  const clearAllFilters = () => {};
+  console.log("filters", filters);
+  useEffect(() => {
+    if (isEmptyObject(filters)) {
+      setIsShow(false);
+    } else {
+      setIsShow(true);
+    }
+  }, [filters]);
+  const clearAllFilters = () => {
+    setFilters(() => ({}));
+  };
   return (
-    <Container style={{}}>
+    <Container style={{ marginTop: 12 }}>
       <Row>
-        <Col sm={4}>
+        <Col sm={6}>
           <Form className="d-flex">
             <InputGroup>
               <FormControl
@@ -64,10 +82,15 @@ export default function SearchBar({ onSearch }) {
         </Col>
       </Row>
 
-      <FilterBar onFilterChange={handleFilterChange}></FilterBar>
+      <FilterBar
+        filters={filters}
+        onFilterChange={handleFilterChange}
+      ></FilterBar>
       <div
         style={{
           marginTop: 8,
+          height: 30,
+          marginLeft: 50,
           display: "inline-flex",
           flexDirection: "row",
           alignItems: "center",
@@ -77,8 +100,12 @@ export default function SearchBar({ onSearch }) {
         className="button-effect"
         onClick={clearAllFilters}
       >
-        <AiFillCloseCircle fontSize={24}></AiFillCloseCircle>
-        <p style={{ margin: 0, marginLeft: 8 }}>Reset all filters</p>
+        {isShow && (
+          <>
+            <AiFillCloseCircle fontSize={24}></AiFillCloseCircle>
+            <p style={{ margin: 0, marginLeft: 8 }}>Xoá tất cả bộ lọc</p>
+          </>
+        )}
       </div>
     </Container>
   );

@@ -45,7 +45,9 @@ export default function Header() {
                 <ul>
                   {field.skills.map((skill) => (
                     <li key={skill.id}>
-                      <a href="#">{skill.name}</a>
+                      <Link to={`/mentor/search?skillId=${skill.id}`}>
+                        {skill.name}
+                      </Link>
                     </li>
                   ))}
                 </ul>
