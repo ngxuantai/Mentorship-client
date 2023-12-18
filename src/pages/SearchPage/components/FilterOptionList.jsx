@@ -1,16 +1,5 @@
-import {
-  Form,
-  FormControl,
-  InputGroup,
-  Container,
-  Row,
-  Col,
-  Button,
-} from "react-bootstrap";
-import { useRef, useState } from "react";
-import { useEffect } from "react";
-import { AiFillCloseCircle } from "react-icons/ai";
-import FilterBar from "./FilterBar";
+import { useEffect, useRef, useState } from "react";
+import { Container, Form, FormControl, InputGroup, Row } from "react-bootstrap";
 import FilterOptionItem from "./FilterOptionItem";
 
 export default function FilterOptionList({
@@ -91,7 +80,6 @@ export default function FilterOptionList({
       </Row>
       <Row style={{ display: "flex", marginTop: 12 }}>
         <FilterOptionItem onItemClick={onItemClick}></FilterOptionItem>
-        <p>Skill 2 </p>
       </Row>
     </Container>
   );

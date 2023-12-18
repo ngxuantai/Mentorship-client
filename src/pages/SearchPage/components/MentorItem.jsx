@@ -1,15 +1,12 @@
-import React, { useState } from "react";
+import { Button, Col, Container, Row } from "react-bootstrap";
 import styled from "styled-components";
-import { Link } from "react-router-dom";
 import { SkillTag } from "../../../components/Tags";
-import { Row, Col, Container, Button } from "react-bootstrap";
 // import { CenteredRow, CenteredCol } from "@src/components/sharedComponents";
 const StyledContainer = styled(Container)`
   border: 1px solid black;
   border-radius: 24px;
   border-color: gray;
   padding: 24px;
-  margin: 12px;
   width: 80%;
 `;
 

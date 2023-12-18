@@ -1,25 +1,29 @@
-import React, {useState} from 'react';
-import styled from 'styled-components';
-import {Link, useNavigate} from 'react-router-dom';
+import { Visibility, VisibilityOff } from "@mui/icons-material";
 import {
-  TextField,
   FormControl,
-  InputLabel,
-  InputAdornment,
-  OutlinedInput,
   IconButton,
-} from '@mui/material';
-import {Visibility, VisibilityOff} from '@mui/icons-material';
-import {colors} from '../constants/colors';
-import useAuthStore from '../store/authStore';
+  InputAdornment,
+  InputLabel,
+  OutlinedInput,
+  TextField,
+} from "@mui/material";
+import { useEffect, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import styled from "styled-components";
+import { colors } from "../constants/colors";
+import firebaseInstance from "../services/firebase";
+import useAuthStore from "../store/authStore";
+import { useUserStore } from "../store/userStore";
 
 function LoginPage() {
   const navigate = useNavigate();
+  const { user, setUser } = useUserStore();
   const setAuth = useAuthStore.getState().login;
   const [values, setValues] = useState({
-    email: '',
-    password: '',
+    email: "",
+    password: "",
   });
+  console.log("login page: user", user);
   const [showPassword, setShowPassword] = useState(false);
   // const [tab, setTab] = useState('mentor');
 
@@ -32,17 +36,39 @@ function LoginPage() {
   // };
 
   const handleChange = (event) => {
-    const {name, value} = event.target;
-    setValues({...values, [name]: value});
+    const { name, value } = event.target;
+    setValues({ ...values, [name]: value });
   };
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
-    setAuth(values);
-    localStorage.setItem('token', '123456');
-    console.log(values);
-    navigate('/mentee');
+
+    const userCredential = await firebaseInstance.signIn(
+      values.email,
+      values.password
+    );
+    const user = userCredential.user;
+    const a = firebaseInstance.auth.currentUser;
+    const doc = await firebaseInstance.getUser(user.uid);
+    const userInfo = doc.data();
+    setUser(userInfo);
+    // console.log("userInfo", a, userInfo);
+    // if (userInfo.role === "mentee") {
+    //   navigate("/mentee");
+    // } else if (userInfo.role === "mentor") {
+    //   navigate("/mentor");
+    // }
+    await localStorage.setItem("user_role", JSON.stringify("mentee"));
   };
+  useEffect(() => {
+    if (user) {
+      if (user.role === "mentee") {
+        navigate("/mentee");
+      } else if (user.role === "mentor") {
+        navigate("/mentor");
+      }
+    }
+  }, [user]);
 
   return (
     <Container>
@@ -78,7 +104,7 @@ function LoginPage() {
               autoComplete="off"
               label="Tên đăng nhập hoặc email"
               variant="outlined"
-              sx={{width: '100%', fontSize: '1rem'}}
+              sx={{ width: "100%", fontSize: "1rem" }}
             />
             <FormControl variant="outlined">
               <InputLabel htmlFor="outlined-adornment-password">
@@ -87,7 +113,7 @@ function LoginPage() {
               <OutlinedInput
                 name="password"
                 onChange={(event) => handleChange(event)}
-                type={showPassword ? 'text' : 'password'}
+                type={showPassword ? "text" : "password"}
                 endAdornment={
                   <InputAdornment position="end">
                     <IconButton
@@ -111,7 +137,7 @@ function LoginPage() {
             </span>
             <span>
               Chưa có tài khoản?
-              <br /> <Link to="/auth/signup">Đăng kí làm mentee</Link> hoặc{' '}
+              <br /> <Link to="/auth/signup">Đăng kí làm mentee</Link> hoặc{" "}
               <Link to="/mentor">Nộp đơn làm mentor</Link>
             </span>
           </form>

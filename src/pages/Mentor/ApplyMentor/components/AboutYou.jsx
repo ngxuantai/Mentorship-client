@@ -1,20 +1,20 @@
-import React, {useRef, useState, useEffect} from 'react';
-import styled from 'styled-components';
-import PrivacyTipIcon from '@mui/icons-material/PrivacyTip';
-import InfoIcon from '@mui/icons-material/Info';
+import InfoIcon from "@mui/icons-material/Info";
 import {
-  TextField,
   Avatar,
   FormControl,
   InputLabel,
-  Select,
   MenuItem,
-} from '@mui/material';
+  Select,
+  TextField,
+} from "@mui/material";
+import { useEffect, useRef, useState } from "react";
+import styled from "styled-components";
+import firebaseInstance from "../../../../services/firebase";
 
-export default function AboutYou({onButtonClick}) {
+export default function AboutYou({ onButtonClick }) {
   useEffect(() => {
     // Gọi API để lấy danh sách quốc gia
-    fetch('https://restcountries.com/v2/all')
+    fetch("https://restcountries.com/v2/all")
       .then((response) => response.json())
       .then((data) => {
         // Xử lý dữ liệu trả về
@@ -24,21 +24,21 @@ export default function AboutYou({onButtonClick}) {
         }));
         setCountries(countryList);
         // Chọn quốc gia mặc định (ví dụ: chọn quốc gia đầu tiên)
-        setSelectedCountry(countryList.length > 0 ? countryList[0].code : '');
+        setSelectedCountry(countryList.length > 0 ? countryList[0].code : "");
       })
-      .catch((error) => console.error('Error fetching countries:', error));
+      .catch((error) => console.error("Error fetching countries:", error));
   }, []); // [] ensures that the effect runs only once when the component mounts
 
   const [values, setValues] = useState({
-    firstName: '',
-    lastName: '',
-    email: '',
-    password: '',
-    jobTitle: '',
-    company: '',
-    linkedin: '',
-    twitter: '',
-    location: '',
+    firstName: "",
+    lastName: "",
+    email: "",
+    password: "",
+    jobTitle: "",
+    company: "",
+    linkedin: "",
+    twitter: "",
+    location: "",
   });
   const [countries, setCountries] = useState([]);
 
@@ -48,33 +48,36 @@ export default function AboutYou({onButtonClick}) {
     fileInputRef.current.click();
   };
 
-  const handleFileChange = (event) => {
+  const handleFileChange = async (event) => {
     const file = event.target.files[0];
     if (file) {
       console.log(`Đã chọn tệp: ${file.name}`);
+      await firebaseInstance.storeImage("avatar", file);
       // Thực hiện xử lý tệp ở đây (ví dụ: tải lên máy chủ)
     }
   };
 
   const handleChange = (event) => {
-    const {name, value} = event.target;
-    setValues({...values, [name]: value});
+    const { name, value } = event.target;
+    setValues({ ...values, [name]: value });
   };
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    onButtonClick('pagetwo');
+    onButtonClick("pagetwo");
   };
-  
+
   return (
     <Container>
       <ContentContainer>
         <TipsContainer>
           <div>
-            <InfoIcon style={{color: '#3f83f8', fontSize: '16px'}} />
+            <InfoIcon style={{ color: "#3f83f8", fontSize: "16px" }} />
           </div>
-          <div style={{paddingTop: '2px', color: '#224F9C', fontSize: '16px'}}>
-            <span style={{margin: 0, padding: 0, fontWeight: 'bold'}}>
+          <div
+            style={{ paddingTop: "2px", color: "#224F9C", fontSize: "16px" }}
+          >
+            <span style={{ margin: 0, padding: 0, fontWeight: "bold" }}>
               Lovely to see you!
             </span>
             <p>
@@ -93,11 +96,11 @@ export default function AboutYou({onButtonClick}) {
         <AvatarContainer>
           <p>Photo</p>
           <div className="avatar-change">
-            <Avatar sx={{width: '100px', height: '100px'}} />
+            <Avatar sx={{ width: "100px", height: "100px" }} />
             <input
               type="file"
               ref={fileInputRef}
-              style={{display: 'none'}}
+              style={{ display: "none" }}
               onChange={handleFileChange}
             />
             <button onClick={handleButtonClick}>Chọn tệp</button>
@@ -113,8 +116,8 @@ export default function AboutYou({onButtonClick}) {
               variant="outlined"
               size="small"
               sx={{
-                width: '100%',
-                fontSize: '1rem',
+                width: "100%",
+                fontSize: "1rem",
               }}
               required
             />
@@ -126,8 +129,8 @@ export default function AboutYou({onButtonClick}) {
               variant="outlined"
               size="small"
               sx={{
-                width: '100%',
-                fontSize: '1rem',
+                width: "100%",
+                fontSize: "1rem",
               }}
               required
             />
@@ -141,8 +144,8 @@ export default function AboutYou({onButtonClick}) {
               variant="outlined"
               size="small"
               sx={{
-                width: '100%',
-                fontSize: '1rem',
+                width: "100%",
+                fontSize: "1rem",
               }}
               required
             />
@@ -154,8 +157,8 @@ export default function AboutYou({onButtonClick}) {
               variant="outlined"
               size="small"
               sx={{
-                width: '100%',
-                fontSize: '1rem',
+                width: "100%",
+                fontSize: "1rem",
               }}
               required
               type="password"
@@ -170,8 +173,8 @@ export default function AboutYou({onButtonClick}) {
               variant="outlined"
               size="small"
               sx={{
-                width: '100%',
-                fontSize: '1rem',
+                width: "100%",
+                fontSize: "1rem",
               }}
               required
             />
@@ -183,12 +186,12 @@ export default function AboutYou({onButtonClick}) {
               variant="outlined"
               size="small"
               sx={{
-                width: '100%',
-                fontSize: '1rem',
+                width: "100%",
+                fontSize: "1rem",
               }}
             />
           </div>
-          <FormControl style={{width: '70%'}}>
+          <FormControl style={{ width: "70%" }}>
             <InputLabel id="demo-simple-select-label" size="small">
               Location
             </InputLabel>
@@ -207,7 +210,11 @@ export default function AboutYou({onButtonClick}) {
             </Select>
           </FormControl>
           <div
-            style={{width: '100%', display: 'flex', justifyContent: 'flex-end'}}
+            style={{
+              width: "100%",
+              display: "flex",
+              justifyContent: "flex-end",
+            }}
           >
             <button>Next step</button>
           </div>

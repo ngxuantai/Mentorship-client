@@ -1,17 +1,18 @@
-import React, { useState } from "react";
-import styled from "styled-components";
-import { Link, useNavigate } from "react-router-dom";
-import {
-  TextField,
-  FormControl,
-  InputLabel,
-  InputAdornment,
-  OutlinedInput,
-  IconButton,
-} from "@mui/material";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
+import {
+  FormControl,
+  IconButton,
+  InputAdornment,
+  InputLabel,
+  OutlinedInput,
+  TextField,
+} from "@mui/material";
+import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import styled from "styled-components";
+import menteeApi from "../api/mentee";
 import { colors } from "../constants/colors";
-import useAuthStore from "../store/authStore";
+import firebaseInstance from "../services/firebase";
 
 function SignupPage() {
   const navigate = useNavigate();
@@ -38,12 +39,16 @@ function SignupPage() {
     setShowConfirmPassword(!showConfirmPassword);
   };
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
-    setAuth(values);
-    localStorage.setItem("token", "123456");
-    console.log(values);
-    navigate("/mentee");
+    try {
+      await firebaseInstance.createAccount(values.email, values.password);
+      await menteeApi.createMentee(values);
+      console.log(values);
+      navigate("/mentee");
+    } catch (er) {
+      console.log("er", er);
+    }
   };
 
   return (

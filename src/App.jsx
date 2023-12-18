@@ -1,6 +1,5 @@
-import { useEffect } from "react";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
-import useAuthStore from "../src/store/authStore";
+import ProtectedRoute from "./navigation/ProtectedRoute";
 import HomePage from "./pages/HomePage";
 import Login from "./pages/LoginPage";
 import Applications from "./pages/Mentee/Applications";
@@ -17,32 +16,45 @@ import Search from "./pages/SearchPage";
 import SignUp from "./pages/SignupPage";
 
 function App() {
-  const setAuth = useAuthStore.getState().login;
-
-  useEffect(() => {
-    const token = localStorage.getItem("token");
-    if (token) {
-      setAuth(token);
-    }
-  }, []);
-
   return (
     <Router>
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/auth/login" element={<Login />} />
         <Route path="/auth/signup" element={<SignUp />} />
-        <Route path="/search" element={<Search />} />
+
         <Route path="/mentee" element={<DashBoard />} />
         <Route path="/profile" element={<Profile />} />
         <Route path="/settings" element={<Settings />} />
         <Route path="/mentee1" element={<InformationForm />} />
         <Route path="/mentee2" element={<ApplyProcess />} />
+        <Route path="/mentor/search" element={<Search />} />
         <Route path="/mentor" element={<Mentor />} />
         <Route path="/mentor/apply" element={<ApplyMentor />} />
-        <Route path="/mentee/applications" element={<Applications />} />
-        <Route path="/mentee/inquires" element={<Inquires />} />
-        <Route path="/mentee/wishlist" element={<Wishlist />} />
+        <Route
+          path="/mentee/applications"
+          element={
+            <ProtectedRoute>
+              <Applications />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/mentee/inquires"
+          element={
+            <ProtectedRoute>
+              <Inquires />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/mentee/wishlist"
+          element={
+            <ProtectedRoute>
+              <Wishlist />
+            </ProtectedRoute>
+          }
+        />
       </Routes>
     </Router>
   );

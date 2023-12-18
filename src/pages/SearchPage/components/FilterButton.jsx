@@ -1,17 +1,6 @@
-import {
-  Form,
-  FormControl,
-  InputGroup,
-  Container,
-  Row,
-  Col,
-  Button,
-} from "react-bootstrap";
-import { useRef, useState } from "react";
-import { useEffect } from "react";
+import { useEffect, useRef, useState } from "react";
 import { BsChevronDown } from "react-icons/bs";
 import FilterOptionList from "./FilterOptionList";
-
 export default function FilterButton({}) {
   const [searchInput, setSearchInput] = useState("");
   const [selectedItem, setSelectedItem] = useState("Select filter");

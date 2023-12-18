@@ -1,49 +1,51 @@
+import { useEffect, useState } from "react";
 import {
+  Col,
+  Container,
   Form,
   FormControl,
   InputGroup,
-  Container,
   Row,
-  Col,
-  Button,
 } from "react-bootstrap";
-import "../css/SearchBar.css";
-import { useRef, useState } from "react";
-import { useEffect } from "react";
 import { AiFillCloseCircle } from "react-icons/ai";
+import "../css/SearchBar.css";
 import FilterBar from "./FilterBar";
 
-export default function SearchBar({}) {
+export default function SearchBar({ onSearch }) {
   const [searchInput, setSearchInput] = useState("");
+  const [filters, setFilters] = useState({});
 
-  const timeoutRef = useRef();
   useEffect(() => {
-    if (timeoutRef.current) {
-      clearTimeout(timeoutRef);
-    }
-
-    if (searchInput.trim() === "") {
-      // resetList();
-    } else {
-      const newTimeout = setTimeout(() => {
-        // search(searchInput);
-        console.log("SEARCH");
-      }, 500);
-      timeoutRef.current = newTimeout;
-    }
-    return () => {
-      if (timeoutRef.current) {
-        clearTimeout(timeoutRef.current);
+    const ref = setTimeout(() => {
+      if (searchInput.trim() !== "") {
+        onSearch(searchInput, filters);
+      } else {
+        onSearch("");
       }
+    }, 500);
+    return () => {
+      clearTimeout(ref);
     };
-  }, [searchInput]);
-
+  }, [searchInput, filters]);
   const handleSearchInputChange = (e) => {
     setSearchInput(e.target.value);
   };
-  const clearAllFilters = () => {
-    console.log("clicked");
+  const handleFilterChange = ({ type, filter }) => {
+    switch (type) {
+      case "skill": {
+        setFilters({ ...filters, skill: filter });
+        break;
+      }
+      case "price": {
+        setFilters({ ...filters, price: filter });
+        break;
+      }
+      default:
+        console.log("filter is invalid");
+    }
   };
+
+  const clearAllFilters = () => {};
   return (
     <Container style={{}}>
       <Row>
@@ -62,7 +64,7 @@ export default function SearchBar({}) {
         </Col>
       </Row>
 
-      <FilterBar></FilterBar>
+      <FilterBar onFilterChange={handleFilterChange}></FilterBar>
       <div
         style={{
           marginTop: 8,

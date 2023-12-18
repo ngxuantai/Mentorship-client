@@ -1,17 +1,17 @@
-import React, { useState } from "react";
+import { useCallback, useState } from "react";
+import { Container, Row } from "react-bootstrap";
 import styled from "styled-components";
-import { Link } from "react-router-dom";
-import { SkillTag } from "../../components/Tags";
-import { Row, Col, Container, Button } from "react-bootstrap";
-import SearchBar from "./components/SearchBar";
+import mentorApi from "../../api/mentor";
+import Header from "../Mentee/DashBoard/components/Header";
 import MentorItem from "./components/MentorItem";
+import SearchBar from "./components/SearchBar";
 // import { CenteredRow, CenteredCol } from "@src/components/sharedComponents";
 const StyledContainer = styled(Container)`
   border-radius: 24px;
   border-color: gray;
+  align-self: center;
   padding: 24px;
-  margin: 12px;
-  width: 80%;
+  width: 100%;
 `;
 
 const Text = styled.p`
@@ -19,13 +19,26 @@ const Text = styled.p`
 `;
 
 function Search() {
+  const [searchResult, setSearchResult] = useState([]);
+
+  const handleSearch = useCallback(async (searchInput, filters) => {
+    console.log("searchInput", searchInput);
+    const mentors = await mentorApi.searchMentor(searchInput);
+    console.log("searchInput result", mentors);
+    setSearchResult(mentors || []);
+  }, []);
   return (
-    <StyledContainer fluid>
-      <Row className="justify-content-between align-items-start">
-        <SearchBar></SearchBar>
-        <MentorItem></MentorItem>
-      </Row>
-    </StyledContainer>
+    <>
+      <Header></Header>
+      <StyledContainer fluid>
+        <Row className="justify-content-between align-items-start">
+          <SearchBar onSearch={handleSearch}></SearchBar>
+          {searchResult.map((mentor, index) => (
+            <MentorItem key={index} mentor={mentor} />
+          ))}
+        </Row>
+      </StyledContainer>
+    </>
   );
 }
 

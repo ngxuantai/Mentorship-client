@@ -2,14 +2,20 @@ import Container from "react-bootstrap/Container";
 import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
 import NavDropdown from "react-bootstrap/NavDropdown";
-import "../css/index.css";
+import { useNavigate } from "react-router";
 import styled from "styled-components";
+import "../css/index.css";
 
 const Text = styled.p`
   padding: 8px 4px;
 `;
 
 function Header() {
+  const navigate = useNavigate();
+  const handleSignOut = async () => {
+    // await firebaseInstance.signOut();
+    // navigate("");
+  };
   return (
     <Navbar style={{ width: "100%" }} expand="lg" className="bg-body-tertiary">
       <Container>
@@ -52,7 +58,11 @@ function Header() {
               </NavDropdown.Item>
               <NavDropdown.Item href="#action/3.3">Something</NavDropdown.Item>
               <NavDropdown.Divider />
-              <NavDropdown.Item style={{ color: "tomato" }} href="#action/3.4">
+              <NavDropdown.Item
+                onClick={handleSignOut}
+                style={{ color: "tomato" }}
+                href="#action/3.4"
+              >
                 Sign Out
               </NavDropdown.Item>
             </NavDropdown>
