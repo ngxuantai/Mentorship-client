@@ -1,18 +1,17 @@
-import React, {useRef} from 'react';
-import styled from 'styled-components';
-import PrivacyTipIcon from '@mui/icons-material/PrivacyTip';
-import {TextField, Avatar} from '@mui/material';
-import {colors} from '../../../../constants/colors';
+import PrivacyTipIcon from "@mui/icons-material/PrivacyTip";
+import { Avatar, TextField } from "@mui/material";
+import React, { useRef } from "react";
+import styled from "styled-components";
 
 export default function PersonalInfor() {
   const [values, setValues] = React.useState({
-    firstName: '',
-    lastName: '',
-    email: '',
-    jobTitle: '',
-    linkedin: '',
-    twitter: '',
-    goal: '',
+    firstName: "",
+    lastName: "",
+    email: "",
+    jobTitle: "",
+    linkedin: "",
+    twitter: "",
+    goal: "",
   });
 
   const fileInputRef = useRef(null);
@@ -30,39 +29,42 @@ export default function PersonalInfor() {
   };
 
   const handleChange = (event) => {
-    const {name, value} = event.target;
-    setValues({...values, [name]: value});
+    const { name, value } = event.target;
+    setValues({ ...values, [name]: value });
   };
   return (
     <Container>
       <Tittle>
-        <h3>Your profile</h3>
+        <h3>Hồ sơ của bạn</h3>
       </Tittle>
       <ContentContainer>
-        <h5 style={{fontWeight: 'bold'}}>Personal Information</h5>
+        <h5 style={{ fontWeight: "bold" }}>Thông tin cá nhân</h5>
         <TipsContainer>
           <p>
-            <PrivacyTipIcon style={{color: '#3f83f8', fontSize: '16px'}} /> Tips
+            <PrivacyTipIcon style={{ color: "#3f83f8", fontSize: "16px" }} />{" "}
+            Mẹo
           </p>
           <ul>
             <li>
-              Adding your photo and social media profiles helps mentors feel
-              confident that you’re a real person (e.g. not a bot).
+              Thêm ảnh và hồ sơ truyền thông xã hội của bạn giúp người hướng dẫn
+              cảm thấy tự tin rằng bạn là một người thật (ví dụ: không phải là
+              bot).
             </li>
             <li>
-              Your profile is only visible to mentors that you send applications
-              to. It is not indexed on search engines like Google.
+              Hồ sơ của bạn chỉ hiển thị với người hướng dẫn mà bạn gửi đơn ứng
+              tuyển đến. Nó không được lập chỉ mục trên các công cụ tìm kiếm như
+              Google.
             </li>
           </ul>
         </TipsContainer>
         <AvatarContainer>
-          <p>Photo</p>
+          <p>Ảnh</p>
           <div className="avatar-change">
-            <Avatar sx={{width: '100px', height: '100px'}} />
+            <Avatar sx={{ width: "100px", height: "100px" }} />
             <input
               type="file"
               ref={fileInputRef}
-              style={{display: 'none'}}
+              style={{ display: "none" }}
               onChange={handleFileChange}
             />
             <button onClick={handleButtonClick}>Chọn tệp</button>
@@ -74,12 +76,12 @@ export default function PersonalInfor() {
               name="firstName"
               onChange={(event) => handleChange(event)}
               autoComplete="off"
-              label="First Name"
+              label="Tên"
               variant="outlined"
               size="small"
               sx={{
-                width: '100%',
-                fontSize: '1rem',
+                width: "100%",
+                fontSize: "1rem",
               }}
               required
             />
@@ -87,19 +89,19 @@ export default function PersonalInfor() {
               name="lastName"
               onChange={(event) => handleChange(event)}
               autoComplete="off"
-              label="Last name"
+              label="Họ"
               variant="outlined"
               size="small"
               sx={{
-                width: '100%',
-                fontSize: '1rem',
+                width: "100%",
+                fontSize: "1rem",
               }}
               required
             />
           </div>
           <div
             className="content"
-            style={{width: '50%', paddingRight: '0.5rem'}}
+            style={{ width: "50%", paddingRight: "0.5rem" }}
           >
             <TextField
               name="email"
@@ -109,8 +111,8 @@ export default function PersonalInfor() {
               variant="outlined"
               size="small"
               sx={{
-                width: '100%',
-                fontSize: '1rem',
+                width: "100%",
+                fontSize: "1rem",
               }}
               required
             />
@@ -119,12 +121,12 @@ export default function PersonalInfor() {
             name="jobTitle"
             onChange={(event) => handleChange(event)}
             autoComplete="off"
-            label="Job title"
+            label="Chức danh công việc"
             variant="outlined"
             size="small"
             sx={{
-              width: '100%',
-              fontSize: '1rem',
+              width: "100%",
+              fontSize: "1rem",
             }}
           />
           <div className="content">
@@ -137,8 +139,8 @@ export default function PersonalInfor() {
               variant="outlined"
               size="small"
               sx={{
-                width: '100%',
-                fontSize: '1rem',
+                width: "100%",
+                fontSize: "1rem",
               }}
             />
             <TextField
@@ -150,8 +152,8 @@ export default function PersonalInfor() {
               variant="outlined"
               size="small"
               sx={{
-                width: '100%',
-                fontSize: '1rem',
+                width: "100%",
+                fontSize: "1rem",
               }}
             />
           </div>
@@ -160,19 +162,19 @@ export default function PersonalInfor() {
             multiline
             onChange={(event) => handleChange(event)}
             autoComplete="off"
-            label="Goal"
+            label="Mục tiêu"
             variant="outlined"
             size="small"
             sx={{
-              width: '100%',
-              fontSize: '1rem',
-              '& textarea': {
-                minHeight: '8rem',
-                resize: 'vertical',
+              width: "100%",
+              fontSize: "1rem",
+              "& textarea": {
+                minHeight: "8rem",
+                resize: "vertical",
               },
             }}
           />
-          <button>Save changes</button>
+          <button>Lưu thay đổi</button>
         </InforContainer>
       </ContentContainer>
     </Container>

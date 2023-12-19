@@ -7,7 +7,13 @@ import styled from "styled-components";
 import "../css/index.css";
 
 const Text = styled.p`
-  padding: 8px 4px;
+  padding: 8px 12px;
+  font-weight: 500;
+`;
+const Action = styled.p`
+  font-weight: 500;
+  margin: 0;
+  padding: 4px;
 `;
 
 function Header() {
@@ -26,44 +32,49 @@ function Header() {
             className="me-auto"
             style={{ alignItems: "center", fontWeight: "bold", height: 50 }}
           >
-            <Nav.Link href="#home">Home</Nav.Link>
-            <Nav.Link href="/mentee/applications">Applications</Nav.Link>
-            <Nav.Link href="/mentee/inquires">Inquiries</Nav.Link>
-            <Nav.Link href="/mentee/wishlist">Wishlist</Nav.Link>
-            <Nav.Link href="/settings">Settings</Nav.Link>
+            <Nav.Link href="#home">Trang chủ</Nav.Link>
+            <Nav.Link href="/mentee/applications">Ứng dụng</Nav.Link>
+            <Nav.Link href="/mentee/inquires">Yêu cầu</Nav.Link>
+            <Nav.Link href="/mentee/wishlist">Danh sách mong muốn</Nav.Link>
+            <Nav.Link href="/settings">Cài đặt</Nav.Link>
           </Nav>
           <Nav
             className="ml-auto"
             style={{ alignItems: "center", fontWeight: "bold", height: 50 }}
           >
-            <Nav.Link href="#link">Invite a friend</Nav.Link>
+            <Nav.Link href="#link">Mời bạn bè</Nav.Link>
             <NavDropdown
               style={{}}
               title={
                 <img
                   src="https://picsum.photos/200"
                   alt="Trần Khánh"
-                  style={{ width: 36, height: 36, borderRadius: 20 }}
+                  style={{
+                    width: 36,
+                    height: 36,
+                    borderRadius: 20,
+                  }}
                 />
               }
               id="basic-nav-dropdown"
               className="menu-right"
             >
-              <Text>Signed in as jbkhanhtran@gmail.com</Text>
+              <Text>Đã đăng nhập với jbkhanhtran@gmail.com</Text>
               <NavDropdown.Divider />
 
-              <NavDropdown.Item href="#action/3.1">Action</NavDropdown.Item>
-              <NavDropdown.Item href="#action/3.2">
-                Another action
+              <NavDropdown.Item href="#action/3.1">
+                <Action>Hồ sơ</Action>
               </NavDropdown.Item>
-              <NavDropdown.Item href="#action/3.3">Something</NavDropdown.Item>
+              <NavDropdown.Item href="#action/3.2">
+                <Action>Đơn đăng ký</Action>
+              </NavDropdown.Item>
               <NavDropdown.Divider />
               <NavDropdown.Item
                 onClick={handleSignOut}
                 style={{ color: "tomato" }}
                 href="#action/3.4"
               >
-                Sign Out
+                <Action>Đăng xuất</Action>
               </NavDropdown.Item>
             </NavDropdown>
           </Nav>
