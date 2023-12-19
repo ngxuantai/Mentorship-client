@@ -1,11 +1,15 @@
 import { ChatBubbleOutline } from "@mui/icons-material";
 import { Button } from "react-bootstrap";
+import { useNavigate } from "react-router";
 import MenteeHeader from "../../../components/MenteeHeader";
 
 function Inquires() {
+  const navigate = useNavigate();
+  const handleNavigateToSearchScreen = () => {
+    navigate("/mentor/search");
+  };
   return (
     <div>
-      <MenteeHeader />
       <div
         className="w-full py-2 text-center"
         style={{ backgroundColor: "#04b4ba" }}
@@ -25,7 +29,9 @@ function Inquires() {
           <p className="text-body-tertiary">
             Once you have messaged a mentor, they will show up here
           </p>
-          <Button variant="primary">Find mentors</Button>
+          <Button onClick={handleNavigateToSearchScreen} variant="primary">
+            Find mentors
+          </Button>
         </div>
       </div>
     </div>

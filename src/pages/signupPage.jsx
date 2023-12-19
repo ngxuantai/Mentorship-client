@@ -13,9 +13,11 @@ import styled from "styled-components";
 import menteeApi from "../api/mentee";
 import { colors } from "../constants/colors";
 import firebaseInstance from "../services/firebase";
+import { useUserStore } from "../store/userStore";
 
 function SignupPage() {
   const navigate = useNavigate();
+  const { user, setUser } = useUserStore();
   const [values, setValues] = useState({
     fullname: "",
     email: "",
@@ -42,9 +44,16 @@ function SignupPage() {
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
-      await firebaseInstance.createAccount(values.email, values.password);
-      await menteeApi.createMentee(values);
-      console.log(values);
+      const userFirebase = await firebaseInstance.createAccount(
+        values.email,
+        values.password
+      );
+      const mentee = await menteeApi.createMentee(values);
+      await firebaseInstance.addUser(userFirebase.uid, {
+        id: mentee.id,
+        role: "mentee",
+      });
+      setUser({ ...mentee, role: "mentee" });
       navigate("/mentee");
     } catch (er) {
       console.log("er", er);

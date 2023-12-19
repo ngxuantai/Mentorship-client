@@ -138,7 +138,7 @@ function MenteeHeader() {
           <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
             {pages.map((page) => (
               <Button
-                key={page}
+                key={page.name}
                 onClick={() => handleNavigate(page.link)}
                 sx={{
                   fontWeight: "bold",
@@ -176,7 +176,7 @@ function MenteeHeader() {
               onClose={handleCloseUserMenu}
             >
               {settings.map((setting) => (
-                <MenuItem key={setting} onClick={handleCloseUserMenu}>
+                <MenuItem key={setting.name} onClick={handleCloseUserMenu}>
                   <Typography textAlign="center">{setting.name}</Typography>
                 </MenuItem>
               ))}

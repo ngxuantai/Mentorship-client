@@ -25,8 +25,7 @@ class Firebase {
     );
     const user = userCredential.user;
     console.log("user", user);
-
-    await this.addUser(user.uid, { role: "mentee" });
+    return user;
   };
 
   signIn = (email, password) =>

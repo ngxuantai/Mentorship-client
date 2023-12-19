@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import { Button } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import MenteeHeader from "../../../components/MenteeHeader";
 import RecommendList from "./components/RecommendList";
 // import { CenteredRow, CenteredCol } from "@src/components/sharedComponents";
 const StyledContainer = styled.div`
@@ -32,7 +31,9 @@ const Content = styled.div`
 function DashBoard() {
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(true);
-
+  const handleNavigateToSearchScreen = () => {
+    navigate("/mentor/search");
+  };
   useEffect(() => {
     const token = localStorage.getItem("token");
     if (!token) {
@@ -47,8 +48,6 @@ function DashBoard() {
         <div></div>
       ) : (
         <StyledContainer fluid>
-          <MenteeHeader></MenteeHeader>
-
           <Content>
             <h2>Welcome, Khánh! Browse</h2>
             <p>
@@ -56,6 +55,7 @@ function DashBoard() {
               the next level!
             </p>
             <Button
+              onClick={handleNavigateToSearchScreen}
               variant="secondary"
               style={{
                 fontWeight: "bold",

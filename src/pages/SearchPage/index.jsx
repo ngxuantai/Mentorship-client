@@ -51,10 +51,15 @@ function Search() {
   }, []);
   return (
     <>
-      <MenteeHeader></MenteeHeader>
       <StyledContainer fluid>
         <Row className="justify-content-between align-items-start">
-          <h1 style={{ textAlign: "center", width: "100%" }}>
+          <h1
+            style={{
+              textAlign: "center",
+              width: "100%",
+              captionSideolor: "gray",
+            }}
+          >
             Tìm kiếm Mentor
           </h1>
           <SearchBar

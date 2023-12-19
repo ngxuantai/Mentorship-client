@@ -8,7 +8,6 @@ function Wishlist() {
   const navigate = useNavigate();
   return (
     <div>
-      <MenteeHeader />
       <div
         className="w-full py-2 text-center"
         style={{ backgroundColor: "#04b4ba" }}

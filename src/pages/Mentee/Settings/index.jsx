@@ -14,7 +14,6 @@ export default function Settings() {
   };
   return (
     <div style={{ margin: "auto" }}>
-      <MenteeHeader></MenteeHeader>
       <Container>
         <Tabs
           value={value}

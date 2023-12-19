@@ -10,6 +10,7 @@ import {
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import styled from "styled-components";
+import menteeApi from "../api/mentee";
 import { colors } from "../constants/colors";
 import firebaseInstance from "../services/firebase";
 import useAuthStore from "../store/authStore";
@@ -49,25 +50,28 @@ function LoginPage() {
     );
     const user = userCredential.user;
     const a = firebaseInstance.auth.currentUser;
+    //userId in firestore != userId in .net
     const doc = await firebaseInstance.getUser(user.uid);
     const userInfo = doc.data();
-    setUser(userInfo);
-    // console.log("userInfo", a, userInfo);
-    // if (userInfo.role === "mentee") {
-    //   navigate("/mentee");
-    // } else if (userInfo.role === "mentor") {
-    //   navigate("/mentor");
-    // }
-    await localStorage.setItem("user_role", JSON.stringify("mentee"));
+    console.log("userInfo", a, userInfo);
+    let userData;
+    if (userInfo.role === "mentee") {
+      userData = await menteeApi.getMentee(userInfo.id);
+      setUser({ ...userData, role: "mentee" });
+    } else if (userInfo.role === "mentor") {
+      navigate("/mentor");
+    }
   };
   useEffect(() => {
-    if (user) {
-      if (user.role === "mentee") {
-        navigate("/mentee");
-      } else if (user.role === "mentor") {
-        navigate("/mentor");
+    (async () => {
+      if (user) {
+        if (user.role === "mentee") {
+          navigate("/mentee");
+        } else if (user.role === "mentor") {
+          navigate("/mentor");
+        }
       }
-    }
+    })();
   }, [user]);
 
   return (

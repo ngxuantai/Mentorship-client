@@ -1,4 +1,5 @@
 import { Button, Col, Container, Row } from "react-bootstrap";
+import { useNavigate } from "react-router";
 import styled from "styled-components";
 import { SkillTag } from "../../../components/Tags";
 // import { CenteredRow, CenteredCol } from "@src/components/sharedComponents";
@@ -15,6 +16,11 @@ const Text = styled.p`
 `;
 
 function MentorItem({ mentor }) {
+  const navigate = useNavigate();
+
+  const handleNavigateToProfile = () => {
+    navigate(`/mentor/profile?mentorId=${mentor.id}`);
+  };
   return (
     <StyledContainer fluid>
       <Row className="justify-content-between align-items-start">
@@ -52,6 +58,7 @@ function MentorItem({ mentor }) {
             ))}
           </Col>
           <Button
+            onClick={handleNavigateToProfile}
             variant="secondary"
             style={{
               fontWeight: "bold",

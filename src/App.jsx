@@ -1,8 +1,10 @@
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import MenteeHeader from "./components/MenteeHeader";
 import ProtectedRoute from "./navigation/ProtectedRoute";
 import HomePage from "./pages/HomePage";
 import Login from "./pages/LoginPage";
 import Applications from "./pages/Mentee/Applications";
+import ApplyMentee from "./pages/Mentee/ApplyMentee";
 import ApplyProcess from "./pages/Mentee/ApplyProcess/";
 import InformationForm from "./pages/Mentee/ApplyProcess/InformationForm";
 import DashBoard from "./pages/Mentee/DashBoard";
@@ -18,19 +20,23 @@ import SignUp from "./pages/SignupPage";
 function App() {
   return (
     <Router>
+      <MenteeHeader></MenteeHeader>
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/auth/login" element={<Login />} />
         <Route path="/auth/signup" element={<SignUp />} />
 
-        <Route path="/mentee" element={<DashBoard />} />
-        <Route path="/profile" element={<Profile />} />
+        <Route path="/mentor" element={<Mentor />} />
+        <Route path="/mentor/search" element={<Search />} />
+        <Route path="/mentor/profile" element={<Profile />} />
+        <Route path="/mentor/apply" element={<ApplyMentor />} />
+
         <Route path="/settings" element={<Settings />} />
+
+        <Route path="/mentee" element={<DashBoard />} />
         <Route path="/mentee1" element={<InformationForm />} />
         <Route path="/mentee2" element={<ApplyProcess />} />
-        <Route path="/mentor/search" element={<Search />} />
-        <Route path="/mentor" element={<Mentor />} />
-        <Route path="/mentor/apply" element={<ApplyMentor />} />
+        <Route path="/mentee/apply" element={<ApplyMentee />} />
         <Route
           path="/mentee/applications"
           element={

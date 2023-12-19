@@ -1,22 +1,38 @@
-import React from 'react';
-import styled from 'styled-components';
-import PlanItem from './components/PlanItem';
-import Comment from './components/Comment';
-import {colors} from '../../constants/colors';
-import {Row, Col, Button, Badge} from 'react-bootstrap';
-import {List, ListItem, ListItemIcon, ListItemText} from '@mui/material';
 import {
-  Place,
-  Star,
-  WatchLater,
-  Task,
-  PlayArrow,
-  Favorite,
   Bolt,
-} from '@mui/icons-material';
-import {SkillTag} from '../../components/Tags';
+  Favorite,
+  Place,
+  PlayArrow,
+  Star,
+  Task,
+  WatchLater,
+} from "@mui/icons-material";
+import { List, ListItem, ListItemIcon, ListItemText } from "@mui/material";
+import { useEffect, useState } from "react";
+import { Badge, Button, Col, Row } from "react-bootstrap";
+import { useLocation, useNavigate } from "react-router";
+import styled from "styled-components";
+import mentorApi from "../../api/mentor";
+import { SkillTag } from "../../components/Tags";
+import { colors } from "../../constants/colors";
+import Comment from "./components/Comment";
+import PlanItem from "./components/PlanItem";
 
 function Profile() {
+  const navigate = useNavigate();
+  const location = useLocation();
+  const [mentor, setMentor] = useState();
+  const queryParams = new URLSearchParams(location.search);
+  const mentorId = queryParams.get("mentorId");
+
+  useEffect(() => {
+    const fetchMentor = async () => {
+      const data = await mentorApi.getMentorById(mentorId);
+      setMentor(data);
+    };
+
+    fetchMentor();
+  }, []);
   return (
     <Container>
       <div className="wallpaper">
@@ -27,16 +43,16 @@ function Profile() {
           ></img>
         </div>
         <div className="badget">
-          <Badge bg="light" style={{color: 'grey'}}>
+          <Badge bg="light" style={{ color: "grey" }}>
             <Bolt />
             Quick Responder
           </Badge>
         </div>
       </div>
       <div className="planItem">
-        <PlanItem></PlanItem>
+        <PlanItem mentor={mentor}></PlanItem>
       </div>
-      <div className="info " style={{marginTop: '100px'}}>
+      <div className="info " style={{ marginTop: "100px" }}>
         <Row sm={4} className="d-flex justify-content-center mt-5">
           <Col>
             <h3>Kristi Harper</h3>
@@ -73,7 +89,7 @@ function Profile() {
                 <ListItemText primary="Usually responds in half a day" />
               </ListItem>
             </List>
-            <div style={{display: 'flex'}}>
+            <div style={{ display: "flex" }}>
               <Button variant="light">
                 <PlayArrow />
                 <span>Play intro</span>
@@ -99,12 +115,12 @@ function Profile() {
           </Col>
           <Col></Col>
         </Row>
-        <hr style={{position: 'relative', zIndex: '-1'}} />
+        <hr style={{ position: "relative", zIndex: "-1" }} />
         <Row sm={4} className="d-flex justify-content-center">
           <Col sm={6}>
             <h3>About</h3>
             <p>
-              {' '}
+              {" "}
               Hi there! My name is Kristi Harper. I'm passionate about UX Design
               and mentoring. I have hands-on experience as an end-to-end
               designer. With effective leadership, strategic planning, and user
@@ -135,7 +151,7 @@ function Profile() {
           </Col>
           <Col></Col>
         </Row>
-        <hr style={{position: 'relative', zIndex: '-1'}} />
+        <hr style={{ position: "relative", zIndex: "-1" }} />
         <Row sm={4} className="d-flex justify-content-center">
           <Col sm={6}>
             <h3>What mentees say</h3>

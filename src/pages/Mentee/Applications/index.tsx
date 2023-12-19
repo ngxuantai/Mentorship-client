@@ -16,7 +16,7 @@ function Applications() {
   };
   return (
     <div style={{}}>
-      <MenteeHeader></MenteeHeader>
+      {/* <MenteeHeader></MenteeHeader> */}
       <div
         className="w-full py-2 text-center"
         style={{ backgroundColor: "#04b4ba" }}
