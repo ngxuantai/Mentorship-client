@@ -1,8 +1,7 @@
-import React from 'react';
-import './css/ProgressBar.css';
-import {ProgressBar, Step} from 'react-step-progress-bar';
+import { ProgressBar, Step } from "react-step-progress-bar";
+import "./css/ProgressBar.css";
 
-const MultiStepProgressBar = ({page, onPageNumberClick}) => {
+const MultiStepProgressBar = ({ page, onPageNumberClick }) => {
   // const steps = [
   //   {page: 'pageone', percentage: 0},
   //   {page: 'pagetwo', percentage: 50},
@@ -10,11 +9,11 @@ const MultiStepProgressBar = ({page, onPageNumberClick}) => {
   // ];
 
   var stepPercentage = 0;
-  if (page === 'pageone') {
+  if (page === "pageone") {
     stepPercentage = 0;
-  } else if (page === 'pagetwo') {
+  } else if (page === "pagetwo") {
     stepPercentage = 50;
-  } else if (page === 'pagethree') {
+  } else if (page === "pagethree") {
     stepPercentage = 100;
   } else {
     stepPercentage = 0;
@@ -41,27 +40,30 @@ const MultiStepProgressBar = ({page, onPageNumberClick}) => {
     // </ProgressBar>
     <ProgressBar percent={stepPercentage}>
       <Step>
-        {({accomplished, index}) => (
+        {({ accomplished, index }) => (
           <div
-            className={`indexedStep ${accomplished ? 'accomplished' : null}`}
+            style={style}
+            className={`indexedStep ${accomplished ? "accomplished" : null}`}
           >
             {index + 1}
           </div>
         )}
       </Step>
       <Step>
-        {({accomplished, index}) => (
+        {({ accomplished, index }) => (
           <div
-            className={`indexedStep ${accomplished ? 'accomplished' : null}`}
+            style={style}
+            className={`indexedStep ${accomplished ? "accomplished" : null}`}
           >
             {index + 1}
           </div>
         )}
       </Step>
       <Step>
-        {({accomplished, index}) => (
+        {({ accomplished, index }) => (
           <div
-            className={`indexedStep ${accomplished ? 'accomplished' : null}`}
+            style={style}
+            className={`indexedStep ${accomplished ? "accomplished" : null}`}
           >
             {index + 1}
           </div>
@@ -71,4 +73,8 @@ const MultiStepProgressBar = ({page, onPageNumberClick}) => {
   );
 };
 
+const style = {
+  fontSize: 18,
+  fontWeight: "500",
+};
 export default MultiStepProgressBar;

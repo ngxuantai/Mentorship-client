@@ -103,7 +103,9 @@ export default function SearchBar({ onSearch, resetSearch }) {
         {isShow && (
           <>
             <AiFillCloseCircle fontSize={24}></AiFillCloseCircle>
-            <p style={{ margin: 0, marginLeft: 8 }}>Xoá tất cả bộ lọc</p>
+            <p style={{ fontWeight: "500", margin: 0, marginLeft: 8 }}>
+              Xoá tất cả bộ lọc
+            </p>
           </>
         )}
       </div>

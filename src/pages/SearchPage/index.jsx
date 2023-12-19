@@ -4,7 +4,7 @@ import { useLocation } from "react-router";
 import styled from "styled-components";
 import mentorApi from "../../api/mentor";
 import skillApi from "../../api/skill";
-import Header from "../Mentee/DashBoard/components/Header";
+import MenteeHeader from "../../components/MenteeHeader";
 import MentorItem from "./components/MentorItem";
 import SearchBar from "./components/SearchBar";
 // import { CenteredRow, CenteredCol } from "@src/components/sharedComponents";
@@ -51,7 +51,7 @@ function Search() {
   }, []);
   return (
     <>
-      <Header></Header>
+      <MenteeHeader></MenteeHeader>
       <StyledContainer fluid>
         <Row className="justify-content-between align-items-start">
           <h1 style={{ textAlign: "center", width: "100%" }}>

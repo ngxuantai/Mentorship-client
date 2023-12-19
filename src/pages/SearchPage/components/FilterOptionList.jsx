@@ -62,6 +62,8 @@ export default function FilterOptionList({
       ref={forwardRef}
       style={{
         minWidth: 200,
+        zIndex: 1,
+        backgroundColor: "red",
         position: "absolute",
         maxHeight: 600,
         top: "100%",

@@ -5,6 +5,7 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  color: #4d4c4c;
 }
 
 code {
@@ -16,9 +17,15 @@ code {
   cursor: pointer;
   transition: background-color 0.4s;
 }
-
 p {
+  color: #4d4c4c;
   margin: 0;
+}
+a:hover,
+a:visited,
+a:link,
+a:active {
+  text-decoration: none;
 }
 .button-effect:hover {
   background-color: rgb(236, 236, 236);
@@ -27,3 +34,6 @@ p {
 /* .button-effect:active {
   opacity: 0.6;
 } */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
