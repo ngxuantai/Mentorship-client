@@ -2,7 +2,13 @@ import * as firebase from "firebase/app";
 import "firebase/auth";
 import * as authService from "firebase/auth";
 import * as firestoreService from "firebase/firestore";
-import { FirebaseStorage, getStorage } from "firebase/storage";
+import {
+  FirebaseStorage,
+  getDownloadURL,
+  getStorage,
+  ref,
+  uploadBytesResumable,
+} from "firebase/storage";
 import firebaseConfig from "../config/firebase";
 
 class Firebase {
@@ -64,7 +70,7 @@ class Firebase {
         .catch((error) => reject(error));
     });
 
-  generateKey = () => this.db.collection("products").doc().id;
+  // generateKey = () => firestoreService.getDoc().id;
   onAuthStateChanged = () =>
     new Promise((resolve, reject) => {
       this.auth.onAuthStateChanged((user) => {
@@ -77,11 +83,25 @@ class Firebase {
     });
 
   storeImage = async (folder, imageFile) => {
-    const id = this.generateKey();
-    const snapshot = await this.storage.ref(folder).child(id).put(imageFile);
-    const downloadURL = await snapshot.ref.getDownloadURL();
-
-    return downloadURL;
+    const id = Date.now();
+    const imageRef = ref(this.storage, `images/${id}`);
+    const uploadTask = uploadBytesResumable(imageRef, imageFile);
+    return new Promise((resolve, reject) => {
+      uploadTask.on(
+        "state_changed",
+        (snapshot) => {},
+        (error) => {
+          console.log(error);
+        },
+        () => {
+          // Upload completed successfully, now we can get the download URL
+          getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+            console.log("File available at", downloadURL);
+            resolve(downloadURL);
+          });
+        }
+      );
+    });
   };
 
   // deleteImage = (id) => this.storage.ref("products").child(id).delete();

@@ -11,11 +11,11 @@ export default function Header() {
   useEffect(() => {
     const getField = async () => {
       const fieldsData = await fieldApi.getAllFields();
-      console.log("fieldsData", fieldsData);
+
       const updatedFields = await Promise.all(
         fieldsData.map(async (field) => {
           const skills = await skillApi.getSkillsByFieldId(field.id);
-          console.log("skills", skills);
+      
 
           return { ...field, skills: skills.slice(0, 4) };
         })

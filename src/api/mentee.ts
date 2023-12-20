@@ -22,6 +22,17 @@ const menteeApi = {
       return null;
     }
   },
+  updateMentee: async (id, mentee) => {
+    try {
+      const url = `/api/mentee/update/${id}`;
+      const res = await axiosClient.put(url, mentee);
+      console.log("updated mentee data", res.data);
+      return res.data;
+    } catch (error) {
+      console.error(error);
+      return null;
+    }
+  },
 };
 
 export default menteeApi;

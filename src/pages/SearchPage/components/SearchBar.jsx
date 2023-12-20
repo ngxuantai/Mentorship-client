@@ -53,7 +53,7 @@ export default function SearchBar({ onSearch, resetSearch }) {
         console.log("value is invalid");
     }
   };
-  console.log("filters", filters);
+
   useEffect(() => {
     if (isEmptyObject(filters)) {
       setIsShow(false);

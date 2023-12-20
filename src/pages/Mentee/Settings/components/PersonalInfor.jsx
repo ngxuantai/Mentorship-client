@@ -2,16 +2,17 @@ import PrivacyTipIcon from "@mui/icons-material/PrivacyTip";
 import { Avatar, TextField } from "@mui/material";
 import React, { useRef } from "react";
 import styled from "styled-components";
+import firebaseInstance from "../../../../services/firebase";
+import { useUserStore } from "../../../../store/userStore";
 
 export default function PersonalInfor() {
+  const { user, updateUser } = useUserStore();
+  const [selectedImage, setSelectedImage] = React.useState(user.avatar);
   const [values, setValues] = React.useState({
-    firstName: "",
-    lastName: "",
-    email: "",
-    jobTitle: "",
-    linkedin: "",
-    twitter: "",
-    goal: "",
+    firstName: user.firstName,
+    lastName: user.lastName,
+    email: user.email,
+    jobTitle: user.jobTitle || "",
   });
 
   const fileInputRef = useRef(null);
@@ -20,14 +21,25 @@ export default function PersonalInfor() {
     fileInputRef.current.click();
   };
 
-  const handleFileChange = (event) => {
+  const handleFileChange = async (event) => {
     const file = event.target.files[0];
     if (file) {
-      console.log(`Đã chọn tệp: ${file.name}`);
+      values.avatar = file;
+      console.log(`Đã chọn tệp:`, file);
+      const imageUrl = URL.createObjectURL(file);
+      setSelectedImage(imageUrl);
       // Thực hiện xử lý tệp ở đây (ví dụ: tải lên máy chủ)
     }
   };
-
+  const handleSaveChange = async (event) => {
+    event.preventDefault();
+    const avatarUrl = values.avatar
+      ? await firebaseInstance.storeImage("avatar", values.avatar)
+      : user.avatar;
+    console.log(`Đã chọn tệp:`, avatarUrl);
+    const updatedUser = { ...user, avatar: avatarUrl };
+    await updateUser(user.id, updatedUser);
+  };
   const handleChange = (event) => {
     const { name, value } = event.target;
     setValues({ ...values, [name]: value });
@@ -60,7 +72,11 @@ export default function PersonalInfor() {
         <AvatarContainer>
           <p>Ảnh</p>
           <div className="avatar-change">
-            <Avatar sx={{ width: "100px", height: "100px" }} />
+            <Avatar
+              //render selected image here
+              src={selectedImage}
+              sx={{ width: "100px", height: "100px" }}
+            />
             <input
               type="file"
               ref={fileInputRef}
@@ -70,7 +86,7 @@ export default function PersonalInfor() {
             <button onClick={handleButtonClick}>Chọn tệp</button>
           </div>
         </AvatarContainer>
-        <InforContainer>
+        <InforContainer onSubmit={handleSaveChange}>
           <div className="content">
             <TextField
               name="firstName"

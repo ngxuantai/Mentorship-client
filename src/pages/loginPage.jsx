@@ -24,7 +24,7 @@ function LoginPage() {
     email: "",
     password: "",
   });
-  console.log("login page: user", user);
+
   const [showPassword, setShowPassword] = useState(false);
   // const [tab, setTab] = useState('mentor');
 
@@ -53,7 +53,7 @@ function LoginPage() {
     //userId in firestore != userId in .net
     const doc = await firebaseInstance.getUser(user.uid);
     const userInfo = doc.data();
-    console.log("userInfo", a, userInfo);
+
     let userData;
     if (userInfo.role === "mentee") {
       userData = await menteeApi.getMentee(userInfo.id);

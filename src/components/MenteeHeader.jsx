@@ -13,6 +13,7 @@ import Tooltip from "@mui/material/Tooltip";
 import Typography from "@mui/material/Typography";
 import * as React from "react";
 import { useNavigate } from "react-router";
+import { useUserStore } from "../store/userStore";
 
 const pages = [
   { name: "Trang chủ", link: "/" },
@@ -23,16 +24,18 @@ const pages = [
   // thêm các trang khác tại đây
 ];
 
+const LOGGOUT = "Đăng xuất";
 const settings = [
   { name: "Hồ sơ", link: "/" },
   { name: "Lịch sử thanh toán", link: "/mentee/wishlist" },
-  { name: "Đăng xuất", link: "/mentee/inquires" },
+  { name: LOGGOUT, link: "" },
   // thêm các trang khác tại đây
 ];
 
 function MenteeHeader() {
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
+  const { user, setUser } = useUserStore();
   const navigate = useNavigate();
   const handleNavigate = (link) => {
     navigate(link);
@@ -51,7 +54,15 @@ function MenteeHeader() {
   const handleCloseUserMenu = () => {
     setAnchorElUser(null);
   };
-
+  const handleSettingClick = (setting) => {
+    handleCloseUserMenu();
+    if (setting.name == LOGGOUT) {
+      setUser(null);
+      navigate("/");
+      return;
+    }
+    navigate(setting.link);
+  };
   return (
     <AppBar
       style={{
@@ -156,7 +167,12 @@ function MenteeHeader() {
           <Box sx={{ flexGrow: 0 }}>
             <Tooltip title="Open settings">
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
+                <Avatar
+                  alt="Remy Sharp"
+                  src={
+                    user?.avatar ? user.avatar : "/static/images/avatar/2.jpg"
+                  }
+                />
               </IconButton>
             </Tooltip>
             <Menu
@@ -170,14 +186,23 @@ function MenteeHeader() {
               keepMounted
               transformOrigin={{
                 vertical: "top",
+                fontWeight: "bold",
                 horizontal: "right",
               }}
               open={Boolean(anchorElUser)}
               onClose={handleCloseUserMenu}
             >
               {settings.map((setting) => (
-                <MenuItem key={setting.name} onClick={handleCloseUserMenu}>
-                  <Typography textAlign="center">{setting.name}</Typography>
+                <MenuItem
+                  key={setting.name}
+                  onClick={() => handleSettingClick(setting)}
+                >
+                  <Typography
+                    color={setting.name === LOGGOUT ? "tomato" : null}
+                    textAlign="center"
+                  >
+                    <strong>{setting.name}</strong>
+                  </Typography>
                 </MenuItem>
               ))}
             </Menu>

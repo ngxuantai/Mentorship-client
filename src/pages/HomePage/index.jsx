@@ -3,6 +3,7 @@ import { useNavigate } from "react-router";
 import styled from "styled-components";
 import Footer from "../../components/Footer";
 import Header from "../../components/Header";
+import { UserRole } from "../../constants";
 import { useUserStore } from "../../store/userStore";
 import Service from "./components/Service";
 import SlideCard from "./components/SlideCard";
@@ -10,21 +11,13 @@ import SlideCard from "./components/SlideCard";
 function HomePage() {
   const navigate = useNavigate();
   const { user } = useUserStore();
-  console.log("homepage: user", user);
-  useEffect(() => {
-    (async () => {
-      const user_route = await localStorage.getItem("user_route");
-      console.log("Home:user_route", user_route);
-      if (user_route) {
-        navigate(`/${user_route}`);
-      }
-    })();
-  }, []);
+
+  useEffect(() => {}, []);
   useEffect(() => {
     if (user) {
-      if (user.role === "mentee") {
+      if (user.role === UserRole.MENTEE) {
         navigate("/mentee");
-      } else if (user.role === "mentor") {
+      } else if (user.role === UserRole.MENTOR) {
         navigate("/mentor");
       }
     }

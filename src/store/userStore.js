@@ -1,12 +1,18 @@
 import create from "zustand";
+import menteeApi from "../api/mentee";
+import { UserRole } from "../constants";
 
 export const useUserStore = create((set) => ({
-  user: {
-    id: "6545fadf162346b2815226b5",
-    avatar: "https://picsum.photos/200/300",
-    displayName: "Default User",
-    email: "default.user@example.com",
-    phoneNumber: "123-456-7890",
-  },
+  user: {},
   setUser: (user) => set({ user }),
+  updateUser: async (id, updatedUser) => {
+    console.log("user", updatedUser);
+    if (user.role === UserRole.MENTEE) {
+      const updatedMentee = await menteeApi.updateMentee(id, updatedUser);
+      if (updatedMentee) {
+        set({ user: updatedMentee });
+      }
+    } else if (user.role === UserRole.MENTOR) {
+    }
+  },
 }));

@@ -2,7 +2,6 @@ import axiosClient from "../config/axiosClient";
 const applicationApi = {
   createApplication: async (data) => {
     try {
-      console.log("data", data);
       const url = "/application/createApplication";
       const res = await axiosClient.post(url, data);
       console.log("application res data", data);

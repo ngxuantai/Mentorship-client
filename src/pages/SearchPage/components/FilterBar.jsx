@@ -7,7 +7,6 @@ import "../css/Slider.css";
 import FilterButton from "./FilterButton";
 
 export default function FilterBar({ filters, onFilterChange }) {
-  console.log("filters", filters);
   return (
     <Container style={{}} className="mt-5">
       <Row
@@ -57,7 +56,6 @@ function PriceFilterButton({
     }
   };
   const handleOnChange = (min, max) => {
-    console.log("on change", min, max);
     onFilterChange("price", { min, max });
   };
   useEffect(() => {

@@ -16,6 +16,7 @@ const menteeApplicationApi = {
     try {
       const url = `/menteeApplication/getMenteeApplicationByMenteeId/${menteeId}`;
       const res = await axiosClient.get(url);
+
       return res.data.data;
     } catch (error) {
       console.error(error);
@@ -49,11 +50,10 @@ const menteeApplicationApi = {
     try {
       const url = "/menteeApplication/createMenteeApplication";
       const res = await axiosClient.post(url, menteeApplication);
-      console.log("mentee application res", res.data);
+
       return res.data.data;
     } catch (error) {
-      console.error(error);
-      return null;
+      throw error;
     }
   },
 };

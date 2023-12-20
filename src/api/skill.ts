@@ -4,7 +4,7 @@ const skillApi = {
     try {
       const url = "/skill/getAllSkills";
       const res = await axiosClient.get(url);
-      console.log("all skills", res.data.data);
+
       return res.data.data;
     } catch (error) {
       console.error(error);

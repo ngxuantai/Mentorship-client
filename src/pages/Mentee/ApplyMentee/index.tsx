@@ -37,15 +37,21 @@ export default function ApplyMentee() {
     }));
   };
   const handleFinish = async () => {
-    const application = {
-      ...values,
-      fee: mentor.price,
-      menteeProfile: { ...user },
-    };
-    await menteeApplicationApi.createMenteeApplication(application);
-    setIsSuccess(true);
+    try {
+      const application = {
+        ...values,
+        fee: mentor.price,
+        mentorId,
+        menteeProfile: { ...user },
+      };
+      console.log("handleFinish", application);
+      await menteeApplicationApi.createMenteeApplication(application);
+      setIsSuccess(true);
+    } catch (er) {
+      console.error(er);
+    }
   };
-  console.log("new value apply mentee", values, user);
+
   const stepComponents = {
     0: <AboutYou values={values} handleInputChange={handleInputChange} />,
     1: <Goal values={values} handleInputChange={handleInputChange} />,
@@ -66,7 +72,7 @@ export default function ApplyMentee() {
   };
   const getMentorInfor = async (id) => {
     const mentor = await mentorApi.getMentorById(id);
-    console.log("getMentorInfor", mentor);
+
     setMentor(mentor);
   };
   useEffect(() => {
