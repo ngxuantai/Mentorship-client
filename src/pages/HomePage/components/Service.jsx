@@ -9,42 +9,44 @@ export default function Service() {
   const navigate = useNavigate();
   return (
     <ServiceContainer>
-      <h2>At your fingertips: a dedicated career coach.</h2>
+      <h2>Trong tầm tay: một người cố vấn tận tâm</h2>
       <p>
-        Want to ace your next job interview? Successfully build your startup?
-        Itching to learn high-demand skills? Work smart with an online mentor or
-        coach by your side to offer expert advice and guidance to match your
-        zeal. Become unstoppable using MentorCruise.
+        Bạn muốn tỏa sáng trong cuộc phỏng vấn việc làm kế tiếp hoặc xây dựng
+        một công ty khởi nghiệp của riêng bạn? Bạn muốn học các kỹ năng làm việc
+        mới? Hãy đến với MentorShip để có thể học tập với người cố vấn đầy kinh
+        nghiệm hoặc huấn luyện viên trực tuyến bên cạnh bạn, từ đó có được lời
+        khuyên và hướng dẫn chuyên môn phù hợp với đam mê của bạn.
       </p>
       <div className="service-card-container">
         <div className="service-card">
-          <h3>Find a mentor</h3>
+          <h3>Tìm kiếm người cố vấn</h3>
           <div className="service-card-icon">
             <img src={findMentor} />
           </div>
           <p>
-            Get matched with an expert mentor who will help you build your
-            skills and accomplish your goals.
+            Kết nối với người cố vấn, từ đó giúp bạn xây dựng kĩ năng và hoàn
+            thiện mục tiêu của mình.
           </p>
         </div>
         <div className="service-card">
-          <h3>Apply for Mentorship</h3>
+          <h3>Nộp đơn Mentorship</h3>
           <div className="service-card-icon">
             <img src={applyMentorship} />
           </div>
           <p>
-            Fill in an application, and if you’re a match with your chosen
-            mentor you can start your free 7-day trial.
+            Điền đơn đăng ký và nếu bạn thấy mình phù hợp với người cố vấn mà
+            bạn chọn, bạn sẽ có được 7 ngày trải nghiệm miễn phí.
           </p>
         </div>
         <div className="service-card">
-          <h3>Level up your skills</h3>
+          <h3>Nâng cao kĩ năng</h3>
           <div className="service-card-icon">
             <img src={levelupSkill} />
           </div>
           <p>
-            From personal chats to hands-on support, each mentor offers
-            different services to help you skyrocket your career.
+            Từ trò chuyện cá nhân đến hỗ trợ thực tế, mỗi người cố vấn cung cấp
+            các dịch vụ khác nhau để giúp bạn thăng tiến nhanh chóng trong sự
+            nghiệp của mình.
           </p>
         </div>
       </div>

@@ -31,8 +31,8 @@ function HomePage() {
             </p>
             <h1>Mentorship</h1>
             <SearchForm>
-              <input type="text" placeholder="Search for mentors" />
-              <button>Search</button>
+              <input type="text" placeholder="" />
+              <button>Tìm kiếm</button>
             </SearchForm>
             <div style={{width: '100%'}}>
               <SlideCard />

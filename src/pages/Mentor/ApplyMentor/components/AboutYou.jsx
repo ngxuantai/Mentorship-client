@@ -188,7 +188,7 @@ export default function AboutYou({onButtonClick}) {
               }}
             />
           </div>
-          <FormControl style={{width: '70%'}}>
+          {/* <FormControl style={{width: '70%'}}>
             <InputLabel id="demo-simple-select-label" size="small">
               Location
             </InputLabel>
@@ -205,7 +205,7 @@ export default function AboutYou({onButtonClick}) {
                 </MenuItem>
               ))}
             </Select>
-          </FormControl>
+          </FormControl> */}
           <div
             style={{width: '100%', display: 'flex', justifyContent: 'flex-end'}}
           >

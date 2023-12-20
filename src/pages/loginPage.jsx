@@ -11,11 +11,11 @@ import {
 } from '@mui/material';
 import {Visibility, VisibilityOff} from '@mui/icons-material';
 import {colors} from '../constants/colors';
-import useAuthStore from '../store/authStore';
+import userStore from '../store/userStore';
 
 function LoginPage() {
   const navigate = useNavigate();
-  const setAuth = useAuthStore.getState().login;
+  const userState = userStore.getState().user;
   const [values, setValues] = useState({
     email: '',
     password: '',
@@ -38,10 +38,17 @@ function LoginPage() {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    setAuth(values);
+    const user = {
+      email: values.email,
+      // password: values.password,
+    };
+
+    // userState.login({user, token: '123456'});
+    console.log(userState);
+    // setAuth(values);
     localStorage.setItem('token', '123456');
     console.log(values);
-    navigate('/mentee');
+    // navigate('/mentee');
   };
 
   return (

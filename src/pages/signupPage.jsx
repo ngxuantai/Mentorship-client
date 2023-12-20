@@ -11,7 +11,7 @@ import {
 } from '@mui/material';
 import {Visibility, VisibilityOff} from '@mui/icons-material';
 import {colors} from '../constants/colors';
-import useAuthStore from '../store/authStore';
+import useAuthStore from '../store/userStore';
 
 function SignupPage() {
   const navigate = useNavigate();
