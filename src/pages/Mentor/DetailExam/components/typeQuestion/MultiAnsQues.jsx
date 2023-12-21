@@ -3,6 +3,7 @@ import {TextField, Button, Alert} from '@mui/material';
 import {ToastContainer, toast} from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import RemoveCircleIcon from '@mui/icons-material/RemoveCircle';
+import examApi from '../../../../../api/exam';
 import styled from 'styled-components';
 
 export default function MultiAnsQues({addQuestion, cancelAddQues}) {
@@ -35,7 +36,6 @@ export default function MultiAnsQues({addQuestion, cancelAddQues}) {
     autoClose: 3000,
     pauseOnHover: true,
     draggable: true,
-    theme: 'dark',
   };
 
   const checkCorrectAnswer = () => {

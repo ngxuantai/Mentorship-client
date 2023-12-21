@@ -11,10 +11,10 @@ export default function AddQuestion({examId, addQuestion, cancelAddQues}) {
       type: 'oneAnswer',
       name: 'Một đáp án',
     },
-    {
-      type: 'multipleAnswer',
-      name: 'Nhiều đáp án',
-    },
+    // {
+    //   type: 'multipleAnswer',
+    //   name: 'Nhiều đáp án',
+    // },
     {
       type: 'trueFalse',
       name: 'Đúng hay sai',
@@ -60,13 +60,13 @@ export default function AddQuestion({examId, addQuestion, cancelAddQues}) {
               cancelAddQues={cancelAddQues}
             />
           )}
-          {selectedType === 'multipleAnswer' && (
+          {/* {selectedType === 'multipleAnswer' && (
             <MultipleAnsQues
               examId={examId}
               addQuestion={addQuestion}
               cancelAddQues={cancelAddQues}
             />
-          )}
+          )} */}
           {selectedType === 'trueFalse' && (
             <TrueFalseQues
               examId={examId}

@@ -12,9 +12,20 @@ const examApi = {
       return null;
     }
   },
+  getExamByExamId: async (examId) => {
+    try {
+      const url = `/api/exam/getByExamId/${examId}`;
+      const res = await axiosClient.get(url);
+      console.log('exam data', res.data);
+      return res.data;
+    } catch (error) {
+      console.error(error);
+      return null;
+    }
+  },
   getExamByMentorId: async (mentorId) => {
     try {
-      const url = `/api/exam/get/${mentorId}`;
+      const url = `/api/exam/getByMentorId/${mentorId}`;
       console.log('url', url);
       const res = await axiosClient.get(url);
       console.log('exam data', res.data);

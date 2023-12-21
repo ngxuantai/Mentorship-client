@@ -87,7 +87,7 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   gap: 1rem;
-  align-items: center; // Chỉ định trung tâm theo chiều ngang
+  align-items: center;
 `;
 
 const ButtonContainer = styled.div`

@@ -28,7 +28,6 @@ const DetailExam = () => {
     autoClose: 3000,
     pauseOnHover: true,
     draggable: true,
-    theme: 'dark',
   };
 
   const addQuestion = (data) => {
