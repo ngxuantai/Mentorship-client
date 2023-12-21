@@ -1,5 +1,5 @@
 import {BrowserRouter as Router, Route, Routes} from 'react-router-dom';
-import MenteeHeader from './components/MenteeHeader';
+import MenteeHeader from './components/header/MenteeHeader';
 import ProtectedRoute from './navigation/ProtectedRoute';
 import HomePage from './pages/HomePage';
 import Login from './pages/LoginPage';

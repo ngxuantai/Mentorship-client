@@ -1,4 +1,5 @@
 import { Button, Col, Container, Row } from "react-bootstrap";
+import { FaHeart } from "react-icons/fa";
 import { useNavigate } from "react-router";
 import styled from "styled-components";
 import { SkillTag } from "../../../components/Tags";
@@ -21,6 +22,7 @@ function MentorItem({ mentor }) {
   const handleNavigateToProfile = () => {
     navigate(`/mentor/profile?mentorId=${mentor.id}`);
   };
+  const handleAddToWishList = () => {};
   return (
     <StyledContainer fluid>
       <Row className="justify-content-between align-items-start">
@@ -57,18 +59,40 @@ function MentorItem({ mentor }) {
               <SkillTag key={skill.id}>{skill.name}</SkillTag>
             ))}
           </Col>
-          <Button
-            onClick={handleNavigateToProfile}
-            variant="secondary"
-            style={{
-              fontWeight: "bold",
-              borderRadius: "4px",
-              textAlign: "center",
-              alignSelf: "flex-start",
-            }}
-          >
-            Xem hồ sơ
-          </Button>
+          <div style={{ alignSelf: "flex-start", width: "100%" }}>
+            <Button
+              onClick={handleNavigateToProfile}
+              variant="secondary"
+              style={{
+                fontWeight: "bold",
+                borderRadius: "4px",
+                textAlign: "center",
+                marginRight: 12,
+              }}
+            >
+              Xem hồ sơ
+            </Button>
+            <Button
+              onClick={handleAddToWishList}
+              variant="secondary"
+              style={{
+                fontWeight: "bold",
+                borderRadius: "4px",
+                textAlign: "center",
+                marginRight: 12,
+              }}
+            >
+              <div
+                style={{
+                  display: "flex",
+                  flexDirection: "row",
+                  alignItems: "center",
+                }}
+              >
+                <FaHeart style={{ marginRight: 8 }}></FaHeart> Yêu thích
+              </div>
+            </Button>
+          </div>
         </Col>
         <Col className="d-flex justify-content-end align-items-center flex-column">
           <SkillTag style={{ alignSelf: "flex-end" }}>

@@ -4,7 +4,6 @@ import { useLocation } from "react-router";
 import styled from "styled-components";
 import mentorApi from "../../api/mentor";
 import skillApi from "../../api/skill";
-import MenteeHeader from "../../components/MenteeHeader";
 import MentorItem from "./components/MentorItem";
 import SearchBar from "./components/SearchBar";
 // import { CenteredRow, CenteredCol } from "@src/components/sharedComponents";

@@ -1,7 +1,6 @@
 import { ChatBubbleOutline } from "@mui/icons-material";
 import { Button } from "react-bootstrap";
 import { useNavigate } from "react-router";
-import MenteeHeader from "../../../components/MenteeHeader";
 
 function Inquires() {
   const navigate = useNavigate();

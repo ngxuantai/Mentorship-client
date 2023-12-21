@@ -7,12 +7,13 @@ import { useUserStore } from "../../../../store/userStore";
 
 export default function PersonalInfor() {
   const { user, updateUser } = useUserStore();
+  console.log("user infor", user);
   const [selectedImage, setSelectedImage] = React.useState(user.avatar);
   const [values, setValues] = React.useState({
     firstName: user.firstName,
     lastName: user.lastName,
-    email: user.email,
-    jobTitle: user.jobTitle || "",
+    phoneNumber: user.phoneNumber,
+    dateOfBirth: user.dateOfBirth ? new Date(user.dateOfBirth) : null,
   });
 
   const fileInputRef = useRef(null);
@@ -42,7 +43,14 @@ export default function PersonalInfor() {
   };
   const handleChange = (event) => {
     const { name, value } = event.target;
-    setValues({ ...values, [name]: value });
+
+    // Xử lý trường dateOfBirth riêng lẻ
+    if (name === "dateOfBirth") {
+      const selectedDate = new Date(value);
+      setValues({ ...values, [name]: selectedDate });
+    } else {
+      setValues({ ...values, [name]: value });
+    }
   };
   return (
     <Container>
@@ -120,10 +128,10 @@ export default function PersonalInfor() {
             style={{ width: "50%", paddingRight: "0.5rem" }}
           >
             <TextField
-              name="email"
+              name="phoneNumber"
               onChange={(event) => handleChange(event)}
               autoComplete="off"
-              label="Email"
+              label="Số điện thoại"
               variant="outlined"
               size="small"
               sx={{
@@ -132,39 +140,15 @@ export default function PersonalInfor() {
               }}
               required
             />
-          </div>
-          <TextField
-            name="jobTitle"
-            onChange={(event) => handleChange(event)}
-            autoComplete="off"
-            label="Chức danh công việc"
-            variant="outlined"
-            size="small"
-            sx={{
-              width: "100%",
-              fontSize: "1rem",
-            }}
-          />
-          <div className="content">
             <TextField
-              name="linkedin"
+              name="dateOfBirth"
+              type="date"
               onChange={(event) => handleChange(event)}
-              autoComplete="off"
-              label="LinkedIn"
-              placeholder="https://www.linkedin.com/"
-              variant="outlined"
-              size="small"
-              sx={{
-                width: "100%",
-                fontSize: "1rem",
-              }}
-            />
-            <TextField
-              name="twitter"
-              onChange={(event) => handleChange(event)}
-              autoComplete="off"
-              label="Twitter"
-              placeholder="https://twitter.com/"
+              value={
+                values.dateOfBirth
+                  ? values.dateOfBirth.toISOString().substring(0, 10)
+                  : ""
+              }
               variant="outlined"
               size="small"
               sx={{
@@ -173,6 +157,7 @@ export default function PersonalInfor() {
               }}
             />
           </div>
+          {/*       
           <TextField
             name="goal"
             multiline
@@ -189,7 +174,7 @@ export default function PersonalInfor() {
                 resize: "vertical",
               },
             }}
-          />
+          /> */}
           <button>Lưu thay đổi</button>
         </InforContainer>
       </ContentContainer>
