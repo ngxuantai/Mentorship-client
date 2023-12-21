@@ -1,48 +1,47 @@
-import React, {useState, useEffect} from 'react';
-import {useNavigate} from 'react-router-dom';
+import {useEffect} from 'react';
+import {useNavigate} from 'react-router';
 import styled from 'styled-components';
-import Header from '../../components/Header';
-import SlideCard from './components/SlideCard';
-import Service from './components/Service';
 import Footer from '../../components/Footer';
+import Header from '../../components/Header';
+import {UserRole} from '../../constants';
+import {useUserStore} from '../../store/userStore';
+import Service from './components/Service';
+import SlideCard from './components/SlideCard';
 
 function HomePage() {
   const navigate = useNavigate();
-  const [isLoading, setIsLoading] = useState(true);
+  const {user} = useUserStore();
 
+  useEffect(() => {}, []);
   useEffect(() => {
-    const token = localStorage.getItem('token');
-    if (token) {
-      navigate('/mentee');
+    if (user) {
+      if (user.role === UserRole.MENTEE) {
+        navigate('/mentee');
+      } else if (user.role === UserRole.MENTOR) {
+        navigate('/mentor');
+      }
     }
-    setIsLoading(false);
-  }, []);
-
+  }, [user]);
   return (
     <>
-      {isLoading ? (
-        <></>
-      ) : (
-        <HomeContainer>
-          <Header />
-          <div className="brand-container">
-            <p className="slogan">
-              Học kĩ năng mới, khởi động dự án và đặt chân tới sự nghiệp mơ ước.
-            </p>
-            <h1>Mentorship</h1>
-            <SearchForm>
-              <input type="text" placeholder="" />
-              <button>Tìm kiếm</button>
-            </SearchForm>
-            <div style={{width: '100%'}}>
-              <SlideCard />
-            </div>
+      <HomeContainer>
+        <Header />
+        <div className="brand-container">
+          <p className="slogan">
+            Học kĩ năng mới, khởi động dự án và đặt chân tới sự nghiệp mơ ước.
+          </p>
+          <h1>Mentorship</h1>
+          <SearchForm>
+            <input type="text" placeholder="Search for mentors" />
+            <button>Search</button>
+          </SearchForm>
+          <div style={{width: '100%'}}>
+            <SlideCard />
           </div>
-          <Service />
-          <Footer />
-        </HomeContainer>
-      )}
-      ;
+        </div>
+        <Service />
+        <Footer />
+      </HomeContainer>
     </>
   );
 }

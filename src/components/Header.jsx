@@ -1,10 +1,32 @@
-import React, {useState, useEffect} from 'react';
-import styled from 'styled-components';
-import Logo from '../assets/logo-no-text.png';
-import {Link} from 'react-router-dom';
-import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
+import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
+import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
+import styled from "styled-components";
+import fieldApi from "../api/field";
+import skillApi from "../api/skill";
+import Logo from "../assets/logo-no-text.png";
 
 export default function Header() {
+  const [fields, setFields] = useState([]);
+  useEffect(() => {
+    const getField = async () => {
+      const fieldsData = await fieldApi.getAllFields();
+
+      const updatedFields = await Promise.all(
+        fieldsData.map(async (field) => {
+          const skills = await skillApi.getSkillsByFieldId(field.id);
+      
+
+          return { ...field, skills: skills.slice(0, 4) };
+        })
+      );
+
+      setFields(updatedFields);
+    };
+
+    getField();
+  }, []);
+
   return (
     <Container>
       <div className="logo">
@@ -14,73 +36,23 @@ export default function Header() {
         <MenuContainer>
           <span>
             <Link to="/mentor/search">Tìm kiếm mentor</Link>
-            <KeyboardArrowDownIcon style={{fontSize: '1rem'}} />
+            <KeyboardArrowDownIcon style={{ fontSize: "1rem" }} />
           </span>
           <div className="custom-menu">
-            <div className="menu-column">
-              <div className="menu-header">Tech Mentors</div>
-              <ul>
-                <li>
-                  <a href="#">Javascript</a>
-                </li>
-                <li>
-                  <a href="#">Javascript</a>
-                </li>
-                <li>
-                  <a href="#">Javascript</a>
-                </li>
-                <li>
-                  <a href="#">Javascript</a>
-                </li>
-              </ul>
-              <div className="menu-header">Career Mentors</div>
-              <ul>
-                <li>
-                  <a href="#">Javascript</a>
-                </li>
-                <li>
-                  <a href="#">Javascript</a>
-                </li>
-                <li>
-                  <a href="#">Javascript</a>
-                </li>
-                <li>
-                  <a href="#">Javascript</a>
-                </li>
-              </ul>
-            </div>
-            <div className="menu-column">
-              <div className="menu-header">Business Mentors</div>
-              <ul>
-                <li>
-                  <a href="#">Javascript</a>
-                </li>
-                <li>
-                  <a href="#">Javascript</a>
-                </li>
-                <li>
-                  <a href="#">Javascript</a>
-                </li>
-                <li>
-                  <a href="#">Javascript</a>
-                </li>
-              </ul>
-              <div className="menu-header">Design Mentors</div>
-              <ul>
-                <li>
-                  <a href="#">Javascript</a>
-                </li>
-                <li>
-                  <a href="#">Javascript</a>
-                </li>
-                <li>
-                  <a href="#">Javascript</a>
-                </li>
-                <li>
-                  <a href="#">Javascript</a>
-                </li>
-              </ul>
-            </div>
+            {fields.map((field) => (
+              <div className="menu-column" key={field.id}>
+                <div className="menu-header">{field.name}</div>
+                <ul>
+                  {field.skills.map((skill) => (
+                    <li key={skill.id}>
+                      <Link to={`/mentor/search?skillId=${skill.id}`}>
+                        {skill.name}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ))}
           </div>
         </MenuContainer>
         <div>

@@ -1,33 +1,28 @@
-import React, {useRef, useState, useEffect} from 'react';
-import styled from 'styled-components';
-import PrivacyTipIcon from '@mui/icons-material/PrivacyTip';
-import InfoIcon from '@mui/icons-material/Info';
-import {
-  TextField,
-  Avatar,
-  FormControl,
-  InputLabel,
-  Select,
-  MenuItem,
-} from '@mui/material';
+import InfoIcon from "@mui/icons-material/Info";
+import { TextField } from "@mui/material";
+import { useState } from "react";
+import styled from "styled-components";
+import applicationApi from "../../../../api/application";
+import { applicationData } from "../../../../mockData";
 
-export default function Experience({onButtonClick}) {
+export default function Experience({ onButtonClick }) {
   const [values, setValues] = useState({
-    category: '',
-    skill: '',
-    bio: '',
-    linkedin: '',
-    twitter: '',
-    personalWebsite: '',
+    category: "",
+    skill: "",
+    bio: "",
+    linkedin: "",
+    twitter: "",
+    personalWebsite: "",
   });
 
   const handleChange = (event) => {
-    const {name, value} = event.target;
-    setValues({...values, [name]: value});
+    const { name, value } = event.target;
+    setValues({ ...values, [name]: value });
   };
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
+    await applicationApi.createApplication(applicationData);
   };
 
   return (
@@ -35,10 +30,12 @@ export default function Experience({onButtonClick}) {
       <ContentContainer>
         <TipsContainer>
           <div>
-            <InfoIcon style={{color: '#3f83f8', fontSize: '16px'}} />
+            <InfoIcon style={{ color: "#3f83f8", fontSize: "16px" }} />
           </div>
-          <div style={{paddingTop: '2px', color: '#224F9C', fontSize: '16px'}}>
-            <span style={{margin: 0, padding: 0, fontWeight: 'bold'}}>
+          <div
+            style={{ paddingTop: "2px", color: "#224F9C", fontSize: "16px" }}
+          >
+            <span style={{ margin: 0, padding: 0, fontWeight: "bold" }}>
               Almost there!
             </span>
             <p>
@@ -63,11 +60,11 @@ export default function Experience({onButtonClick}) {
             variant="outlined"
             size="small"
             sx={{
-              width: '100%',
-              fontSize: '1rem',
-              '& textarea': {
-                minHeight: '8rem',
-                resize: 'vertical',
+              width: "100%",
+              fontSize: "1rem",
+              "& textarea": {
+                minHeight: "8rem",
+                resize: "vertical",
               },
             }}
             required
@@ -81,31 +78,31 @@ export default function Experience({onButtonClick}) {
             variant="outlined"
             size="small"
             sx={{
-              width: '100%',
-              fontSize: '1rem',
-              '& textarea': {
-                minHeight: '8rem',
-                resize: 'vertical',
+              width: "100%",
+              fontSize: "1rem",
+              "& textarea": {
+                minHeight: "8rem",
+                resize: "vertical",
               },
             }}
             required
           />
           <div
             style={{
-              width: '100%',
-              display: 'flex',
-              justifyContent: 'space-between',
-              flexDirection: 'row',
+              width: "100%",
+              display: "flex",
+              justifyContent: "space-between",
+              flexDirection: "row",
             }}
           >
             <button
               onClick={() => {
-                onButtonClick('pagetwo');
+                onButtonClick("pagetwo");
               }}
             >
               Previous step
             </button>
-            <button style={{width: '180px'}}>Submit application</button>
+            <button style={{ width: "180px" }}>Submit application</button>
           </div>
         </InforContainer>
       </ContentContainer>

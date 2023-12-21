@@ -1,45 +1,79 @@
-import React from 'react';
-import styled from 'styled-components';
-import PersonalInfor from './PersonalInfor';
-import TimeAvailable from './TimeAvailable';
-import {Checkbox, FormGroup, FormControlLabel} from '@mui/material';
+import { Checkbox, FormControlLabel, FormGroup } from "@mui/material";
+import { useEffect, useState } from "react";
+import styled from "styled-components";
+import PersonalInfor from "./PersonalInfor";
 
 export default function Profiles() {
+  const [notifications, setNotifications] = useState({
+    accountUpdates: true,
+    mentorNotifications: true,
+    wishlistNotifications: true,
+  });
+
+  useEffect(() => {
+    const savedNotifications = localStorage.getItem("notifications");
+    if (savedNotifications) {
+      console.log("savedNotifications", savedNotifications);
+      setNotifications(() => JSON.parse(savedNotifications));
+    }
+  }, []);
+
+  const saveChange = () => {
+    localStorage.setItem("notifications", JSON.stringify(notifications));
+    console.log("setsavedNotifications", notifications);
+  };
+  const handleCheckboxChange = (event) => {
+    setNotifications({
+      ...notifications,
+      [event.target.name]: event.target.checked,
+    });
+  };
+
   return (
     <Container>
       <PersonalInfor />
-      <TimeAvailable />
+      {/* <TimeAvailable /> */}
       <EmailContainer>
-        <h5 style={{fontWeight: 'bold'}}>Email preferences</h5>
-        <p style={{padding: 0, margin: 0}}>
-          Configure your email notifications so you can focus on what’s really
-          important.
+        <h5 style={{ fontWeight: "bold" }}>Tùy chọn email</h5>
+        <p style={{ padding: 0, margin: 0 }}>
+          Cấu hình thông báo email của bạn để bạn có thể tập trung vào những
+          điều thực sự quan trọng.
         </p>
         <FormGroup>
           <FormControlLabel
-            control={<Checkbox defaultChecked />}
-            label="Important updates about your account, mentorship, messages and billing"
+            control={
+              <Checkbox
+                checked={notifications.accountUpdates}
+                onChange={handleCheckboxChange}
+                name="accountUpdates"
+              />
+            }
+            label="Cập nhật quan trọng về tài khoản, hướng dẫn, tin nhắn và thanh toán của bạn"
             disabled={true}
           />
           <FormControlLabel
-            control={<Checkbox defaultChecked />}
-            label="Regular reminders of your ongoing mentorships"
+            control={
+              <Checkbox
+                checked={notifications.mentorNotifications}
+                onChange={handleCheckboxChange}
+                name="mentorNotifications"
+              />
+            }
+            label="Thông báo từ mentor của bạn"
           />
           <FormControlLabel
-            control={<Checkbox defaultChecked />}
-            label="Notifications of mentors on your wishlist"
+            control={
+              <Checkbox
+                checked={notifications.wishlistNotifications}
+                onChange={handleCheckboxChange}
+                name="wishlistNotifications"
+              />
+            }
+            label="Thông báo về mentor trong danh sách mong muốn của bạn"
           />
         </FormGroup>
-        <button>Save changes</button>
+        <button onClick={saveChange}>Lưu thay đổi</button>
       </EmailContainer>
-      <DeleteContainer>
-        <h5 style={{fontWeight: 'bold'}}>Close your account</h5>
-        <p>
-          Once you delete your account, there’s no going back. Please be
-          certain!
-        </p>
-        <button>Delete account</button>
-      </DeleteContainer>
     </Container>
   );
 }
@@ -48,7 +82,7 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  font-family: 'Roboto', 'Helvetica', 'Arial', sans-serif;
+  font-family: "Roboto", "Helvetica", "Arial", sans-serif;
   gap: 2rem;
   padding: 2rem;
 `;

@@ -1,58 +1,55 @@
-import {
-  Form,
-  FormControl,
-  InputGroup,
-  Container,
-  Row,
-  Col,
-  Button,
-} from "react-bootstrap";
-import { useRef, useState } from "react";
-import { useEffect } from "react";
-import { AiFillCloseCircle } from "react-icons/ai";
-import FilterBar from "./FilterBar";
-import FilterOptionItem from "./FilterOptionItem";
+import { useEffect, useRef, useState } from "react";
+import { Container, Form, FormControl, InputGroup, Row } from "react-bootstrap";
+import skillApi from "../../../api/skill";
 
 export default function FilterOptionList({
   forwardRef,
   setShowOptions,
-  setSelectedItem,
+  onSelected,
   setOptionListHovered,
 }) {
   const [searchInput, setSearchInput] = useState("");
-
-  const timeoutRef = useRef();
-  useEffect(() => {
-    if (timeoutRef.current) {
-      clearTimeout(timeoutRef);
-    }
-
-    if (searchInput.trim() === "") {
-      // resetList();
-    } else {
-      const newTimeout = setTimeout(() => {
-        // search(searchInput);
-        console.log("SEARCH");
-      }, 500);
-      timeoutRef.current = newTimeout;
-    }
-    return () => {
-      if (timeoutRef.current) {
-        clearTimeout(timeoutRef.current);
-      }
-    };
-  }, [searchInput]);
+  const [skills, setSkills] = useState([]);
+  const skillList = useRef([]);
 
   const handleSearchInputChange = (e) => {
     setSearchInput(e.target.value);
   };
-  const clearAllFilters = () => {
-    console.log("clicked");
-  };
-  const onItemClick = (item) => {
-    setSelectedItem(item);
+
+  const onItemClick = (skill) => {
+    onSelected(skill);
     setShowOptions(false);
   };
+
+  useEffect(() => {
+    const fetchSkills = async () => {
+      const allSkills = await skillApi.getAllSkills();
+      setSkills(allSkills);
+      skillList.current = allSkills;
+    };
+
+    fetchSkills();
+  }, []);
+  useEffect(() => {
+    const newTimeout = setTimeout(() => {
+      // search(searchInput);
+      if (searchInput) {
+        const res = skills.filter((skill) =>
+          skill.name.toLowerCase().includes(searchInput.toLowerCase())
+        );
+        setSkills(res);
+      } else {
+        setSkills(skillList.current);
+      }
+    }, 500);
+
+    return () => {
+      if (newTimeout) {
+        clearTimeout(newTimeout);
+      }
+    };
+  }, [searchInput]);
+
   return (
     <Container
       onClick={(e) => e.stopPropagation()}
@@ -65,6 +62,8 @@ export default function FilterOptionList({
       ref={forwardRef}
       style={{
         minWidth: 200,
+        zIndex: 1,
+        backgroundColor: "red",
         position: "absolute",
         maxHeight: 600,
         top: "100%",
@@ -89,10 +88,41 @@ export default function FilterOptionList({
           </InputGroup>
         </Form>
       </Row>
-      <Row style={{ display: "flex", marginTop: 12 }}>
-        <FilterOptionItem onItemClick={onItemClick}></FilterOptionItem>
-        <p>Skill 2 </p>
+      <Row
+        style={{
+          display: "flex",
+          marginTop: 12,
+          maxHeight: 130,
+          overflowY: "auto",
+        }}
+      >
+        {skills.map((skill) => (
+          <FilterOptionItem
+            key={skill.id}
+            skill={skill}
+            onItemClick={onItemClick}
+          />
+        ))}
       </Row>
     </Container>
+  );
+}
+function FilterOptionItem({ skill, onItemClick }) {
+  return (
+    <div
+      onClick={() => onItemClick(skill)}
+      style={{
+        display: "inline-flex",
+        flexDirection: "row",
+        alignItems: "center",
+        padding: 10,
+        justifyContent: "start",
+        width: "100%",
+      }}
+      onMouseOver={(e) => e.stopPropagation()}
+      className="button-effect"
+    >
+      <p style={{ margin: 0 }}>{skill.name} </p>
+    </div>
   );
 }

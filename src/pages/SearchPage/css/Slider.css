@@ -1,0 +1,18 @@
+.horizontal-slider .example-thumb {
+  background-color: #4caf50;
+  border-radius: 50%;
+  cursor: grab;
+  height: 25px;
+  line-height: 25px;
+  text-align: center;
+  width: 25px;
+}
+
+.horizontal-slider .example-track {
+  background: #d3d3d3;
+  height: 10px;
+}
+
+.horizontal-slider .example-track.example-active {
+  background: #4caf50;
+}

@@ -1,25 +1,30 @@
-import React, {useState} from 'react';
-import styled from 'styled-components';
-import {Link, useNavigate} from 'react-router-dom';
-import {
-  TextField,
-  FormControl,
-  InputLabel,
-  InputAdornment,
-  OutlinedInput,
-  IconButton,
-} from '@mui/material';
 import {Visibility, VisibilityOff} from '@mui/icons-material';
+import {
+  FormControl,
+  IconButton,
+  InputAdornment,
+  InputLabel,
+  OutlinedInput,
+  TextField,
+} from '@mui/material';
+import {useEffect, useState} from 'react';
+import {Link, useNavigate} from 'react-router-dom';
+import styled from 'styled-components';
+import menteeApi from '../api/mentee';
 import {colors} from '../constants/colors';
-import userStore from '../store/userStore';
+import firebaseInstance from '../services/firebase';
+import useAuthStore from '../store/authStore';
+import {useUserStore} from '../store/userStore';
 
 function LoginPage() {
   const navigate = useNavigate();
-  const userState = userStore.getState().user;
+  const {user, setUser} = useUserStore();
+  const setAuth = useAuthStore.getState().login;
   const [values, setValues] = useState({
     email: '',
     password: '',
   });
+
   const [showPassword, setShowPassword] = useState(false);
   // const [tab, setTab] = useState('mentor');
 
@@ -36,20 +41,39 @@ function LoginPage() {
     setValues({...values, [name]: value});
   };
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
-    const user = {
-      email: values.email,
-      // password: values.password,
-    };
 
-    // userState.login({user, token: '123456'});
-    console.log(userState);
-    // setAuth(values);
-    localStorage.setItem('token', '123456');
-    console.log(values);
-    // navigate('/mentee');
+    const userCredential = await firebaseInstance.signIn(
+      values.email,
+      values.password
+    );
+    const user = userCredential.user;
+    const a = firebaseInstance.auth.currentUser;
+    //userId in firestore != userId in .net
+    const doc = await firebaseInstance.getUser(user.uid);
+    const userInfo = doc.data();
+
+    let userData;
+    if (userInfo.role === 'mentee') {
+      userData = await menteeApi.getMentee(userInfo.id);
+      setUser({...userData, role: 'mentee'});
+    } else if (userInfo.role === 'mentor') {
+      navigate('/mentor');
+    }
   };
+
+  useEffect(() => {
+    (async () => {
+      if (user) {
+        if (user.role === 'mentee') {
+          navigate('/mentee');
+        } else if (user.role === 'mentor') {
+          navigate('/mentor');
+        }
+      }
+    })();
+  }, [user]);
 
   return (
     <Container>

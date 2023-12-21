@@ -1,24 +1,13 @@
-import {
-  Form,
-  FormControl,
-  InputGroup,
-  Container,
-  Row,
-  Col,
-  Button,
-} from "react-bootstrap";
-import { useRef, useState } from "react";
-import { useEffect } from "react";
+import { useEffect, useRef, useState } from "react";
 import { BsChevronDown } from "react-icons/bs";
 import FilterOptionList from "./FilterOptionList";
-
-export default function FilterButton({}) {
+export default function FilterButton({ filters, onFilterChange }) {
   const [searchInput, setSearchInput] = useState("");
-  const [selectedItem, setSelectedItem] = useState("Select filter");
   const [showOptions, setShowOptions] = useState(false);
   const [isOptionListHovered, setOptionListHovered] = useState(false);
   const filterOptionListRef = useRef(null);
   const timeoutRef = useRef();
+
   useEffect(() => {
     if (timeoutRef.current) {
       clearTimeout(timeoutRef);
@@ -40,13 +29,6 @@ export default function FilterButton({}) {
     };
   }, [searchInput]);
 
-  const handleSearchInputChange = (e) => {
-    setSearchInput(e.target.value);
-  };
-  const clearAllFilters = (e) => {
-    console.log("clicked");
-    e.stopPropagation();
-  };
   const showMenuOption = () => {
     setShowOptions(!showOptions);
   };
@@ -76,8 +58,10 @@ export default function FilterButton({}) {
         padding: 10,
         paddingRight: 18,
         paddingLeft: 18,
+        backgroundColor: "white",
         position: "relative",
         borderRadius: 24,
+        zIndex: 1,
         justifyContent: "space-between",
         border: "1px solid gray",
         width: "auto",
@@ -86,12 +70,14 @@ export default function FilterButton({}) {
       onClick={showMenuOption}
     >
       <p style={{ margin: 0, marginRight: 8, fontWeight: "bold" }}>
-        {selectedItem}
+        {filters.skill?.name || "Kĩ năng"}
       </p>
       <BsChevronDown fontSize={16}></BsChevronDown>
       {showOptions && (
         <FilterOptionList
-          setSelectedItem={setSelectedItem}
+          onSelected={(item) => {
+            onFilterChange("skill", item);
+          }}
           setShowOptions={setShowOptions}
           setOptionListHovered={setOptionListHovered}
           forwardRef={filterOptionListRef}

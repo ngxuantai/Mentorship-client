@@ -1,9 +1,8 @@
-import React, {useState, useEffect} from 'react';
-import styled from 'styled-components';
-import {Link, useNavigate} from 'react-router-dom';
-import {Row, Col, Container, Button} from 'react-bootstrap';
-import Header from './components/Header';
-import RecommendList from './components/RecommendList';
+import { useEffect, useState } from "react";
+import { Button } from "react-bootstrap";
+import { useNavigate } from "react-router-dom";
+import styled from "styled-components";
+import RecommendList from "./components/RecommendList";
 // import { CenteredRow, CenteredCol } from "@src/components/sharedComponents";
 const StyledContainer = styled.div`
   padding: 0;
@@ -32,11 +31,13 @@ const Content = styled.div`
 function DashBoard() {
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(true);
-
+  const handleNavigateToSearchScreen = () => {
+    navigate("/mentor/search");
+  };
   useEffect(() => {
-    const token = localStorage.getItem('token');
+    const token = localStorage.getItem("token");
     if (!token) {
-      navigate('/');
+      navigate("/");
     }
     setIsLoading(false);
   }, []);
@@ -47,8 +48,6 @@ function DashBoard() {
         <div></div>
       ) : (
         <StyledContainer fluid>
-          <Header></Header>
-
           <Content>
             <h2>Welcome, Khánh! Browse</h2>
             <p>
@@ -56,11 +55,12 @@ function DashBoard() {
               the next level!
             </p>
             <Button
+              onClick={handleNavigateToSearchScreen}
               variant="secondary"
               style={{
-                fontWeight: 'bold',
-                borderRadius: '4px',
-                textAlign: 'center',
+                fontWeight: "bold",
+                borderRadius: "4px",
+                textAlign: "center",
               }}
             >
               Find Mentor

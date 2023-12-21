@@ -1,15 +1,15 @@
-import React, {useRef, useState, useEffect} from 'react';
-import styled from 'styled-components';
-import PrivacyTipIcon from '@mui/icons-material/PrivacyTip';
 import InfoIcon from '@mui/icons-material/Info';
 import {
-  TextField,
   Avatar,
   FormControl,
   InputLabel,
-  Select,
   MenuItem,
+  Select,
+  TextField,
 } from '@mui/material';
+import {useEffect, useRef, useState} from 'react';
+import styled from 'styled-components';
+import firebaseInstance from '../../../../services/firebase';
 
 export default function AboutYou({onButtonClick}) {
   useEffect(() => {
@@ -48,10 +48,11 @@ export default function AboutYou({onButtonClick}) {
     fileInputRef.current.click();
   };
 
-  const handleFileChange = (event) => {
+  const handleFileChange = async (event) => {
     const file = event.target.files[0];
     if (file) {
       console.log(`Đã chọn tệp: ${file.name}`);
+      await firebaseInstance.storeImage('avatar', file);
       // Thực hiện xử lý tệp ở đây (ví dụ: tải lên máy chủ)
     }
   };
@@ -188,7 +189,7 @@ export default function AboutYou({onButtonClick}) {
               }}
             />
           </div>
-          {/* <FormControl style={{width: '70%'}}>
+          <FormControl style={{width: '70%'}}>
             <InputLabel id="demo-simple-select-label" size="small">
               Location
             </InputLabel>
@@ -205,9 +206,13 @@ export default function AboutYou({onButtonClick}) {
                 </MenuItem>
               ))}
             </Select>
-          </FormControl> */}
+          </FormControl>
           <div
-            style={{width: '100%', display: 'flex', justifyContent: 'flex-end'}}
+            style={{
+              width: '100%',
+              display: 'flex',
+              justifyContent: 'flex-end',
+            }}
           >
             <button>Next step</button>
           </div>
