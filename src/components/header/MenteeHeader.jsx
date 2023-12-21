@@ -13,7 +13,7 @@ import Tooltip from "@mui/material/Tooltip";
 import Typography from "@mui/material/Typography";
 import * as React from "react";
 import { useNavigate } from "react-router";
-import { useUserStore } from "../store/userStore";
+import { useUserStore } from "../../store/userStore";
 
 const pages = [
   { name: "Trang chủ", link: "/" },

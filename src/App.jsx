@@ -1,28 +1,28 @@
-import {BrowserRouter as Router, Route, Routes} from 'react-router-dom';
-import MenteeHeader from './components/MenteeHeader';
-import ProtectedRoute from './navigation/ProtectedRoute';
-import HomePage from './pages/HomePage';
-import Login from './pages/LoginPage';
-import Applications from './pages/Mentee/Applications';
-import ApplyMentee from './pages/Mentee/ApplyMentee';
-import ApplyProcess from './pages/Mentee/ApplyProcess/';
-import InformationForm from './pages/Mentee/ApplyProcess/InformationForm';
-import DashBoard from './pages/Mentee/DashBoard';
-import Inquires from './pages/Mentee/Inquires';
-import Settings from './pages/Mentee/Settings';
-import Wishlist from './pages/Mentee/Wishlist';
-import ApplyMentor from './pages/Mentor/ApplyMentor';
-import Mentor from './pages/Mentor/MentorPage';
-import Profile from './pages/ProfilePage';
-import Search from './pages/SearchPage';
-import SignUp from './pages/SignupPage';
-import Examination from './pages/Mentor/Examination';
-import DetailExam from './pages/Mentor/DetailExam';
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import Header from "./components/header/Header";
+import ProtectedRoute from "./navigation/ProtectedRoute";
+import HomePage from "./pages/HomePage";
+import Login from "./pages/LoginPage";
+import Applications from "./pages/Mentee/Applications";
+import ApplyMentee from "./pages/Mentee/ApplyMentee";
+import ApplyProcess from "./pages/Mentee/ApplyProcess/";
+import InformationForm from "./pages/Mentee/ApplyProcess/InformationForm";
+import DashBoard from "./pages/Mentee/DashBoard";
+import Inquires from "./pages/Mentee/Inquires";
+import Settings from "./pages/Mentee/Settings";
+import Wishlist from "./pages/Mentee/Wishlist";
+import ApplyMentor from "./pages/Mentor/ApplyMentor";
+import DetailExam from "./pages/Mentor/DetailExam";
+import Examination from "./pages/Mentor/Examination";
+import Mentor from "./pages/Mentor/MentorPage";
+import Profile from "./pages/ProfilePage";
+import Search from "./pages/SearchPage";
+import SignUp from "./pages/SignupPage";
 
 function App() {
   return (
     <Router>
-      <MenteeHeader></MenteeHeader>
+      <Header></Header>
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/auth/login" element={<Login />} />
