@@ -4,16 +4,11 @@ import { Button } from "react-bootstrap";
 import { useNavigate } from "react-router";
 import "react-step-progress-bar/styles.css";
 import styled from "styled-components";
-import { useUserStore } from "../../../../store/userStore";
 export default function Success() {
   const navigate = useNavigate();
-  const { user } = useUserStore();
-  const handleNavigateHistory = () => {
-    navigate("/applications");
-  };
 
   const handleNavigateHome = () => {
-    navigate(user?.role === "mentee" ? "/mentee" : "/mentor");
+    navigate("/");
   };
 
   return (
@@ -36,6 +31,16 @@ export default function Success() {
       >
         Ứng tuyển thành công
       </h3>
+      <h5
+        style={{
+          textAlign: "center",
+          width: "100%",
+          color: "#22bb33",
+          marginTop: 12,
+        }}
+      >
+        Kết quả sẽ được gửi tới email của bạn
+      </h5>
       <Container>
         <div style={{ width: "100%" }}>
           <React.Fragment>
@@ -53,14 +58,6 @@ export default function Success() {
                 variant="secondary"
               >
                 Quay lại trang chủ
-              </Button>
-
-              <Button
-                onClick={handleNavigateHistory}
-                className="my-2"
-                variant="secondary"
-              >
-                Xem lịch sử ứng tuyển
               </Button>
             </Box>
           </React.Fragment>

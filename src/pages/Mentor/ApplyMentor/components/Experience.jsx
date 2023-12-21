@@ -1,28 +1,11 @@
 import InfoIcon from "@mui/icons-material/Info";
 import { TextField } from "@mui/material";
-import { useState } from "react";
 import styled from "styled-components";
-import applicationApi from "../../../../api/application";
-import { applicationData } from "../../../../mockData";
 
-export default function Experience({ onButtonClick }) {
-  const [values, setValues] = useState({
-    category: "",
-    skill: "",
-    bio: "",
-    linkedin: "",
-    twitter: "",
-    personalWebsite: "",
-  });
-
-  const handleChange = (event) => {
-    const { name, value } = event.target;
-    setValues({ ...values, [name]: value });
-  };
-
+export default function Experience({ values, onInputChange, onButtonClick }) {
   const handleSubmit = async (event) => {
     event.preventDefault();
-    await applicationApi.createApplication(applicationData);
+    onButtonClick();
   };
 
   return (
@@ -54,7 +37,8 @@ export default function Experience({ onButtonClick }) {
           <TextField
             name="reason"
             multiline
-            onChange={(event) => handleChange(event)}
+            values={values.reason}
+            onChange={onInputChange}
             autoComplete="off"
             label="Why do you want to become a mentor? (Not publicly visible)"
             variant="outlined"
@@ -71,8 +55,9 @@ export default function Experience({ onButtonClick }) {
           />
           <TextField
             name="achievement"
+            values={values.achievement}
             multiline
-            onChange={(event) => handleChange(event)}
+            onChange={onInputChange}
             autoComplete="off"
             label="What, in your opinion, has been your greatest achievement so far? (Not publicly visible)"
             variant="outlined"

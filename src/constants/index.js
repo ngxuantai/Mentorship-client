@@ -5,6 +5,10 @@ export const ApprovalStatus = {
   APPROVED: 1,
   REJECTED: 2,
 };
+export const PaymentStatus = {
+  FAILED: 0,
+  SUCCEDDED: 1,
+};
 export const UserRole = {
   MENTEE: "mentee",
   MENTOR: "mentor",

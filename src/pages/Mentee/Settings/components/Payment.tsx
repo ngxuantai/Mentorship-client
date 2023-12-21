@@ -5,17 +5,17 @@ import { useEffect, useState } from "react";
 import { Button } from "react-bootstrap";
 import { FaCopy } from "react-icons/fa";
 import { useNavigate } from "react-router";
-import menteeApplicationApi from "../../../api/menteeAplication";
-import mentorApi from "../../../api/mentor";
-import { useUserStore } from "../../../store/userStore";
+import mentorApi from "../../../../api/mentor";
+import paymentApi from "../../../../api/payment";
+import { useUserStore } from "../../../../store/userStore";
 import {
   handleCopyClick,
-  mappingApplicationStatus,
+  mappingPaymentStatus,
   shortenId,
-} from "../../../utils/dataHelper";
+} from "../../../../utils/dataHelper";
 
-function Applications() {
-  const [applicationList, setApplicationList] = useState([]);
+export default function Payment() {
+  const [paymentList, setPaymentList] = useState([]);
   const navigate = useNavigate();
   const { user } = useUserStore();
   const handleNavigateToSearchScreen = () => {
@@ -23,70 +23,57 @@ function Applications() {
   };
   useEffect(() => {
     if (user) {
-      const fetchApplicationsAndMentors = async () => {
-        const applications =
-          await menteeApplicationApi.getMenteeApplicationByMenteeId(user.id);
-        const mentors = await mentorApi.getAllMentors();
-        if (mentors) {
-          const applicationsWithMentor = applications.map((a) => {
-            const findMentor = mentors.find((m) => m.id === a.mentorId);
-            if (findMentor) {
-              return {
-                ...a,
-                mentor: findMentor,
-              };
-            }
-            return a;
-          });
-          setApplicationList(applicationsWithMentor);
-        }
+      const fetchPaymentsAndMentors = async () => {
+        const payments = await paymentApi.getPaymentsByUserId(user.id);
+        console.log("payment", payments);
+        const mentorPromises = payments.map(async (p) => {
+          const mentor = await mentorApi.getMentorById(p.mentorId);
+          return mentor;
+        });
+        const mentors = await Promise.all(mentorPromises);
+        const paymentsWithMentors = payments.map((p, index) => ({
+          ...p,
+          mentor: mentors[index],
+        }));
+        console.log("Payments with mentors:", paymentsWithMentors);
+        setPaymentList(paymentsWithMentors);
       };
-      fetchApplicationsAndMentors();
+      fetchPaymentsAndMentors();
     }
   }, [user]);
   return (
     <div style={{ height: 500 }}>
       {/* <MenteeHeader></MenteeHeader> */}
-      <div
-        className="w-full py-2 text-center"
-        style={{ backgroundColor: "#04b4ba" }}
-      >
-        <h5 style={{ color: "white" }}>
-          Want to double the chance of success for your applications?{" "}
-          <a href="/settings" style={{ color: "white" }}>
-            Complete your profile
-          </a>{" "}
-        </h5>
-      </div>
+
       <div className="px-3 py-3">
-        <h3>Applications</h3>
+        <h3>Lịch sử thanh toán</h3>
       </div>
-      {applicationList.length > 0 ? (
-        <AllApplications applications={applicationList} />
+      {paymentList.length > 0 ? (
+        <AllPayments payments={paymentList} />
       ) : (
         <div className="p-2 border rounded d-flex flex-column justify-content-center align-items-center text-center">
           <Article style={{ fontSize: "50px" }} />
-          <p style={{ fontWeight: "500" }}>No active applications</p>
-          <p className="text-body-tertiary">
-            Once you have applied to a mentor, they will show up here
-          </p>
-          <Button
-            onClick={handleNavigateToSearchScreen}
-            style={{ fontWeight: "500" }}
-            variant="primary"
-          >
-            Find mentors
-          </Button>
+          <p style={{ fontWeight: "500" }}>Không có lịch sử thanh toán</p>
         </div>
+        // <p className="text-body-tertiary">
+        //   Once you have applied to a mentor, they will show up here
+        // </p>
+        // <Button
+        //   onClick={handleNavigateToSearchScreen}
+        //   style={{ fontWeight: "500" }}
+        //   variant="primary"
+        // >
+        //   Find mentors
+        // </Button>
       )}
-      {/* <AllApplications applications={applicationList} /> */}
+      {/* <AllPayments payments={paymentList} /> */}
     </div>
   );
 }
 
-const AllApplications = ({ applications }) => {
+const AllPayments = ({ payments }) => {
   const [checkedItems, setCheckedItems] = useState({});
-  console.log("Allapplication", applications);
+  console.log("Allpayment", payments);
   const handleChange = (event) => {
     setCheckedItems({
       ...checkedItems,
@@ -106,14 +93,14 @@ const AllApplications = ({ applications }) => {
           </Table.HeadCell>
           <Table.HeadCell>Id</Table.HeadCell>
           <Table.HeadCell>Tên mentor</Table.HeadCell>
-          <Table.HeadCell>Ngày gửi</Table.HeadCell>
+          <Table.HeadCell>Ngày thanh toán</Table.HeadCell>
           <Table.HeadCell>Trạng thái</Table.HeadCell>
           <Table.HeadCell>Học phí</Table.HeadCell>
-          <Table.HeadCell></Table.HeadCell>
+          <Table.HeadCell>Ghi chú</Table.HeadCell>
         </Table.Head>
 
         <Table.Body className="divide-y divide-gray-200 bg-white divide-gray-700 bg-gray-800">
-          {applications.map((application, index) => (
+          {payments.map((payment, index) => (
             <Table.Row
               key={index}
               className="hover:bg-gray-100 hover:bg-gray-700"
@@ -134,9 +121,9 @@ const AllApplications = ({ applications }) => {
               </Table.Cell>
               <Table.Cell className="whitespace-nowrap p-4 text-base font-medium text-gray-900 text-white">
                 <div className="flex items-center">
-                  {shortenId(application.id)}
+                  {shortenId(payment.id)}
                   <button
-                    onClick={() => handleCopyClick(application.id)}
+                    onClick={() => handleCopyClick(payment.id)}
                     className="ml-2"
                   >
                     <FaCopy className="text-xl" />
@@ -146,35 +133,44 @@ const AllApplications = ({ applications }) => {
               <Table.Cell className="mr-12 flex items-center space-x-6 whitespace-nowrap p-4 lg:mr-0">
                 <img
                   className="h-10 w-10 rounded-full"
-                  src={application.mentor.avatar}
-                  alt={`${application.id} avatar`}
+                  src={payment.mentor.avatar}
+                  alt={`${payment.id} avatar`}
                 />
                 <div className="text-sm font-normal text-gray-500 text-gray-400">
                   <div className="text-base font-semibold text-gray-900 text-white">
-                    {application.mentor.firstName} {application.mentor.lastName}
+                    {payment.mentor.firstName} {payment.mentor.lastName}
                   </div>
                   <div className="text-sm font-normal text-gray-500 text-gray-400">
-                    {application.mentor.email}
+                    {payment.mentor.email}
                   </div>
                 </div>
               </Table.Cell>
               <Table.Cell className="whitespace-nowrap p-4 text-base font-medium text-gray-900 text-white">
-                {format(new Date(application.applicationDate), "dd-MM-yyyy")}
+                {format(new Date(payment.createdAt), "dd-MM-yyyy HH:mm:ss")}
               </Table.Cell>
-              <Table.Cell className="whitespace-nowrap p-4 text-base font-normal text-gray-900 text-white">
+              <Table.Cell className="whitespace-nowrap p-4 text-base font-normal text-gray-900">
                 <div
-                  style={{ fontWeight: "bold" }}
+                  style={{
+                    color: payment.status === 0 ? "tomato" : "green",
+                    fontWeight: "bold",
+                  }}
                   className="flex items-center"
                 >
-                  <div className="mr-2 h-2.5 w-2.5 rounded-full bg-green-400"></div>{" "}
-                  {mappingApplicationStatus(application.status)}
+                  <div
+                    className="mr-2 h-2.5 w-2.5 rounded-full"
+                    style={{
+                      backgroundColor:
+                        payment.status === 0 ? "tomato" : "green",
+                    }}
+                  ></div>{" "}
+                  {mappingPaymentStatus(payment.status)}
                 </div>
               </Table.Cell>
               <Table.Cell className="whitespace-nowrap p-4 text-base font-medium text-gray-900 text-white">
-                {application.fee} VNĐ
+                {payment.price} VNĐ
               </Table.Cell>
               <Table.Cell className="whitespace-nowrap p-4 text-base font-medium text-gray-900 text-white">
-                {/* <ViewApplicationDetailModal application={application} /> */}
+                {/* <ViewPaymentDetailModal payment={payment} /> */}
               </Table.Cell>
             </Table.Row>
           ))}
@@ -183,11 +179,10 @@ const AllApplications = ({ applications }) => {
     </div>
   );
 };
-export default Applications;
 
-const ViewApplicationDetailModal = function ({ application }) {
-  console.log("ViewApplicationDetailModal", application);
-  const profileInfor = application.mentor;
+const ViewPaymentDetailModal = function ({ payment }) {
+  console.log("ViewPaymentDetailModal", payment);
+  const profileInfor = payment.mentor;
   const [isOpen, setOpen] = useState(false);
 
   return (

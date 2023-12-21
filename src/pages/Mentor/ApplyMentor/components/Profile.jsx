@@ -1,59 +1,101 @@
-import React, { useRef, useState, useEffect } from "react";
-import styled from "styled-components";
-import PrivacyTipIcon from "@mui/icons-material/PrivacyTip";
-import InfoIcon from "@mui/icons-material/Info";
 import {
-  TextField,
-  Avatar,
   FormControl,
   InputLabel,
-  Select,
   MenuItem,
+  Select,
+  TextField,
 } from "@mui/material";
+import { useEffect, useState } from "react";
+import styled from "styled-components";
+import fieldApi from "../../../../api/field";
+import skillApi from "../../../../api/skill";
 
-export default function Profile({ onButtonClick }) {
-  const [values, setValues] = useState({
-    category: "",
-    skill: "",
-    bio: "",
-    linkedin: "",
-    twitter: "",
-    personalWebsite: "",
-  });
+export default function Profile({ values, onInputChange, onButtonClick }) {
+  const [fields, setFields] = useState([]);
+  const [selectedField, setSelectedField] = useState([]);
+  const [skills, setSkills] = useState([]);
+  console.log("profile: field", fields);
+  useEffect(() => {
+    const getField = async () => {
+      const fieldsData = await fieldApi.getAllFields();
+      setFields(fieldsData);
+    };
 
-  const handleChange = (event) => {
+    getField();
+  }, []);
+  const onFieldChange = async (event) => {
     const { name, value } = event.target;
-    setValues({ ...values, [name]: value });
+    if (name === "field") {
+      console.log("fieldValue", value);
+      await fetchFieldSkills(value);
+    }
   };
-
+  const fetchFieldSkills = async (fieldId) => {
+    const data = await skillApi.getSkillsByFieldId(fieldId);
+    if (data) {
+      setSkills(data);
+    }
+  };
   const handleSubmit = (event) => {
     event.preventDefault();
     onButtonClick("pagethree");
   };
 
+  useEffect(() => {
+    if (selectedField) {
+    }
+  }, [selectedField]);
   return (
     <Container>
       <ContentContainer>
         <InforContainer onSubmit={handleSubmit}>
           <FormControl style={{ width: "50%" }}>
-            <InputLabel size="small">Category</InputLabel>
+            <InputLabel size="small">Field</InputLabel>
             <Select
-              name="category"
-              label="Category"
-              onChange={(event) => handleChange(event)}
+              name="field"
+              label="Field"
+              onChange={onFieldChange}
               size="small"
               defaultValue=""
             >
-              <MenuItem value="1">Engineering & Data</MenuItem>
+              {fields.map((f) => {
+                return (
+                  <MenuItem key={f.id} value={f.id}>
+                    {f.name}
+                  </MenuItem>
+                );
+              })}
+              {/* <MenuItem value="1">Engineering & Data</MenuItem>
               <MenuItem value="2">UX & Design</MenuItem>
               <MenuItem value="3">Business & Management</MenuItem>
-              <MenuItem value="4">Product & Marketing</MenuItem>
+              <MenuItem value="4">Product & Marketing</MenuItem> */}
+            </Select>
+          </FormControl>
+          <FormControl style={{ width: "50%" }}>
+            <InputLabel size="small">Field</InputLabel>
+            <Select
+              name="skill"
+              label="Skill"
+              onChange={(e) => {}}
+              size="small"
+              defaultValue=""
+            >
+              {skills.map((s) => {
+                return (
+                  <MenuItem key={s.id} value={s.id}>
+                    {s.name}
+                  </MenuItem>
+                );
+              })}
+              {/* <MenuItem value="1">Engineering & Data</MenuItem>
+              <MenuItem value="2">UX & Design</MenuItem>
+              <MenuItem value="3">Business & Management</MenuItem>
+              <MenuItem value="4">Product & Marketing</MenuItem> */}
             </Select>
           </FormControl>
           <div className="content">
             <TextField
               name="skill"
-              onChange={(event) => handleChange(event)}
               autoComplete="off"
               label="Skill"
               variant="outlined"
@@ -69,7 +111,8 @@ export default function Profile({ onButtonClick }) {
           <TextField
             name="bio"
             multiline
-            onChange={(event) => handleChange(event)}
+            value={values.bio}
+            onChange={onInputChange}
             autoComplete="off"
             label="Bio"
             variant="outlined"
@@ -88,9 +131,10 @@ export default function Profile({ onButtonClick }) {
           <div className="content">
             <TextField
               name="linkedin"
-              onChange={(event) => handleChange(event)}
+              onChange={onInputChange}
               autoComplete="off"
               label="LinkedIn"
+              value={values.linkedin}
               placeholder="https://www.linkedin.com/"
               variant="outlined"
               size="small"
@@ -102,7 +146,8 @@ export default function Profile({ onButtonClick }) {
             />
             <TextField
               name="twitter"
-              onChange={(event) => handleChange(event)}
+              value={values.twitter}
+              onChange={onInputChange}
               autoComplete="off"
               label="Twitter"
               placeholder="https://twitter.com/"
@@ -120,7 +165,6 @@ export default function Profile({ onButtonClick }) {
           >
             <TextField
               name="personalWebsite"
-              onChange={(event) => handleChange(event)}
               autoComplete="off"
               label="Personal Website"
               variant="outlined"

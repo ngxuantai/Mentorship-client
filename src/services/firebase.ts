@@ -1,6 +1,7 @@
 import * as firebase from "firebase/app";
 import "firebase/auth";
 import * as authService from "firebase/auth";
+import * as databaseService from "firebase/database";
 import * as firestoreService from "firebase/firestore";
 import {
   FirebaseStorage,
@@ -13,6 +14,7 @@ import firebaseConfig from "../config/firebase";
 
 class Firebase {
   db: firestoreService.Firestore;
+  realtimeDb: databaseService.Database;
   storage: FirebaseStorage;
   auth: authService.Auth;
   constructor() {
@@ -20,6 +22,7 @@ class Firebase {
     this.db = firestoreService.getFirestore();
     this.storage = getStorage();
     this.auth = authService.getAuth();
+    this.realtimeDb = databaseService.getDatabase();
   }
   // AUTH ACTIONS ------------
 
@@ -105,6 +108,45 @@ class Firebase {
   };
 
   // deleteImage = (id) => this.storage.ref("products").child(id).delete();
+
+  //db realtime
+  addCalendar = (userId, calendar) =>
+    databaseService.set(
+      databaseService.ref(this.realtimeDb, "calendars/" + userId),
+      calendar
+    );
+
+  onCalendarChange = (userId, observer) =>
+    databaseService.onValue(
+      databaseService.ref(this.realtimeDb, "calendars/" + userId),
+      observer
+    );
+
+  updateEvent = (userId, eventId, event) =>
+    databaseService.update(
+      databaseService.ref(
+        this.realtimeDb,
+        "calendars/" + userId + "/events/" + eventId
+      ),
+      event
+    );
+
+  addEvent = (userId, event) =>
+    databaseService.set(
+      databaseService.ref(
+        this.realtimeDb,
+        "calendars/" + userId + "/events/" + event.id
+      ),
+      event
+    );
+
+  deleteEvent = (userId, eventId) =>
+    databaseService.remove(
+      databaseService.ref(
+        this.realtimeDb,
+        "calendars/" + userId + "/events/" + eventId
+      )
+    );
 }
 
 const firebaseInstance = new Firebase();
