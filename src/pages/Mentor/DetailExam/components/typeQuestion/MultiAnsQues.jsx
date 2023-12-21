@@ -5,7 +5,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import RemoveCircleIcon from '@mui/icons-material/RemoveCircle';
 import styled from 'styled-components';
 
-export default function OneAnsQues({addQuestion, cancelAddQues}) {
+export default function MultiAnsQues({addQuestion, cancelAddQues}) {
   const [question, setQuestion] = useState('');
 
   const [options, setOptions] = useState([
@@ -39,18 +39,13 @@ export default function OneAnsQues({addQuestion, cancelAddQues}) {
   };
 
   const checkCorrectAnswer = () => {
+    let totalCorrect = 0;
     options.forEach((item) => {
       if (item.isCorrect) {
-        return true;
+        totalCorrect++;
       }
     });
-    return false;
-  };
-
-  const resetOptions = () => {
-    options.forEach((item) => {
-      item.isCorrect = false;
-    });
+    return totalCorrect;
   };
 
   const handleAddOption = () => {
@@ -67,39 +62,56 @@ export default function OneAnsQues({addQuestion, cancelAddQues}) {
     setOptions([...options.slice(0, index), ...options.slice(index + 1)]);
   };
 
-  const handleSaveQuestion = () => {
+  const handleSaveQuestion = async () => {
+    console.log(question);
+    console.log(options);
     let hasError = false;
 
     if (question === '') {
       toast.error('Vui lòng nhập nội dung câu hỏi', toastOptions);
       hasError = true;
-    } else if (options.length < 2) {
+    }
+    if (options.length < 2) {
       toast.error('Vui lòng nhập ít nhất 2 đáp án', toastOptions);
       hasError = true;
     } else {
-      if (options.some((item) => item.option === '')) {
-        toast.error('Vui lòng nhập đáp án', toastOptions);
+      const totalCorrect = checkCorrectAnswer();
+      if (totalCorrect === 0) {
+        toast.error('Vui lòng chọn ít nhất 1 đáp án đúng', toastOptions);
         hasError = true;
-      } else {
-        if (!options.some((item) => item.isCorrect === true)) {
-          toast.error('Vui lòng chọn đáp án đúng', toastOptions);
-          hasError = true;
-        }
+      }
+      if (totalCorrect === options.length) {
+        toast.error(
+          'Số lượng đáp án đúng không được bằng số lượng đáp án',
+          toastOptions
+        );
+        hasError = true;
       }
     }
 
     if (!hasError) {
       const data = {
-        type: 'one-answer',
-        question: question,
+        examId: examId,
+        type: 1,
+        content: question,
         options: options,
         explain: explain || '',
       };
 
-      console.log(data);
-      addQuestion(data);
+      const res = await examApi.createQuestion(data);
+      addQuestion(res.data);
+      resetData();
       toast.success('Lưu câu hỏi thành công', toastOptions);
     }
+  };
+
+  const resetData = () => {
+    setQuestion('');
+    options.map((item) => {
+      item.isCorrect = false;
+      item.option = '';
+    });
+    setExplain('');
   };
 
   return (
@@ -126,7 +138,6 @@ export default function OneAnsQues({addQuestion, cancelAddQues}) {
               justifyContent: 'center',
             }}
             onClick={() => {
-              resetOptions();
               setOptions([
                 ...options.slice(0, index),
                 {
@@ -224,6 +235,7 @@ export default function OneAnsQues({addQuestion, cancelAddQues}) {
           }}
         />
       )}
+      {/* {alert && <Alert severity={alert.type}>{alert.message}</Alert>} */}
       <ToastContainer />
       <div
         style={{
@@ -279,29 +291,25 @@ const Container = styled.div`
   font-family: 'Roboto', 'Helvetica', 'Arial', sans-serif;
 `;
 
-// const QuestionTypeSelector = styled.div`
-//   display: flex;
-//   flex-deirection: row;
+const QuestionTypeSelector = styled.div`
+  display: flex;
+  flex-deirection: row;
 
-//   .question-type {
-//     padding: 4px 8px;
-//     border: 1px solid #ccc;
-//     cursor: pointer;
-//   }
+  .question-type {
+    padding: 4px 8px;
+    border: 1px solid #ccc;
+    cursor: pointer;
+  }
 
-//   .selected {
-//     background-color: #4caf50;
-//     color: #fff;
-//   }
-// `;
+  .selected {
+    background-color: #4caf50;
+    color: #fff;
+  }
+`;
 
 const OptionConatainer = styled.div`
   display: flex;
   flex-direction: row;
   align-items: center;
   gap: 10px;
-  //   .option-letter {
-  //     font-weight: bold;
-  //     // width: 20px;
-  //   }
 `;

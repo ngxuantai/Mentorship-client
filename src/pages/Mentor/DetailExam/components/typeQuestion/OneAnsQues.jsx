@@ -3,9 +3,10 @@ import {TextField, Button, Alert} from '@mui/material';
 import {ToastContainer, toast} from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import RemoveCircleIcon from '@mui/icons-material/RemoveCircle';
+import examApi from '../../../../../api/exam';
 import styled from 'styled-components';
 
-export default function MultiAnsQues({addQuestion, cancelAddQues}) {
+export default function OneAnsQues({examId, addQuestion, cancelAddQues}) {
   const [question, setQuestion] = useState('');
 
   const [options, setOptions] = useState([
@@ -39,13 +40,18 @@ export default function MultiAnsQues({addQuestion, cancelAddQues}) {
   };
 
   const checkCorrectAnswer = () => {
-    let totalCorrect = 0;
     options.forEach((item) => {
       if (item.isCorrect) {
-        totalCorrect++;
+        return true;
       }
     });
-    return totalCorrect;
+    return false;
+  };
+
+  const resetOptions = () => {
+    options.forEach((item) => {
+      item.isCorrect = false;
+    });
   };
 
   const handleAddOption = () => {
@@ -62,44 +68,50 @@ export default function MultiAnsQues({addQuestion, cancelAddQues}) {
     setOptions([...options.slice(0, index), ...options.slice(index + 1)]);
   };
 
-  const handleSaveQuestion = () => {
-    console.log(question);
-    console.log(options);
+  const handleSaveQuestion = async () => {
     let hasError = false;
 
     if (question === '') {
       toast.error('Vui lòng nhập nội dung câu hỏi', toastOptions);
       hasError = true;
-    }
-    if (options.length < 2) {
+    } else if (options.length < 2) {
       toast.error('Vui lòng nhập ít nhất 2 đáp án', toastOptions);
       hasError = true;
     } else {
-      const totalCorrect = checkCorrectAnswer();
-      if (totalCorrect === 0) {
-        toast.error('Vui lòng chọn ít nhất 1 đáp án đúng', toastOptions);
+      if (options.some((item) => item.option === '')) {
+        toast.error('Vui lòng nhập đáp án', toastOptions);
         hasError = true;
-      }
-      if (totalCorrect === options.length) {
-        toast.error(
-          'Số lượng đáp án đúng không được bằng số lượng đáp án',
-          toastOptions
-        );
-        hasError = true;
+      } else {
+        if (!options.some((item) => item.isCorrect === true)) {
+          toast.error('Vui lòng chọn đáp án đúng', toastOptions);
+          hasError = true;
+        }
       }
     }
 
     if (!hasError) {
       const data = {
-        type: 'multi-answer',
-        question: question,
+        examId: examId,
+        type: 0,
+        content: question,
         options: options,
         explain: explain || '',
       };
 
-      addQuestion(data);
+      const res = await examApi.createQuestion(data);
+      addQuestion(res.data);
+      resetData();
       toast.success('Lưu câu hỏi thành công', toastOptions);
     }
+  };
+
+  const resetData = () => {
+    setQuestion('');
+    options.map((item) => {
+      item.isCorrect = false;
+      item.option = '';
+    });
+    setExplain('');
   };
 
   return (
@@ -126,6 +138,7 @@ export default function MultiAnsQues({addQuestion, cancelAddQues}) {
               justifyContent: 'center',
             }}
             onClick={() => {
+              resetOptions();
               setOptions([
                 ...options.slice(0, index),
                 {
@@ -209,10 +222,12 @@ export default function MultiAnsQues({addQuestion, cancelAddQues}) {
         <TextField
           multiline
           label="Giải thích"
-          size="small"
+          // size="small"
           type="text"
           value={explain}
           onChange={(e) => setExplain(e.target.value)}
+          variant="outlined"
+          size="small"
           sx={{
             width: '100%',
             fontSize: '1rem',
@@ -223,7 +238,6 @@ export default function MultiAnsQues({addQuestion, cancelAddQues}) {
           }}
         />
       )}
-      {/* {alert && <Alert severity={alert.type}>{alert.message}</Alert>} */}
       <ToastContainer />
       <div
         style={{
@@ -279,25 +293,29 @@ const Container = styled.div`
   font-family: 'Roboto', 'Helvetica', 'Arial', sans-serif;
 `;
 
-const QuestionTypeSelector = styled.div`
-  display: flex;
-  flex-deirection: row;
+// const QuestionTypeSelector = styled.div`
+//   display: flex;
+//   flex-deirection: row;
 
-  .question-type {
-    padding: 4px 8px;
-    border: 1px solid #ccc;
-    cursor: pointer;
-  }
+//   .question-type {
+//     padding: 4px 8px;
+//     border: 1px solid #ccc;
+//     cursor: pointer;
+//   }
 
-  .selected {
-    background-color: #4caf50;
-    color: #fff;
-  }
-`;
+//   .selected {
+//     background-color: #4caf50;
+//     color: #fff;
+//   }
+// `;
 
 const OptionConatainer = styled.div`
   display: flex;
   flex-direction: row;
   align-items: center;
   gap: 10px;
+  //   .option-letter {
+  //     font-weight: bold;
+  //     // width: 20px;
+  //   }
 `;

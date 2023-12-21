@@ -36,7 +36,7 @@ export default function TrueFalseQues({addQuestion, cancelAddQues}) {
     });
   };
 
-  const handleSaveQuestion = () => {
+  const handleSaveQuestion = async () => {
     let hasError = false;
     if (question === '') {
       toast.error('Vui lòng nhập nội dung câu hỏi', toastOptions);
@@ -46,14 +46,27 @@ export default function TrueFalseQues({addQuestion, cancelAddQues}) {
       hasError = true;
     } else {
       const data = {
-        type: 'trueFalse',
-        question: question,
+        examId: examId,
+        type: 2,
+        content: question,
         options: options,
         explain: explain,
       };
-      addQuestion(data);
+
+      const res = await examApi.createQuestion(data);
+      addQuestion(res.data);
+      resetData();
       toast.success('Lưu câu hỏi thành công', toastOptions);
     }
+  };
+
+  const resetData = () => {
+    setQuestion('');
+    options.map((item) => {
+      item.isCorrect = false;
+      item.option = '';
+    });
+    setExplain('');
   };
 
   return (

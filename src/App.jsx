@@ -16,6 +16,8 @@ import Mentor from './pages/Mentor/MentorPage';
 import Profile from './pages/ProfilePage';
 import Search from './pages/SearchPage';
 import SignUp from './pages/SignupPage';
+import Examination from './pages/Mentor/Examination';
+import DetailExam from './pages/Mentor/DetailExam';
 
 function App() {
   return (
@@ -61,6 +63,9 @@ function App() {
             </ProtectedRoute>
           }
         />
+
+        <Route path="mentor/examination" element={<Examination />} />
+        <Route path="mentor/examination/:id" element={<DetailExam />} />
       </Routes>
     </Router>
   );

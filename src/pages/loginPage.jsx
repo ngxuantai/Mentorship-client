@@ -13,13 +13,13 @@ import styled from 'styled-components';
 import menteeApi from '../api/mentee';
 import {colors} from '../constants/colors';
 import firebaseInstance from '../services/firebase';
-import useAuthStore from '../store/authStore';
 import {useUserStore} from '../store/userStore';
+// import {useUserStore} from '../store/userStore';
 
 function LoginPage() {
   const navigate = useNavigate();
   const {user, setUser} = useUserStore();
-  const setAuth = useAuthStore.getState().login;
+  const setAuth = useUserStore.getState().login;
   const [values, setValues] = useState({
     email: '',
     password: '',

@@ -5,7 +5,7 @@ import MultipleAnsQues from './typeQuestion/MultiAnsQues';
 import TrueFalseQues from './typeQuestion/TrueFalseQues';
 import styled from 'styled-components';
 
-export default function AddQuestion({addQuestion, cancelAddQues}) {
+export default function AddQuestion({examId, addQuestion, cancelAddQues}) {
   const questionType = [
     {
       type: 'oneAnswer',
@@ -55,18 +55,21 @@ export default function AddQuestion({addQuestion, cancelAddQues}) {
         <>
           {selectedType === 'oneAnswer' && (
             <OneAnsQues
+              examId={examId}
               addQuestion={addQuestion}
               cancelAddQues={cancelAddQues}
             />
           )}
           {selectedType === 'multipleAnswer' && (
             <MultipleAnsQues
+              examId={examId}
               addQuestion={addQuestion}
               cancelAddQues={cancelAddQues}
             />
           )}
           {selectedType === 'trueFalse' && (
             <TrueFalseQues
+              examId={examId}
               addQuestion={addQuestion}
               cancelAddQues={cancelAddQues}
             />
