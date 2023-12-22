@@ -1,5 +1,5 @@
 import {BrowserRouter as Router, Route, Routes} from 'react-router-dom';
-import MenteeHeader from './components/header/MenteeHeader';
+import Header from './components/header/Header';
 import ProtectedRoute from './navigation/ProtectedRoute';
 import HomePage from './pages/HomePage';
 import Login from './pages/LoginPage';
@@ -8,25 +8,27 @@ import ApplyMentee from './pages/Mentee/ApplyMentee';
 import ApplyProcess from './pages/Mentee/ApplyProcess/';
 import InformationForm from './pages/Mentee/ApplyProcess/InformationForm';
 import DashBoard from './pages/Mentee/DashBoard';
+import DoExam from './pages/Mentee/DoExam';
 import Inquires from './pages/Mentee/Inquires';
-import Settings from './pages/Mentee/Settings';
+import ListExam from './pages/Mentee/ListExam';
+import {default as MenteeSettings} from './pages/Mentee/Settings';
 import Wishlist from './pages/Mentee/Wishlist';
 import ApplyMentor from './pages/Mentor/ApplyMentor';
+import MentorCalendar from './pages/Mentor/Calendar';
+import DetailExam from './pages/Mentor/DetailExam';
+import Examination from './pages/Mentor/Examination';
 import Mentor from './pages/Mentor/MentorPage';
+import MentorSettings from './pages/Mentor/Settings';
+import ListMentee from './pages/Mentor/ListMentee';
+import MenteeApplication from './pages/Mentor/MenteeApplication';
 import Profile from './pages/ProfilePage';
 import Search from './pages/SearchPage';
 import SignUp from './pages/SignupPage';
-import ListExam from './pages/Mentee/ListExam';
-import DoExam from './pages/Mentee/DoExam';
-import Examination from './pages/Mentor/Examination';
-import DetailExam from './pages/Mentor/DetailExam';
-import ListMentee from './pages/Mentor/ListMentee';
-import MenteeApplication from './pages/Mentor/MenteeApplication';
 
 function App() {
   return (
     <Router>
-      <MenteeHeader></MenteeHeader>
+      <Header></Header>
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/auth/login" element={<Login />} />
@@ -35,14 +37,15 @@ function App() {
         <Route path="/mentor" element={<Mentor />} />
         <Route path="/mentor/search" element={<Search />} />
         <Route path="/mentor/profile" element={<Profile />} />
+        <Route path="/mentor/calendar" element={<MentorCalendar />} />
+        <Route path="/mentor/settings" element={<MentorSettings />} />
         <Route path="/mentor/apply" element={<ApplyMentor />} />
-
-        <Route path="/settings" element={<Settings />} />
 
         <Route path="/mentee" element={<DashBoard />} />
         <Route path="/mentee1" element={<InformationForm />} />
         <Route path="/mentee2" element={<ApplyProcess />} />
         <Route path="/mentee/apply" element={<ApplyMentee />} />
+        <Route path="/mentee/settings" element={<MenteeSettings />} />
         <Route
           path="/mentee/applications"
           element={

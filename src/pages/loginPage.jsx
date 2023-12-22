@@ -1,4 +1,4 @@
-import {Visibility, VisibilityOff} from '@mui/icons-material';
+import { Visibility, VisibilityOff } from "@mui/icons-material";
 import {
   FormControl,
   IconButton,
@@ -6,23 +6,25 @@ import {
   InputLabel,
   OutlinedInput,
   TextField,
-} from '@mui/material';
-import {useEffect, useState} from 'react';
-import {Link, useNavigate} from 'react-router-dom';
-import styled from 'styled-components';
-import menteeApi from '../api/mentee';
-import {colors} from '../constants/colors';
-import firebaseInstance from '../services/firebase';
-import {useUserStore} from '../store/userStore';
+} from "@mui/material";
+import { useEffect, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import styled from "styled-components";
+import menteeApi from "../api/mentee";
+import mentorApi from "../api/mentor";
+import { UserRole } from "../constants";
+import { colors } from "../constants/colors";
+import firebaseInstance from "../services/firebase";
+import { useUserStore } from "../store/userStore";
 // import {useUserStore} from '../store/userStore';
 
 function LoginPage() {
   const navigate = useNavigate();
-  const {user, setUser} = useUserStore();
+  const { user, setUser } = useUserStore();
   const setAuth = useUserStore.getState().login;
   const [values, setValues] = useState({
-    email: '',
-    password: '',
+    email: "",
+    password: "",
   });
 
   const [showPassword, setShowPassword] = useState(false);
@@ -37,8 +39,8 @@ function LoginPage() {
   // };
 
   const handleChange = (event) => {
-    const {name, value} = event.target;
-    setValues({...values, [name]: value});
+    const { name, value } = event.target;
+    setValues({ ...values, [name]: value });
   };
 
   const handleSubmit = async (event) => {
@@ -49,27 +51,26 @@ function LoginPage() {
       values.password
     );
     const user = userCredential.user;
-    const a = firebaseInstance.auth.currentUser;
     //userId in firestore != userId in .net
     const doc = await firebaseInstance.getUser(user.uid);
     const userInfo = doc.data();
 
     let userData;
-    if (userInfo.role === 'mentee') {
+    if (userInfo.role === UserRole.MENTEE) {
       userData = await menteeApi.getMentee(userInfo.id);
-      setUser({...userData, role: 'mentee'});
-    } else if (userInfo.role === 'mentor') {
-      navigate('/mentor');
+    } else if (userInfo.role === UserRole.MENTOR) {
+      userData = await mentorApi.getMentorById(userInfo.id);
     }
+    setUser({ ...userData, role: userInfo.role });
   };
 
   useEffect(() => {
     (async () => {
       if (user) {
-        if (user.role === 'mentee') {
-          navigate('/mentee');
-        } else if (user.role === 'mentor') {
-          navigate('/mentor');
+        if (user.role === "mentee") {
+          navigate("/mentee");
+        } else if (user.role === "mentor") {
+          navigate("/mentor");
         }
       }
     })();
@@ -109,7 +110,7 @@ function LoginPage() {
               autoComplete="off"
               label="Tên đăng nhập hoặc email"
               variant="outlined"
-              sx={{width: '100%', fontSize: '1rem'}}
+              sx={{ width: "100%", fontSize: "1rem" }}
             />
             <FormControl variant="outlined">
               <InputLabel htmlFor="outlined-adornment-password">
@@ -118,7 +119,7 @@ function LoginPage() {
               <OutlinedInput
                 name="password"
                 onChange={(event) => handleChange(event)}
-                type={showPassword ? 'text' : 'password'}
+                type={showPassword ? "text" : "password"}
                 endAdornment={
                   <InputAdornment position="end">
                     <IconButton
@@ -142,7 +143,7 @@ function LoginPage() {
             </span>
             <span>
               Chưa có tài khoản?
-              <br /> <Link to="/auth/signup">Đăng kí làm mentee</Link> hoặc{' '}
+              <br /> <Link to="/auth/signup">Đăng kí làm mentee</Link> hoặc{" "}
               <Link to="/mentor">Nộp đơn làm mentor</Link>
             </span>
           </form>

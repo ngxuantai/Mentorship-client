@@ -1,6 +1,7 @@
 import {create} from 'zustand';
-import menteeApi from '../api/mentee';
 import {UserRole} from '../constants';
+import menteeApi from '../api/mentee';
+import mentorApi from '../api/mentor';
 
 export const useUserStore = create((set) => ({
   user: {},
@@ -9,20 +10,21 @@ export const useUserStore = create((set) => ({
     console.log('user', updatedUser);
 
     // Destructure the user from the state
-    const {user} = set.getState();
+    const {user} = useUserStore.getState();
 
-    if (user.role === UserRole.MENTEE) {
-      try {
-        // Assuming menteeApi.updateMentee returns the updated mentee
+    try {
+      if (user.role === UserRole.MENTEE) {
         const updatedMentee = await menteeApi.updateMentee(id, updatedUser);
 
-        // Use the set function to update the state
         set({user: updatedMentee});
-      } catch (error) {
-        console.error('Error updating mentee:', error);
+      } else if (user.role === UserRole.MENTOR) {
+        // Handle mentor update logic here if needed
+        const updateMentor = await mentorApi.updateMentor(id, updatedUser);
+
+        set({user: updateMentor});
       }
-    } else if (user.role === UserRole.MENTOR) {
-      // Handle mentor update logic here if needed
+    } catch (error) {
+      console.error('Error updating mentee:', error);
     }
   },
 }));
