@@ -1,17 +1,17 @@
-import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
-import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
-import styled from "styled-components";
-import fieldApi from "../../api/field";
-import skillApi from "../../api/skill";
-import Logo from "../../assets/logo-no-text.png";
-import { UserRole } from "../../constants";
-import { useUserStore } from "../../store/userStore";
-import MenteeHeader from "./MenteeHeader";
-import MentorHeader from "./MentorHeader";
+import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
+import {useEffect, useState} from 'react';
+import {Link} from 'react-router-dom';
+import styled from 'styled-components';
+import fieldApi from '../../api/field';
+import skillApi from '../../api/skill';
+import Logo from '../../assets/logo-no-text.png';
+import {UserRole} from '../../constants';
+import {useUserStore} from '../../store/userStore';
+import MenteeHeader from './MenteeHeader';
+import MentorHeader from './MentorHeader';
 
 export default function Header() {
-  const { user } = useUserStore();
+  const {user} = useUserStore();
   if (!user) return <UnAuthHeader></UnAuthHeader>;
   if (user.role === UserRole.MENTEE) {
     return <MenteeHeader></MenteeHeader>;
@@ -30,7 +30,7 @@ function UnAuthHeader() {
         fieldsData.map(async (field) => {
           const skills = await skillApi.getSkillsByFieldId(field.id);
 
-          return { ...field, skills: skills.slice(0, 4) };
+          return {...field, skills: skills.slice(0, 4)};
         })
       );
 
@@ -49,7 +49,7 @@ function UnAuthHeader() {
         <MenuContainer>
           <span>
             <Link to="/mentor/search">Tìm kiếm mentor</Link>
-            <KeyboardArrowDownIcon style={{ fontSize: "1rem" }} />
+            <KeyboardArrowDownIcon style={{fontSize: '1rem'}} />
           </span>
           <div className="custom-menu">
             {fields.map((field) => (

@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import { Button } from "react-bootstrap";
 import { FaCopy } from "react-icons/fa";
 import { useNavigate } from "react-router";
-import menteeApplicationApi from "../../../api/menteeAplication";
+import menteeApplicationApi from "../../../api/menteeApplication";
 import mentorApi from "../../../api/mentor";
 import { useUserStore } from "../../../store/userStore";
 import {
