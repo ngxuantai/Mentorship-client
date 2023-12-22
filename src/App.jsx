@@ -20,6 +20,8 @@ import ListExam from './pages/Mentee/ListExam';
 import DoExam from './pages/Mentee/DoExam';
 import Examination from './pages/Mentor/Examination';
 import DetailExam from './pages/Mentor/DetailExam';
+import ListMentee from './pages/Mentor/ListMentee';
+import MenteeApplication from './pages/Mentor/MenteeApplication';
 
 function App() {
   return (
@@ -71,6 +73,11 @@ function App() {
 
         <Route path="mentor/examination" element={<Examination />} />
         <Route path="mentor/examination/:id" element={<DetailExam />} />
+        <Route path="mentor/list-mentee" element={<ListMentee />} />
+        <Route
+          path="mentor/mentee-application"
+          element={<MenteeApplication />}
+        />
       </Routes>
     </Router>
   );

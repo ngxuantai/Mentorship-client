@@ -10,6 +10,10 @@ export const PaymentStatus = {
   SUCCEDDED: 1,
 };
 export const UserRole = {
-  MENTEE: "mentee",
-  MENTOR: "mentor",
+  MENTEE: 'mentee',
+  MENTOR: 'mentor',
+};
+export const ApplicationStatus = {
+  APPROVED: 1,
+  REJECTED: 2,
 };

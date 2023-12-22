@@ -1,4 +1,4 @@
-import create from 'zustand';
+import {create} from 'zustand';
 import menteeApi from '../api/mentee';
 import {UserRole} from '../constants';
 
