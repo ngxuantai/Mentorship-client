@@ -1,5 +1,5 @@
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
-import MenteeHeader from "./components/header/MenteeHeader";
+import Header from "./components/header/Header";
 import ProtectedRoute from "./navigation/ProtectedRoute";
 import HomePage from "./pages/HomePage";
 import Login from "./pages/LoginPage";
@@ -26,7 +26,7 @@ import SignUp from "./pages/SignupPage";
 function App() {
   return (
     <Router>
-      <MenteeHeader></MenteeHeader>
+      <Header></Header>
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/auth/login" element={<Login />} />

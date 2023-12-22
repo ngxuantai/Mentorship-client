@@ -1,4 +1,3 @@
-import PrivacyTipIcon from "@mui/icons-material/PrivacyTip";
 import { Avatar, TextField } from "@mui/material";
 import React, { useRef } from "react";
 import styled from "styled-components";
@@ -13,6 +12,9 @@ export default function PersonalInfor() {
     firstName: user.firstName,
     lastName: user.lastName,
     phoneNumber: user.phoneNumber,
+    jobTitle: user.jobTitle,
+    email: user.email,
+    linkedin: user.linkedin,
     dateOfBirth: user.dateOfBirth ? new Date(user.dateOfBirth) : null,
   });
 
@@ -38,7 +40,7 @@ export default function PersonalInfor() {
       ? await firebaseInstance.storeImage("avatar", values.avatar)
       : user.avatar;
     console.log(`Đã chọn tệp:`, avatarUrl);
-    const updatedUser = { ...user, avatar: avatarUrl };
+    const updatedUser = { ...user, ...values, avatar: avatarUrl };
     await updateUser(user.id, updatedUser);
   };
   const handleChange = (event) => {
@@ -59,124 +61,140 @@ export default function PersonalInfor() {
       </Tittle>
       <ContentContainer>
         <h5 style={{ fontWeight: "bold" }}>Thông tin cá nhân</h5>
-        <TipsContainer>
-          <p>
-            <PrivacyTipIcon style={{ color: "#3f83f8", fontSize: "16px" }} />{" "}
-            Mẹo
-          </p>
-          <ul>
-            <li>
-              Thêm ảnh và hồ sơ truyền thông xã hội của bạn giúp người hướng dẫn
-              cảm thấy tự tin rằng bạn là một người thật (ví dụ: không phải là
-              bot).
-            </li>
-            <li>
-              Hồ sơ của bạn chỉ hiển thị với người hướng dẫn mà bạn gửi đơn ứng
-              tuyển đến. Nó không được lập chỉ mục trên các công cụ tìm kiếm như
-              Google.
-            </li>
-          </ul>
-        </TipsContainer>
-        <AvatarContainer>
-          <p>Ảnh</p>
-          <div className="avatar-change">
-            <Avatar
-              //render selected image here
-              src={selectedImage}
-              sx={{ width: "100px", height: "100px" }}
-            />
+        <div style={{ display: "flex", flexDirection: "row" }}>
+          <AvatarContainer>
+            <div onClick={handleButtonClick} className="avatar-change">
+              <Avatar
+                //render selected image here
+                src={selectedImage}
+                sx={{ width: "100px", height: "100px" }}
+              />
+              {/* <button onClick={handleButtonClick}>Chọn tệp</button> */}
+            </div>
             <input
               type="file"
               ref={fileInputRef}
               style={{ display: "none" }}
               onChange={handleFileChange}
             />
-            <button onClick={handleButtonClick}>Chọn tệp</button>
-          </div>
-        </AvatarContainer>
-        <InforContainer onSubmit={handleSaveChange}>
-          <div className="content">
-            <TextField
-              name="firstName"
-              onChange={(event) => handleChange(event)}
-              autoComplete="off"
-              label="Tên"
-              variant="outlined"
-              size="small"
-              sx={{
-                width: "100%",
-                fontSize: "1rem",
-              }}
-              required
-            />
-            <TextField
-              name="lastName"
-              onChange={(event) => handleChange(event)}
-              autoComplete="off"
-              label="Họ"
-              variant="outlined"
-              size="small"
-              sx={{
-                width: "100%",
-                fontSize: "1rem",
-              }}
-              required
-            />
-          </div>
-          <div
-            className="content"
-            style={{ width: "50%", paddingRight: "0.5rem" }}
-          >
-            <TextField
-              name="phoneNumber"
-              onChange={(event) => handleChange(event)}
-              autoComplete="off"
-              label="Số điện thoại"
-              variant="outlined"
-              size="small"
-              sx={{
-                width: "100%",
-                fontSize: "1rem",
-              }}
-              required
-            />
-            <TextField
-              name="dateOfBirth"
-              type="date"
-              onChange={(event) => handleChange(event)}
-              value={
-                values.dateOfBirth
-                  ? values.dateOfBirth.toISOString().substring(0, 10)
-                  : ""
-              }
-              variant="outlined"
-              size="small"
-              sx={{
-                width: "100%",
-                fontSize: "1rem",
-              }}
-            />
-          </div>
-          {/*       
-          <TextField
-            name="goal"
-            multiline
-            onChange={(event) => handleChange(event)}
-            autoComplete="off"
-            label="Mục tiêu"
-            variant="outlined"
-            size="small"
-            sx={{
-              width: "100%",
-              fontSize: "1rem",
-              "& textarea": {
-                minHeight: "8rem",
-                resize: "vertical",
-              },
-            }}
-          /> */}
-          <button>Lưu thay đổi</button>
-        </InforContainer>
+          </AvatarContainer>
+          <InforContainer onSubmit={handleSaveChange}>
+            <div className="content">
+              <TextField
+                name="firstName"
+                value={values.firstName}
+                onChange={(event) => handleChange(event)}
+                autoComplete="off"
+                placeholder="Tên"
+                variant="outlined"
+                size="small"
+                sx={{
+                  width: "100%",
+                  fontSize: "1rem",
+                }}
+                required
+              />
+              <TextField
+                value={values.lastName}
+                name="lastName"
+                onChange={(event) => handleChange(event)}
+                autoComplete="off"
+                placeholder="Họ"
+                variant="outlined"
+                size="small"
+                sx={{
+                  width: "100%",
+                  fontSize: "1rem",
+                }}
+                required
+              />
+            </div>
+            <div className="content">
+              <TextField
+                value={values.phoneNumber}
+                name="phoneNumber"
+                onChange={(event) => handleChange(event)}
+                autoComplete="off"
+                placeholder="Số điện thoại"
+                variant="outlined"
+                size="small"
+                sx={{
+                  width: "100%",
+                  fontSize: "1rem",
+                }}
+                required
+              />
+              <TextField
+                value={values.email}
+                name="email"
+                onChange={(event) => handleChange(event)}
+                autoComplete="off"
+                placeholder="Email"
+                variant="outlined"
+                size="small"
+                sx={{
+                  width: "100%",
+                  fontSize: "1rem",
+                }}
+                required
+              />
+            </div>
+            <div className="content">
+              <TextField
+                name="jobTitle"
+                value={values.jobTitle}
+                onChange={(event) => handleChange(event)}
+                autoComplete="off"
+                placeholder="Nghề nghiệp"
+                variant="outlined"
+                size="small"
+                sx={{
+                  width: "50%",
+                  fontSize: "1rem",
+                }}
+                required
+              />
+              <div
+                className="content"
+                style={{ width: "50%", paddingRight: "0.5rem" }}
+              >
+                <TextField
+                  name="linkedin"
+                  value={values.linkedin}
+                  onChange={(event) => handleChange(event)}
+                  autoComplete="off"
+                  placeholder="Linked url"
+                  variant="outlined"
+                  size="small"
+                  sx={{
+                    width: "100%",
+                    fontSize: "1rem",
+                  }}
+                  required
+                />
+                <TextField
+                  name="dateOfBirth"
+                  type="date"
+                  value={values.dateOfBirth}
+                  onChange={(event) => handleChange(event)}
+                  value={
+                    values.dateOfBirth
+                      ? values.dateOfBirth.toISOString().substring(0, 10)
+                      : ""
+                  }
+                  variant="outlined"
+                  size="small"
+                  sx={{
+                    width: "100%",
+                    fontSize: "1rem",
+                  }}
+                />
+              </div>
+            </div>
+
+            <button>Lưu thay đổi</button>
+          </InforContainer>
+        </div>
       </ContentContainer>
     </Container>
   );
@@ -214,6 +232,7 @@ const TipsContainer = styled.div`
 
 const AvatarContainer = styled.div`
   display: flex;
+  margin: 0px 20px;
   flex-direction: column;
   p {
     font-size: 16px;

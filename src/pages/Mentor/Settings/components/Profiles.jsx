@@ -1,6 +1,6 @@
-import { Checkbox, FormControlLabel, FormGroup } from "@mui/material";
 import { useEffect, useState } from "react";
 import styled from "styled-components";
+import OtherInfor from "./OtherInfor";
 import PersonalInfor from "./PersonalInfor";
 
 export default function Profiles() {
@@ -32,8 +32,9 @@ export default function Profiles() {
   return (
     <Container>
       <PersonalInfor />
+      <OtherInfor />
       {/* <TimeAvailable /> */}
-      <EmailContainer>
+      {/* <EmailContainer>
         <h5 style={{ fontWeight: "bold" }}>Tùy chọn email</h5>
         <p style={{ padding: 0, margin: 0 }}>
           Cấu hình thông báo email của bạn để bạn có thể tập trung vào những
@@ -73,7 +74,7 @@ export default function Profiles() {
           />
         </FormGroup>
         <button onClick={saveChange}>Lưu thay đổi</button>
-      </EmailContainer>
+      </EmailContainer> */}
     </Container>
   );
 }

@@ -22,6 +22,18 @@ const mentorApi = {
       return null;
     }
   },
+
+  updateMentor: async (id, mentor) => {
+    try {
+      const url = `/api/mentor/update/${id}`;
+      const res = await axiosClient.put(url, mentor);
+      console.log("updated mentor data", res.data);
+      return res.data;
+    } catch (error) {
+      console.error(error);
+      return null;
+    }
+  },
   getMentorById: async (id) => {
     try {
       const url = `/api/mentor/get/${id}`;
