@@ -6,7 +6,7 @@ import Payment from "./components/Payment";
 
 import Profiles from "./components/Profiles";
 
-export default function MenteeSettings() {
+export default function MentorSettings() {
   const [value, setValue] = React.useState(0);
 
   const handleChange = (event, newValue) => {

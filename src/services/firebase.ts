@@ -110,43 +110,89 @@ class Firebase {
   // deleteImage = (id) => this.storage.ref("products").child(id).delete();
 
   //db realtime
-  addCalendar = (userId, calendar) =>
-    databaseService.set(
-      databaseService.ref(this.realtimeDb, "calendars/" + userId),
-      calendar
-    );
+  // Hàm trợ giúp để lấy các sự kiện
 
-  onCalendarChange = (userId, observer) =>
-    databaseService.onValue(
-      databaseService.ref(this.realtimeDb, "calendars/" + userId),
-      observer
-    );
-
-  updateEvent = (userId, eventId, event) =>
-    databaseService.update(
+  getEvents = async (userId, dayOfWeek) => {
+    const snapshot = await databaseService.get(
       databaseService.ref(
         this.realtimeDb,
-        "calendars/" + userId + "/events/" + eventId
-      ),
-      event
-    );
-
-  addEvent = (userId, event) =>
-    databaseService.set(
-      databaseService.ref(
-        this.realtimeDb,
-        "calendars/" + userId + "/events/" + event.id
-      ),
-      event
-    );
-
-  deleteEvent = (userId, eventId) =>
-    databaseService.remove(
-      databaseService.ref(
-        this.realtimeDb,
-        "calendars/" + userId + "/events/" + eventId
+        "calendars/" + userId + "/" + dayOfWeek
       )
     );
+    return snapshot.val() || [];
+  };
+
+  // Thêm sự kiện
+  addEvent = async (userId, dayOfWeek, event) => {
+    const eventId = Date.now();
+    const eventRef = databaseService.ref(
+      this.realtimeDb,
+      "calendars/" + userId + "/" + dayOfWeek
+    );
+
+    // Lấy tất cả các sự kiện hiện tại
+    const events = await this.getEvents(userId, dayOfWeek);
+
+    // Thêm sự kiện mới vào mảng
+    events.push({ ...event, id: eventId });
+
+    // Cập nhật mảng sự kiện trong cơ sở dữ liệu
+    await databaseService.set(eventRef, events);
+
+    return eventId;
+  };
+
+  // Cập nhật sự kiện
+  updateEvent = async (userId, dayOfWeek, eventId, event) => {
+    const eventRef = databaseService.ref(
+      this.realtimeDb,
+      "calendars/" + userId + "/" + dayOfWeek
+    );
+
+    // Lấy tất cả các sự kiện hiện tại
+    const events = await this.getEvents(userId, dayOfWeek);
+
+    // Tìm sự kiện cần cập nhật và cập nhật nó
+    const index = events.findIndex((e) => e.id === eventId);
+    if (index !== -1) {
+      events[index] = { ...event, id: eventId };
+
+      // Cập nhật mảng sự kiện trong cơ sở dữ liệu
+      await databaseService.set(eventRef, events);
+    }
+  };
+
+  // Xóa sự kiện
+  deleteEvent = async (userId, dayOfWeek, eventId) => {
+    const eventRef = databaseService.ref(
+      this.realtimeDb,
+      "calendars/" + userId + "/" + dayOfWeek
+    );
+
+    // Lấy tất cả các sự kiện hiện tại
+    const events = await this.getEvents(userId, dayOfWeek);
+
+    // Tìm sự kiện cần xóa và xóa nó
+    const index = events.findIndex((e) => e.id === eventId);
+    if (index !== -1) {
+      events.splice(index, 1);
+
+      // Cập nhật mảng sự kiện trong cơ sở dữ liệu
+      await databaseService.set(eventRef, events);
+    }
+  };
+  // Theo dõi sự thay đổi của lịch
+  observeCalendarChanges(userId, onEventChange) {
+    return databaseService.onValue(
+      databaseService.ref(this.realtimeDb, "calendars/" + userId),
+      (snapshot) => {
+        const weekEvents = snapshot.val();
+        console.log("calendar", weekEvents);
+
+        onEventChange(weekEvents);
+      }
+    );
+  }
 }
 
 const firebaseInstance = new Firebase();

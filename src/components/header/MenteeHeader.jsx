@@ -20,7 +20,7 @@ const pages = [
   { name: "Danh sách mentor", link: "/mentee/wishlist" },
   { name: "Yêu cầu", link: "/mentee/inquires" },
   { name: "Danh sách yêu cầu", link: "/mentee/applications" },
-  { name: "Cài đặt", link: "/settings" },
+  { name: "Cài đặt", link: "/mentee/settings" },
   // thêm các trang khác tại đây
 ];
 

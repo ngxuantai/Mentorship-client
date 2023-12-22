@@ -12,7 +12,8 @@ import MentorHeader from "./MentorHeader";
 
 export default function Header() {
   const { user } = useUserStore();
-  if (!user) return <UnAuthHeader></UnAuthHeader>;
+  console.log("user", user);
+  if (!user || !user.role) return <UnAuthHeader></UnAuthHeader>;
   if (user.role === UserRole.MENTEE) {
     return <MenteeHeader></MenteeHeader>;
   }

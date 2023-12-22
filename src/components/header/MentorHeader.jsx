@@ -16,11 +16,9 @@ import { useNavigate } from "react-router";
 import { useUserStore } from "../../store/userStore";
 
 const pages = [
-  { name: "Trang chủ", link: "/" },
-  { name: "Danh sách mentor", link: "/mentee/wishlist" },
-  { name: "Yêu cầu", link: "/mentee/inquires" },
-  { name: "Danh sách yêu cầu", link: "/mentee/applications" },
-  { name: "Cài đặt", link: "/settings" },
+  // { name: "Trang chủ", link: "/" },
+  { name: "Lịch dạy", link: "/mentor/calendar" },
+  { name: "Cài đặt", link: "/mentor/settings" },
   // thêm các trang khác tại đây
 ];
 
