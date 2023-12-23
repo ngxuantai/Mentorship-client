@@ -13,6 +13,7 @@ import Inquires from './pages/Mentee/Inquires';
 import ListExam from './pages/Mentee/ListExam';
 import {default as MenteeSettings} from './pages/Mentee/Settings';
 import Wishlist from './pages/Mentee/Wishlist';
+import RatingComment from './pages/Mentee/RatingComment';
 import ApplyMentor from './pages/Mentor/ApplyMentor';
 import MentorCalendar from './pages/Mentor/Calendar';
 import DetailExam from './pages/Mentor/DetailExam';
@@ -70,7 +71,7 @@ function App() {
             </ProtectedRoute>
           }
         />
-
+        <Route path="/mentee/rating" element={<RatingComment />} />
         <Route path="/mentee/exam" element={<ListExam />} />
         <Route path="/mentee/exam/:id" element={<DoExam />} />
 
