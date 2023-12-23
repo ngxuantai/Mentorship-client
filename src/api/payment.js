@@ -5,7 +5,7 @@ const paymentApi = {
     try {
       const url = '/payment';
       const res = await axiosClient.post(url, payment);
-      console.log('new payment data', res.data.data);
+      // Wait for 2000 milliseconds (2 seconds)
       return res.data.data;
     } catch (error) {
       console.error(error);
@@ -36,6 +36,16 @@ const paymentApi = {
     try {
       const url = '/getRequestUrl';
       const res = await axiosClient.post(url, payment);
+      return res.data.data;
+    } catch (error) {
+      console.error(error);
+      return null;
+    }
+  },
+  deletePayment: async (menteeApplicationId) => {
+    try {
+      const url = `/payment/deletePayments/${menteeApplicationId}`;
+      const res = await axiosClient.delete(url);
       return res.data.data;
     } catch (error) {
       console.error(error);

@@ -12,6 +12,17 @@ const menteeApplicationApi = {
     }
   },
 
+  getMenteeApplicationById: async (id) => {
+    try {
+      const url = `/menteeApplication/getMenteeApplicationById/${id}`;
+      const res = await axiosClient.get(url);
+      return res.data.data;
+    } catch (error) {
+      console.error(error);
+      return null;
+    }
+  },
+
   getMenteeApplicationByMenteeId: async (menteeId) => {
     try {
       const url = `/menteeApplication/getMenteeApplicationByMenteeId/${menteeId}`;

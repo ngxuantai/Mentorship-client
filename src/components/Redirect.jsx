@@ -1,45 +1,61 @@
-import {useEffect} from 'react';
-import usePaymentStore from '../store/paymentStore';
+import {useEffect, useState} from 'react';
 import {PaymentStatus} from '../constants';
+import usePaymentStore from '../store/paymentStore';
+import menteeApplicationApi from '../api/menteeApplication';
+import paymentApi from '../api/payment';
 
 const RedirectComponent = () => {
   const {payment, createPayment} = usePaymentStore();
-
-  // Thêm hàm xử lý kết quả thanh toán
-  const handlePaymentResult = async () => {
-    const queryParams = new URLSearchParams(window.location.search);
-    const vnpResponseCode = queryParams.get('vnp_ResponseCode');
-
-    if (vnpResponseCode === '00') {
-      // Thanh toán thành công, xử lý logic của bạn ở đây
-      console.log('Thanh toán thành công');
-      await createPayment({
-        menteeId: '658551f06a7e6920f9112a4a',
-        mentorId: '65840127a47c189dd995cdf3',
-        menteeApplicationId: '6586b6070d0111d78c392fcb',
-        price: 100000,
-        status: PaymentStatus.SUCCESS,
-      });
-    } else {
-      // Thanh toán không thành công, xử lý logic của bạn ở đây
-      console.log('Thanh toán không thành công');
-    }
-  };
-
-  // Gọi hàm handlePaymentResult khi trang chủ được tải
-  useEffect(() => {
-    handlePaymentResult();
-  }, []);
+  const [menteeAppli, setMenteeAppli] = useState();
+  const [checkout, setCheckout] = useState(false);
 
   useEffect(() => {
-    // Kiểm tra xem URL có chứa "/ReturnUrl" không
-    if (window.location.pathname.includes('/ReturnUrl')) {
-      // Chuyển hướng đến http://localhost:5173
-      window.location.href = 'http://localhost:5173';
+    const getMenteeApplication = async () => {
+      const queryParams = new URLSearchParams(window.location.search);
+      const vnpResponseCode = queryParams.get('vnp_ResponseCode');
+
+      if (vnpResponseCode === '00') {
+        const vnpTxnRef = queryParams.get('vnp_TxnRef');
+        const menteeApplication =
+          await menteeApplicationApi.getMenteeApplicationById(vnpTxnRef);
+
+        if (menteeApplication) {
+          // Kiểm tra xem đã thực hiện thanh toán cho menteeApplication này chưa
+          if (!checkout) {
+            setCheckout(true); // Đánh dấu rằng đã thực hiện thanh toán
+
+            // Thực hiện thanh toán
+            const res = await createPayment({
+              menteeApplicationId: menteeApplication.id,
+              mentorId: menteeApplication.mentorId,
+              menteeId: menteeApplication.menteeProfile.id,
+              price: menteeApplication.fee,
+              status: PaymentStatus.SUCCESS,
+            });
+            await paymentApi.deletePayment(res.id);
+            window.location.href = 'http://localhost:5173/mentee/payment';
+          }
+        }
+
+        // if (res) {
+        //   await paymentApi.deletePayment(menteeApplication.id);
+        // }
+
+        // if (window.location.pathname.includes('/ReturnUrl')) {
+        //   // Chuyển hướng đến http://localhost:5173
+        //   window.location.href = 'http://localhost:5173/mentee/payment';
+        // }
+      } else {
+        console.log('Thanh toán không thành công');
+      }
+    };
+
+    // Run the effect only once by passing an empty dependency array
+    if (!checkout) {
+      getMenteeApplication();
     }
   }, []);
 
-  // Component không cần render gì cả
   return null;
 };
 

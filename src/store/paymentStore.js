@@ -4,10 +4,9 @@ import paymentApi from '../api/payment';
 const usePaymentStore = create((set) => ({
   payment: null,
   setPayment: (payment) => set({payment}),
-  createPayment: async (payment) => {
+  createPayment: async (data) => {
     try {
-      const newPayment = await paymentApi.createPayment(payment);
-      console.log('new payment data', newPayment);
+      const newPayment = await paymentApi.createPayment(data);
       set({payment: newPayment});
     } catch (error) {
       console.error(error);

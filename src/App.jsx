@@ -11,6 +11,7 @@ import DashBoard from './pages/Mentee/DashBoard';
 import DoExam from './pages/Mentee/DoExam';
 import Inquires from './pages/Mentee/Inquires';
 import ListExam from './pages/Mentee/ListExam';
+import Payment from './pages/Mentee/Payment';
 import {default as MenteeSettings} from './pages/Mentee/Settings';
 import Wishlist from './pages/Mentee/Wishlist';
 import RatingComment from './pages/Mentee/RatingComment';
@@ -75,6 +76,7 @@ function App() {
         <Route path="/mentee/rating" element={<RatingComment />} />
         <Route path="/mentee/exam" element={<ListExam />} />
         <Route path="/mentee/exam/:id" element={<DoExam />} />
+        <Route path="/mentee/payment" element={<Payment />} />
 
         <Route path="mentor/examination" element={<Examination />} />
         <Route path="mentor/examination/:id" element={<DetailExam />} />
@@ -83,7 +85,10 @@ function App() {
           path="mentor/mentee-application"
           element={<MenteeApplication />}
         />
-        <Route path="/ReturnUrl/*" element={<RedirectComponent />} />
+        <Route
+          path="/mentee/payment/ReturnUrl/*"
+          element={<RedirectComponent />}
+        />
       </Routes>
     </Router>
   );

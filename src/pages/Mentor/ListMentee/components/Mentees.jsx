@@ -8,7 +8,7 @@ import {FaCopy} from 'react-icons/fa';
 import {handleCopyClick, shortenId} from '../../../../utils/dataHelper';
 import {ApprovalStatus} from '../../../../constants';
 
-export default function ListApplications({applications}) {
+export default function Mentees({applications}) {
   const [checkedItems, setCheckedItems] = useState({});
   const [selectAll, setSelectAll] = useState(false);
   const [changedDaysCompensation, setChangedDaysCompensation] = useState({});
