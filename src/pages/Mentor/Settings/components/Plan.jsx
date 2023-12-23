@@ -1,6 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import styled from 'styled-components';
 import planApi from '../../../../api/plan';
+import paymentApi from '../../../../api/payment';
 import {Button, Label, TextInput, Textarea} from 'flowbite-react';
 import {PlanType} from '../../../../constants';
 import PlanItem from './PlanItem';
@@ -18,7 +19,20 @@ const Plan = () => {
       console.log(res);
       setPlans(res);
     };
+    // get request payment
+    const fetchPayment = async () => {
+      const res = await paymentApi.getRequestUrl({
+        menteeId: '658551f06a7e6920f9112a4a',
+        menteeApplicattion: '6586b6070d0111d78c392fc8',
+        amount: 100000,
+        description: 'thanh toan',
+      });
+      console.log(res);
+      setUrl(res);
+    };
+
     fetchPlans();
+    fetchPayment();
   }, []);
 
   useEffect(() => {
@@ -46,6 +60,12 @@ const Plan = () => {
       const res = await planApi.createPlan(updatedPlan);
       console.log(res);
     }
+  };
+
+  const [url, setUrl] = useState('');
+  const handleCheckOut = () => {
+    //redirect to url
+    window.location.href = url;
   };
 
   return (
@@ -104,6 +124,7 @@ const Plan = () => {
           </>
         )}
       </ContentContainer>
+      <Button onClick={() => handleCheckOut()}>Thanh toan</Button>
     </Container>
   );
 };

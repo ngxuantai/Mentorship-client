@@ -6,8 +6,8 @@ export const ApprovalStatus = {
   REJECTED: 2,
 };
 export const PaymentStatus = {
-  FAILED: 0,
-  SUCCEDDED: 1,
+  SUCCESS: 0,
+  FAILED: 1,
 };
 export const UserRole = {
   MENTEE: 'mentee',

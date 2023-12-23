@@ -25,6 +25,7 @@ import MenteeApplication from './pages/Mentor/MenteeApplication';
 import Profile from './pages/ProfilePage';
 import Search from './pages/SearchPage';
 import SignUp from './pages/SignupPage';
+import RedirectComponent from './components/Redirect';
 
 function App() {
   return (
@@ -82,6 +83,7 @@ function App() {
           path="mentor/mentee-application"
           element={<MenteeApplication />}
         />
+        <Route path="/ReturnUrl/*" element={<RedirectComponent />} />
       </Routes>
     </Router>
   );
