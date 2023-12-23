@@ -27,6 +27,7 @@ import Profile from './pages/ProfilePage';
 import Search from './pages/SearchPage';
 import SignUp from './pages/SignupPage';
 import RedirectComponent from './components/Redirect';
+import VideoChat from './pages/VideoChatPage';
 
 function App() {
   return (
@@ -85,6 +86,8 @@ function App() {
           path="mentor/mentee-application"
           element={<MenteeApplication />}
         />
+
+        <Route path="/videochat" element={<VideoChat />} />
         <Route
           path="/mentee/payment/ReturnUrl/*"
           element={<RedirectComponent />}
