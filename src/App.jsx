@@ -26,24 +26,6 @@ import Profile from './pages/ProfilePage';
 import Search from './pages/SearchPage';
 import SignUp from './pages/SignupPage';
 import RedirectComponent from './components/Redirect';
-import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
-import MenteeHeader from "./components/MenteeHeader";
-import ProtectedRoute from "./navigation/ProtectedRoute";
-import HomePage from "./pages/HomePage";
-import Login from "./pages/LoginPage";
-import Applications from "./pages/Mentee/Applications";
-import ApplyMentee from "./pages/Mentee/ApplyMentee";
-import ApplyProcess from "./pages/Mentee/ApplyProcess/";
-import InformationForm from "./pages/Mentee/ApplyProcess/InformationForm";
-import DashBoard from "./pages/Mentee/DashBoard";
-import Inquires from "./pages/Mentee/Inquires";
-import Settings from "./pages/Mentee/Settings";
-import Wishlist from "./pages/Mentee/Wishlist";
-import ApplyMentor from "./pages/Mentor/ApplyMentor";
-import Mentor from "./pages/Mentor/MentorPage";
-import Profile from "./pages/ProfilePage";
-import Search from "./pages/SearchPage";
-import SignUp from "./pages/SignupPage";
 import VideoChat from "./pages/VideoChatPage";
 
 function App() {
