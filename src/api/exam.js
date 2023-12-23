@@ -26,7 +26,6 @@ const examApi = {
   getExamByMentorId: async (mentorId) => {
     try {
       const url = `/api/exam/getByMentorId/${mentorId}`;
-      console.log('url', url);
       const res = await axiosClient.get(url);
       console.log('exam data', res.data);
       return res.data;

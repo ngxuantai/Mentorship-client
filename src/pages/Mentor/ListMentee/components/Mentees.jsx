@@ -1,6 +1,7 @@
 import React, {useState} from 'react';
 import {Table, Checkbox, Label, TextInput, Button} from 'flowbite-react';
 import ViewDetailMentee from './ViewDetailMentee';
+import AddExam from './AddExam';
 // import RejectedApplication from './RejectedApplication';
 import {format} from 'date-fns';
 import {FaCopy} from 'react-icons/fa';
@@ -165,6 +166,7 @@ export default function ListApplications({applications}) {
                   Lưu
                 </Button>
                 <ViewDetailMentee application={application} />
+                <AddExam application={application} />
                 <Button>Nhắn tin</Button>
               </div>
             </Table.Cell>

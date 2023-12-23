@@ -3,8 +3,12 @@ import axiosClient from '../config/axiosClient';
 const mneteeExamApi = {
   createMenteeExam: async (examId, mentorId, menteeId) => {
     try {
+      console.log('examId6', examId);
+      console.log('mentorId6', mentorId);
+      console.log('menteeId6', menteeId);
       const url = '/api/menteeExam/create';
-      const res = await axiosClient.post(url, {examId, mentorId, menteeId});
+      const data = {examId: examId, mentorId: mentorId, menteeId: menteeId};
+      const res = await axiosClient.post(url, data);
       console.log('new mentee exam data', res.data);
       return res.data;
     } catch (error) {

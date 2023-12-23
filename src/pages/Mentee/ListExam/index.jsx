@@ -10,7 +10,7 @@ const Exam = () => {
   useEffect(() => {
     const fetchExams = async () => {
       const res = await menteeExamApi.getMenteeExamByMenteeId(
-        '657feddd696c958dbc0ecd81'
+        '658551f06a7e6920f9112a4a'
       );
       console.log(res);
       setMenteeExams(res);
