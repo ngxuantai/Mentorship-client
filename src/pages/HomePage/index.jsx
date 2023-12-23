@@ -1,31 +1,29 @@
-import { useEffect } from "react";
-import { useNavigate } from "react-router";
-import styled from "styled-components";
-import Footer from "../../components/Footer";
-import Header from "../../components/Header";
-import { UserRole } from "../../constants";
-import { useUserStore } from "../../store/userStore";
-import Service from "./components/Service";
-import SlideCard from "./components/SlideCard";
+import {useEffect} from 'react';
+import {useNavigate} from 'react-router';
+import styled from 'styled-components';
+import Footer from '../../components/Footer';
+import {UserRole} from '../../constants';
+import {useUserStore} from '../../store/userStore';
+import Service from './components/Service';
+import SlideCard from './components/SlideCard';
 
 function HomePage() {
   const navigate = useNavigate();
-  const { user } = useUserStore();
+  const {user} = useUserStore();
 
   useEffect(() => {}, []);
   useEffect(() => {
     if (user) {
       if (user.role === UserRole.MENTEE) {
-        navigate("/mentee");
+        navigate('/mentee');
       } else if (user.role === UserRole.MENTOR) {
-        navigate("/mentor");
+        navigate('/mentor');
       }
     }
   }, [user]);
   return (
     <>
       <HomeContainer>
-        <Header />
         <div className="brand-container">
           <p className="slogan">
             Học kĩ năng mới, khởi động dự án và đặt chân tới sự nghiệp mơ ước.
@@ -35,14 +33,13 @@ function HomePage() {
             <input type="text" placeholder="Search for mentors" />
             <button>Search</button>
           </SearchForm>
-          <div style={{ width: "100%" }}>
+          <div style={{width: '100%'}}>
             <SlideCard />
           </div>
         </div>
         <Service />
         <Footer />
       </HomeContainer>
-      ;
     </>
   );
 }

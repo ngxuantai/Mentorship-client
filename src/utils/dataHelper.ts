@@ -1,4 +1,4 @@
-import { ApprovalStatus } from "../constants";
+import { ApprovalStatus, PaymentStatus } from "../constants";
 export function isEmptyObject(obj) {
   for (var prop in obj) {
     if (Object.prototype.hasOwnProperty.call(obj, prop)) {
@@ -40,7 +40,7 @@ export const handleCopyClick = async (value) => {
   }
 };
 
-export const mapStatus = (status) => {
+export const mappingApplicationStatus = (status) => {
   switch (status) {
     case ApprovalStatus.PENDING:
       return "Đang chờ";
@@ -48,6 +48,16 @@ export const mapStatus = (status) => {
       return "Chấp thuận";
     case ApprovalStatus.APPROVED:
       return "Từ chối";
+    default:
+      return null;
+  }
+};
+export const mappingPaymentStatus = (status) => {
+  switch (status) {
+    case PaymentStatus.FAILED:
+      return "Thất bại";
+    case PaymentStatus.SUCCEDDED:
+      return "Thành công";
     default:
       return null;
   }

@@ -11,15 +11,17 @@ import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import menteeApi from "../api/mentee";
+import mentorApi from "../api/mentor";
+import { UserRole } from "../constants";
 import { colors } from "../constants/colors";
 import firebaseInstance from "../services/firebase";
-import useAuthStore from "../store/authStore";
 import { useUserStore } from "../store/userStore";
+// import {useUserStore} from '../store/userStore';
 
 function LoginPage() {
   const navigate = useNavigate();
   const { user, setUser } = useUserStore();
-  const setAuth = useAuthStore.getState().login;
+  const setAuth = useUserStore.getState().login;
   const [values, setValues] = useState({
     email: "",
     password: "",
@@ -49,19 +51,19 @@ function LoginPage() {
       values.password
     );
     const user = userCredential.user;
-    const a = firebaseInstance.auth.currentUser;
     //userId in firestore != userId in .net
     const doc = await firebaseInstance.getUser(user.uid);
     const userInfo = doc.data();
 
     let userData;
-    if (userInfo.role === "mentee") {
+    if (userInfo.role === UserRole.MENTEE) {
       userData = await menteeApi.getMentee(userInfo.id);
-      setUser({ ...userData, role: "mentee" });
-    } else if (userInfo.role === "mentor") {
-      navigate("/mentor");
+    } else if (userInfo.role === UserRole.MENTOR) {
+      userData = await mentorApi.getMentorById(userInfo.id);
     }
+    setUser({ ...userData, role: userInfo.role });
   };
+
   useEffect(() => {
     (async () => {
       if (user) {

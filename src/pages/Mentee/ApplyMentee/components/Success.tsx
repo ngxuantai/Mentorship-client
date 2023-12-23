@@ -9,7 +9,7 @@ export default function Success() {
   const navigate = useNavigate();
   const { user } = useUserStore();
   const handleNavigateHistory = () => {
-    navigate("/settings");
+    navigate("/applications");
   };
 
   const handleNavigateHome = () => {
@@ -27,6 +27,7 @@ export default function Success() {
     >
       <h3
         style={{
+          fontWeight: "bold",
           textAlign: "center",
           width: "100%",
           color: "#22bb33",
@@ -55,7 +56,7 @@ export default function Success() {
               </Button>
 
               <Button
-                onClick={handleNavigateHome}
+                onClick={handleNavigateHistory}
                 className="my-2"
                 variant="secondary"
               >

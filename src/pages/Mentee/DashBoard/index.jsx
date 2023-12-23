@@ -35,10 +35,10 @@ function DashBoard() {
     navigate("/mentor/search");
   };
   useEffect(() => {
-    const token = localStorage.getItem("token");
-    if (!token) {
-      navigate("/");
-    }
+    // const token = localStorage.getItem("token");
+    // if (!token) {
+    //   navigate("/");
+    // }
     setIsLoading(false);
   }, []);
 

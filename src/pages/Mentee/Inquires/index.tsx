@@ -1,7 +1,6 @@
 import { ChatBubbleOutline } from "@mui/icons-material";
 import { Button } from "react-bootstrap";
 import { useNavigate } from "react-router";
-import MenteeHeader from "../../../components/MenteeHeader";
 
 function Inquires() {
   const navigate = useNavigate();
@@ -16,7 +15,7 @@ function Inquires() {
       >
         <h5 style={{ color: "white" }}>
           Want to double the chance of success for your applications?{" "}
-          <a href="/settings" style={{ color: "white" }}>
+          <a href="mentee/settings" style={{ color: "white" }}>
             Complete your profile
           </a>{" "}
         </h5>

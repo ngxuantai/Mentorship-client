@@ -13,14 +13,12 @@ import Tooltip from "@mui/material/Tooltip";
 import Typography from "@mui/material/Typography";
 import * as React from "react";
 import { useNavigate } from "react-router";
-import { useUserStore } from "../store/userStore";
+import { useUserStore } from "../../store/userStore";
 
 const pages = [
-  { name: "Trang chủ", link: "/" },
-  { name: "Danh sách mentor", link: "/mentee/wishlist" },
-  { name: "Yêu cầu", link: "/mentee/inquires" },
-  { name: "Danh sách yêu cầu", link: "/mentee/applications" },
-  { name: "Cài đặt", link: "/settings" },
+  // { name: "Trang chủ", link: "/" },
+  { name: "Lịch dạy", link: "/mentor/calendar" },
+  { name: "Cài đặt", link: "/mentor/settings" },
   // thêm các trang khác tại đây
 ];
 
@@ -32,7 +30,7 @@ const settings = [
   // thêm các trang khác tại đây
 ];
 
-function MenteeHeader() {
+function MentorHeader() {
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
   const { user, setUser } = useUserStore();
@@ -212,4 +210,4 @@ function MenteeHeader() {
     </AppBar>
   );
 }
-export default MenteeHeader;
+export default MentorHeader;

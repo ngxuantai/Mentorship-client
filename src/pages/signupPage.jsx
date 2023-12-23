@@ -1,4 +1,4 @@
-import { Visibility, VisibilityOff } from "@mui/icons-material";
+import {Visibility, VisibilityOff} from '@mui/icons-material';
 import {
   FormControl,
   IconButton,
@@ -6,28 +6,28 @@ import {
   InputLabel,
   OutlinedInput,
   TextField,
-} from "@mui/material";
-import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import styled from "styled-components";
-import menteeApi from "../api/mentee";
-import { colors } from "../constants/colors";
-import firebaseInstance from "../services/firebase";
-import { useUserStore } from "../store/userStore";
+} from '@mui/material';
+import {useState} from 'react';
+import {Link, useNavigate} from 'react-router-dom';
+import styled from 'styled-components';
+import menteeApi from '../api/mentee';
+import {colors} from '../constants/colors';
+import firebaseInstance from '../services/firebase';
+import {useUserStore} from '../store/userStore';
 
 function SignupPage() {
   const navigate = useNavigate();
-  const { user, setUser } = useUserStore();
+  const {user, setUser} = useUserStore();
   const [values, setValues] = useState({
-    fullname: "",
-    email: "",
-    password: "",
-    confirmPassword: "",
+    fullname: '',
+    email: '',
+    password: '',
+    confirmPassword: '',
   });
 
   const handleChange = (event) => {
-    const { name, value } = event.target;
-    setValues({ ...values, [name]: value });
+    const {name, value} = event.target;
+    setValues({...values, [name]: value});
   };
 
   const [showPassword, setShowPassword] = useState(false);
@@ -51,12 +51,12 @@ function SignupPage() {
       const mentee = await menteeApi.createMentee(values);
       await firebaseInstance.addUser(userFirebase.uid, {
         id: mentee.id,
-        role: "mentee",
+        role: 'mentee',
       });
-      setUser({ ...mentee, role: "mentee" });
-      navigate("/mentee");
+      setUser({...mentee, role: 'mentee'});
+      navigate('/mentee');
     } catch (er) {
-      console.log("er", er);
+      console.log('er', er);
     }
   };
 
@@ -78,7 +78,7 @@ function SignupPage() {
               autoComplete="off"
               label="Họ và tên"
               variant="outlined"
-              sx={{ width: "100%", fontSize: "1rem" }}
+              sx={{width: '100%', fontSize: '1rem'}}
             />
             <TextField
               name="email"
@@ -86,7 +86,7 @@ function SignupPage() {
               autoComplete="off"
               label="Email"
               variant="outlined"
-              sx={{ width: "100%", fontSize: "1rem" }}
+              sx={{width: '100%', fontSize: '1rem'}}
             />
             <FormControl variant="outlined">
               <InputLabel htmlFor="outlined-adornment-password">
@@ -95,7 +95,7 @@ function SignupPage() {
               <OutlinedInput
                 name="password"
                 onChange={(event) => handleChange(event)}
-                type={showPassword ? "text" : "password"}
+                type={showPassword ? 'text' : 'password'}
                 endAdornment={
                   <InputAdornment position="end">
                     <IconButton
@@ -118,7 +118,7 @@ function SignupPage() {
               <OutlinedInput
                 name="confirmPassword"
                 onChange={(event) => handleChange(event)}
-                type={showConfirmPassword ? "text" : "password"}
+                type={showConfirmPassword ? 'text' : 'password'}
                 endAdornment={
                   <InputAdornment position="end">
                     <IconButton

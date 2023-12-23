@@ -1,46 +1,26 @@
 import InfoIcon from "@mui/icons-material/Info";
-import {
-  Avatar,
-  FormControl,
-  InputLabel,
-  MenuItem,
-  Select,
-  TextField,
-} from "@mui/material";
+import { Avatar, TextField } from "@mui/material";
 import { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
-import firebaseInstance from "../../../../services/firebase";
 
-export default function AboutYou({ onButtonClick }) {
-  useEffect(() => {
-    // Gọi API để lấy danh sách quốc gia
-    fetch("https://restcountries.com/v2/all")
-      .then((response) => response.json())
-      .then((data) => {
-        // Xử lý dữ liệu trả về
-        const countryList = data.map((country) => ({
-          code: country.alpha2Code,
-          name: country.name,
-        }));
-        setCountries(countryList);
-        // Chọn quốc gia mặc định (ví dụ: chọn quốc gia đầu tiên)
-        setSelectedCountry(countryList.length > 0 ? countryList[0].code : "");
-      })
-      .catch((error) => console.error("Error fetching countries:", error));
-  }, []); // [] ensures that the effect runs only once when the component mounts
-
-  const [values, setValues] = useState({
-    firstName: "",
-    lastName: "",
-    email: "",
-    password: "",
-    jobTitle: "",
-    company: "",
-    linkedin: "",
-    twitter: "",
-    location: "",
-  });
-  const [countries, setCountries] = useState([]);
+export default function AboutYou({ values, onInputChange, onButtonClick }) {
+  const [selectedImage, setSelectedImage] = useState();
+  // useEffect(() => {
+  //   // Gọi API để lấy danh sách quốc gia
+  //   fetch("https://restcountries.com/v2/all")
+  //     .then((response) => response.json())
+  //     .then((data) => {
+  //       // Xử lý dữ liệu trả về
+  //       const countryList = data.map((country) => ({
+  //         code: country.alpha2Code,
+  //         name: country.name,
+  //       }));
+  //       setCountries(countryList);
+  //       // Chọn quốc gia mặc định (ví dụ: chọn quốc gia đầu tiên)
+  //       setSelectedCountry(countryList.length > 0 ? countryList[0].code : "");
+  //     })
+  //     .catch((error) => console.error("Error fetching countries:", error));
+  // }, []); // [] ensures that the effect runs only once when the component mounts
 
   const fileInputRef = useRef(null);
 
@@ -50,23 +30,30 @@ export default function AboutYou({ onButtonClick }) {
 
   const handleFileChange = async (event) => {
     const file = event.target.files[0];
-    if (file) {
-      console.log(`Đã chọn tệp: ${file.name}`);
-      await firebaseInstance.storeImage("avatar", file);
-      // Thực hiện xử lý tệp ở đây (ví dụ: tải lên máy chủ)
-    }
-  };
 
-  const handleChange = (event) => {
-    const { name, value } = event.target;
-    setValues({ ...values, [name]: value });
+    if (file) {
+      onInputChange({ target: { name: "avatar", value: file } });
+      //read image file
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setSelectedImage(reader.result);
+      };
+      reader.readAsDataURL(file);
+      console.log(`Đã chọn tệp: ${file.name}`);
+      // await firebaseInstance.storeImage("avatar", file);
+    }
   };
 
   const handleSubmit = (event) => {
     event.preventDefault();
     onButtonClick("pagetwo");
   };
-
+  useEffect(() => {
+    if (values.avatar) {
+      const imageUrl = URL.createObjectURL(values.avatar);
+      setSelectedImage(imageUrl);
+    }
+  }, []);
   return (
     <Container>
       <ContentContainer>
@@ -96,7 +83,10 @@ export default function AboutYou({ onButtonClick }) {
         <AvatarContainer>
           <p>Photo</p>
           <div className="avatar-change">
-            <Avatar sx={{ width: "100px", height: "100px" }} />
+            <Avatar
+              src={selectedImage}
+              sx={{ width: "100px", height: "100px" }}
+            />
             <input
               type="file"
               ref={fileInputRef}
@@ -110,9 +100,10 @@ export default function AboutYou({ onButtonClick }) {
           <div className="content">
             <TextField
               name="firstName"
-              onChange={(event) => handleChange(event)}
+              value={values.firstName}
+              onChange={onInputChange}
               autoComplete="off"
-              label="First Name"
+              placeholder="Tên"
               variant="outlined"
               size="small"
               sx={{
@@ -122,10 +113,11 @@ export default function AboutYou({ onButtonClick }) {
               required
             />
             <TextField
+              value={values.lastName}
               name="lastName"
-              onChange={(event) => handleChange(event)}
+              onChange={onInputChange}
               autoComplete="off"
-              label="Last name"
+              placeholder="Họ"
               variant="outlined"
               size="small"
               sx={{
@@ -137,10 +129,11 @@ export default function AboutYou({ onButtonClick }) {
           </div>
           <div className="content">
             <TextField
+              value={values.email}
               name="email"
-              onChange={(event) => handleChange(event)}
+              onChange={onInputChange}
               autoComplete="off"
-              label="Email"
+              placeholder="Email"
               variant="outlined"
               size="small"
               sx={{
@@ -150,10 +143,11 @@ export default function AboutYou({ onButtonClick }) {
               required
             />
             <TextField
-              name="password"
-              onChange={(event) => handleChange(event)}
+              name="phoneNumber"
+              value={values.phoneNumber}
+              onChange={onInputChange}
               autoComplete="off"
-              label="Password"
+              placeholder="Số điện thoại"
               variant="outlined"
               size="small"
               sx={{
@@ -161,15 +155,15 @@ export default function AboutYou({ onButtonClick }) {
                 fontSize: "1rem",
               }}
               required
-              type="password"
             />
           </div>
           <div className="content">
             <TextField
               name="jobTitle"
-              onChange={(event) => handleChange(event)}
+              value={values.jobTitle}
+              onChange={onInputChange}
               autoComplete="off"
-              label="Job title"
+              placeholder="Nghề nghiệp"
               variant="outlined"
               size="small"
               sx={{
@@ -179,10 +173,11 @@ export default function AboutYou({ onButtonClick }) {
               required
             />
             <TextField
-              name="company"
-              onChange={(event) => handleChange(event)}
-              autoComplete="off"
-              label="Company"
+              name="dateOfBirth"
+              type="date"
+              placeholder="Ngày sinh"
+              onChange={onInputChange}
+              value={values.dateOfBirth || new Date()}
               variant="outlined"
               size="small"
               sx={{
@@ -191,24 +186,7 @@ export default function AboutYou({ onButtonClick }) {
               }}
             />
           </div>
-          <FormControl style={{ width: "70%" }}>
-            <InputLabel id="demo-simple-select-label" size="small">
-              Location
-            </InputLabel>
-            <Select
-              name="location"
-              label="Location"
-              onChange={(event) => handleChange(event)}
-              size="small"
-              defaultValue=""
-            >
-              {countries.map((country) => (
-                <MenuItem key={country.code} value={country.code}>
-                  {country.name}
-                </MenuItem>
-              ))}
-            </Select>
-          </FormControl>
+
           <div
             style={{
               width: "100%",

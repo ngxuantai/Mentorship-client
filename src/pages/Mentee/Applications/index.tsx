@@ -5,12 +5,12 @@ import { useEffect, useState } from "react";
 import { Button } from "react-bootstrap";
 import { FaCopy } from "react-icons/fa";
 import { useNavigate } from "react-router";
-import menteeApplicationApi from "../../../api/menteeAplication";
+import menteeApplicationApi from "../../../api/menteeApplication";
 import mentorApi from "../../../api/mentor";
 import { useUserStore } from "../../../store/userStore";
 import {
   handleCopyClick,
-  mapStatus,
+  mappingApplicationStatus,
   shortenId,
 } from "../../../utils/dataHelper";
 
@@ -53,7 +53,7 @@ function Applications() {
       >
         <h5 style={{ color: "white" }}>
           Want to double the chance of success for your applications?{" "}
-          <a href="/settings" style={{ color: "white" }}>
+          <a href="mentee/settings" style={{ color: "white" }}>
             Complete your profile
           </a>{" "}
         </h5>
@@ -146,7 +146,7 @@ const AllApplications = ({ applications }) => {
               <Table.Cell className="mr-12 flex items-center space-x-6 whitespace-nowrap p-4 lg:mr-0">
                 <img
                   className="h-10 w-10 rounded-full"
-                  src={application.mentor.avatar}
+                  src={application?.mentor?.avatar}
                   alt={`${application.id} avatar`}
                 />
                 <div className="text-sm font-normal text-gray-500 text-gray-400">
@@ -167,7 +167,7 @@ const AllApplications = ({ applications }) => {
                   className="flex items-center"
                 >
                   <div className="mr-2 h-2.5 w-2.5 rounded-full bg-green-400"></div>{" "}
-                  {mapStatus(application.status)}
+                  {mappingApplicationStatus(application.status)}
                 </div>
               </Table.Cell>
               <Table.Cell className="whitespace-nowrap p-4 text-base font-medium text-gray-900 text-white">

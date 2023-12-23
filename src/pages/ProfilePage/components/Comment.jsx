@@ -1,6 +1,7 @@
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 import styled from 'styled-components';
 import {Row, Col, Button, Container} from 'react-bootstrap';
+import menteeApi from '../../../api/mentee';
 import {Star} from '@mui/icons-material';
 
 const StyledContainer = styled(Container)`
@@ -20,74 +21,84 @@ const StyledContainer = styled(Container)`
 `;
 
 function Comment() {
+  const [listComment, setListComment] = useState([
+    {
+      id: 1,
+      content: 'Kristi has been an exceptional mentor.',
+      star: 5,
+      createAt: Date.now(),
+      menteeId: '657feddd696c958dbc0ecd81',
+      mentorId: 2,
+    },
+  ]);
+
+  const [menteeData, setMenteeData] = useState({});
+
+  useEffect(() => {
+    const fetchMenteeData = async (menteeId) => {
+      const mentee = await menteeApi.getMentee(menteeId);
+      setMenteeData((prevData) => ({...prevData, [menteeId]: mentee}));
+    };
+
+    // Fetch mentee data for all comments
+    listComment.forEach((comment) => {
+      fetchMenteeData(comment.menteeId);
+    });
+  }, [listComment]);
+
+  // const [newComment, setNewComment] = useState('');
+  // const [rating, setRating] = useState(0);
+
+  // const handleCommentSubmit = () => {
+  //   // Handle the logic to submit the comment and rating
+  //   console.log('Submitted Comment:', newComment);
+  //   console.log('Rating:', rating);
+
+  //   // You can call an API here to submit the comment and rating to the server
+  //   // For simplicity, I'm just logging the values for demonstration purposes
+
+  //   // Clear the form after submission
+  //   setNewComment('');
+  //   setRating(0);
+  // };
+
   return (
     <StyledContainer>
-      <div className="comment py-4">
-        <Row>
-          <Col sm={1} className="px-0 py-0 d-flex justify-content-center">
-            <div className="mentee-avatar">
-              <img src="https://www.artsource.ie/wp-content/uploads/2023/08/Jin-Yong-Art-copy.jpg"></img>
-            </div>
-          </Col>
-          <Col xs="auto">
-            <span style={{fontWeight: 'bold'}}>
-              Christy <b style={{opacity: '0.5'}}>on October 5, 2023</b>
-            </span>
-            <br />
-            <Star />
-            <Star />
-            <Star />
-            <Star />
-            <Star />
-          </Col>
-        </Row>
-        <Row>
-          <span>
-            Kristi has been an exceptional mentor. Not only am I updating my
-            resume and cover letter under her expert guidance, but I'm also
-            planning to work with her for another month to refine my portfolio.
-            Her feedback is both insightful and actionable, demonstrating her
-            deep expertise in the field. What stands out the most is Kristi's
-            genuine commitment to my success. She consistently goes the extra
-            mile to ensure that every aspect of my resume and cover letter is
-            coherent and impactful. Her passion for mentoring is evident in
-            every interaction, and I feel fortunate to have her by my side as I
-            navigate the challenges and opportunities of my career. Anyone
-            looking to elevate their professional materials would greatly
-            benefit from Kristi's mentorship.
-          </span>
-        </Row>
-      </div>
-      <div className="comment py-4">
-        <Row>
-          <Col sm={1} className="px-0 py-0 d-flex justify-content-center">
-            <div className="mentee-avatar">
-              <img src="https://resources.stuff.co.nz/content/dam/images/1/u/u/u/f/c/image.related.StuffLandscapeThreeByTwo.1464x976.1uz6y4.png/1558037341511.jpg"></img>
-            </div>
-          </Col>
-          <Col xs="auto">
-            <span style={{fontWeight: 'bold'}}>
-              Gabrielle <b style={{opacity: '0.5'}}>on August 23, 2023</b>
-            </span>
-            <br />
-            <Star />
-            <Star />
-            <Star />
-            <Star />
-            <Star />
-          </Col>
-        </Row>
-        <Row>
-          <span>
-            Kristi was an incredible mentor, she went above and beyond supplying
-            me with well-organized and easy-to-digest information on LinkedIn
-            updates, job hunting, resume review, and clear concise portfolio
-            design review and feedback. I would HIGHLY recommend her to anyone
-            she is warm, intelligent, passionate, and an outstanding teacher.
-            She has made me more confidence in my search and believe in myself.
-          </span>
-        </Row>
-      </div>
+      {listComment.map((comment) => {
+        return (
+          <div className="comment py-4" key={comment.id}>
+            <Row>
+              <Col sm={1} className="px-0 py-0 d-flex justify-content-center">
+                <div className="mentee-avatar">
+                  <img src="https://www.artsource.ie/wp-content/uploads/2023/08/Jin-Yong-Art-copy.jpg"></img>
+                </div>
+              </Col>
+              <Col xs="auto">
+                <span style={{fontWeight: 'bold'}}>
+                  {menteeData[comment.menteeId]?.fullName}
+                  <b style={{opacity: '0.5', paddingLeft: '4px'}}>
+                    on{' '}
+                    {new Date(comment.createAt).toLocaleDateString('vi-VN', {
+                      year: 'numeric',
+                      month: 'short',
+                      day: 'numeric',
+                    })}
+                  </b>
+                </span>
+                <br />
+                <Star />
+                <Star />
+                <Star />
+                <Star />
+                <Star />
+              </Col>
+            </Row>
+            <Row>
+              <span style={{padding: 0}}>{comment.content}</span>
+            </Row>
+          </div>
+        );
+      })}
     </StyledContainer>
   );
 }

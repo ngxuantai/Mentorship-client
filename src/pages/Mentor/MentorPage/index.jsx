@@ -1,11 +1,15 @@
-import React from 'react';
-import styled from 'styled-components';
-import {Row, Col, Button} from 'react-bootstrap';
-import {colors} from '../../../constants/colors';
-import MentorList from './components/MentorList';
-import FrequentlyAskedQuestions from './components/FrequentlyAskedQuestions';
+import { Button, Col, Row } from "react-bootstrap";
+import { useNavigate } from "react-router";
+import styled from "styled-components";
+import { colors } from "../../../constants/colors";
+import FrequentlyAskedQuestions from "./components/FrequentlyAskedQuestions";
+import MentorList from "./components/MentorList";
 
 function Mentor() {
+  const navigate = useNavigate();
+  const handleNavigateToApplyMentor = () => {
+    navigate("/mentor/apply");
+  };
   return (
     <Container>
       <Row className="intro-wallpaper d-flex justify-content-center">
@@ -13,7 +17,7 @@ function Mentor() {
           <h1>
             <span>Share your expertise, grow,</span>
             <br />
-            <span style={{color: `${colors.text.secondary}`}}>
+            <span style={{ color: `${colors.text.secondary}` }}>
               make a difference
             </span>
           </h1>
@@ -25,7 +29,8 @@ function Mentor() {
           <Row xs="auto" className="d-flex justify-content-center">
             <Col className="d-flex justify-content-center">
               <StyledButton
-                style={{backgroundColor: `${colors.button.secondary}`}}
+                onClick={handleNavigateToApplyMentor}
+                style={{ backgroundColor: `${colors.button.secondary}` }}
               >
                 Become a mentor
               </StyledButton>
@@ -38,8 +43,8 @@ function Mentor() {
                 }}
                 onClick={() => {
                   document
-                    .getElementById('faq')
-                    .scrollIntoView({behavior: 'smooth'});
+                    .getElementById("faq")
+                    .scrollIntoView({ behavior: "smooth" });
                 }}
               >
                 Frequently asked questions
@@ -48,14 +53,14 @@ function Mentor() {
           </Row>
         </div>
         <div className="intro-pic">
-          <div style={{position: 'absolute', height: '80%', width: '100%'}}>
-            <div style={{height: '50%', width: '100%'}}></div>
+          <div style={{ position: "absolute", height: "80%", width: "100%" }}>
+            <div style={{ height: "50%", width: "100%" }}></div>
             <div
-              style={{height: '50%', width: '100%', backgroundColor: 'black'}}
+              style={{ height: "50%", width: "100%", backgroundColor: "black" }}
             ></div>
           </div>
 
-          <div className="px-5" style={{zIndex: '2'}}>
+          <div className="px-5" style={{ zIndex: "2" }}>
             <img src="https://cdn.mentorcruise.com/img/screenshots/sample-profile.png" />
           </div>
         </div>
@@ -64,19 +69,19 @@ function Mentor() {
         <div className=" mt-5 p-5 text-center justify-content-center">
           <div
             className="text-center py-5"
-            style={{paddingLeft: '20%', paddingRight: '20%'}}
+            style={{ paddingLeft: "20%", paddingRight: "20%" }}
           >
-            <h2 style={{color: 'white'}}>
+            <h2 style={{ color: "white" }}>
               The amazing things that mentoring can do for you
             </h2>
-            <span style={{color: 'white'}}>
+            <span style={{ color: "white" }}>
               Managers, executives and leaders agree that mentoring is one of
               the most impactful ways to spend your time. In return, you're
               building crucial leadership qualities.
             </span>
           </div>
         </div>
-        <div className="" style={{paddingLeft: '20%', paddingRight: '20%'}}>
+        <div className="" style={{ paddingLeft: "20%", paddingRight: "20%" }}>
           <MentorList />
         </div>
       </Row>
@@ -84,10 +89,10 @@ function Mentor() {
         <div
           className="text-center"
           style={{
-            paddingLeft: '20%',
-            paddingRight: '20%',
-            paddingTop: '10%',
-            paddingBottom: '10%',
+            paddingLeft: "20%",
+            paddingRight: "20%",
+            paddingTop: "10%",
+            paddingBottom: "10%",
           }}
         >
           <h4>
@@ -99,28 +104,28 @@ function Mentor() {
             <Col sm={1}>
               <div
                 style={{
-                  height: '50px',
-                  width: '50px',
-                  borderRadius: '50%',
-                  overflow: 'hidden',
+                  height: "50px",
+                  width: "50px",
+                  borderRadius: "50%",
+                  overflow: "hidden",
                 }}
               >
                 <img
                   src="https://www.artsource.ie/wp-content/uploads/2023/08/Jin-Yong-Art-copy.jpg"
-                  style={{display: 'block', height: '100%', width: '100%'}}
+                  style={{ display: "block", height: "100%", width: "100%" }}
                 ></img>
               </div>
             </Col>
             <Col xs="auto" className="d-flex align-items-center">
-              <span style={{fontWeight: 'bold'}}>
-                Arvid Kahl{' '}
-                <b style={{opacity: '0.5'}}>Serial Entrepreneur, Author</b>
+              <span style={{ fontWeight: "bold" }}>
+                Arvid Kahl{" "}
+                <b style={{ opacity: "0.5" }}>Serial Entrepreneur, Author</b>
               </span>
             </Col>
           </Row>
         </div>
       </Row>
-      <Row id="faq" style={{paddingLeft: '10%', paddingRight: '10%'}}>
+      <Row id="faq" style={{ paddingLeft: "10%", paddingRight: "10%" }}>
         <FrequentlyAskedQuestions />
       </Row>
     </Container>

@@ -4,7 +4,7 @@ import React, { useEffect, useState } from "react";
 import { useLocation } from "react-router";
 import "react-step-progress-bar/styles.css";
 import styled from "styled-components";
-import menteeApplicationApi from "../../../api/menteeAplication";
+import menteeApplicationApi from "../../../api/menteeApplication";
 import mentorApi from "../../../api/mentor";
 import { useUserStore } from "../../../store/userStore";
 import AboutYou from "./components/AboutYou";

@@ -5,7 +5,20 @@ export const ApprovalStatus = {
   APPROVED: 1,
   REJECTED: 2,
 };
+export const PaymentStatus = {
+  SUCCESS: 0,
+  FAILED: 1,
+};
 export const UserRole = {
-  MENTEE: "mentee",
-  MENTOR: "mentor",
+  MENTEE: 'mentee',
+  MENTOR: 'mentor',
+};
+export const ApplicationStatus = {
+  APPROVED: 1,
+  REJECTED: 2,
+};
+export const PlanType = {
+  LITE: 0,
+  STANDARD: 1,
+  PRO: 2,
 };

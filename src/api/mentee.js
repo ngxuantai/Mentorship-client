@@ -1,4 +1,4 @@
-import axiosClient from "../config/axiosClient";
+import axiosClient from '../config/axiosClient';
 
 const menteeApi = {
   getMentee: async (id) => {
@@ -13,9 +13,9 @@ const menteeApi = {
   },
   createMentee: async (mentee) => {
     try {
-      const url = "/api/mentee/create";
+      const url = '/api/mentee/create';
       const res = await axiosClient.post(url, mentee);
-      console.log("new mentee data", res.data);
+      console.log('new mentee data', res.data);
       return res.data;
     } catch (error) {
       console.error(error);
@@ -26,7 +26,7 @@ const menteeApi = {
     try {
       const url = `/api/mentee/update/${id}`;
       const res = await axiosClient.put(url, mentee);
-      console.log("updated mentee data", res.data);
+      console.log('updated mentee data', res.data);
       return res.data;
     } catch (error) {
       console.error(error);
