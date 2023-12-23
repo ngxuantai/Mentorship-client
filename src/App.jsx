@@ -16,6 +16,7 @@ import Mentor from "./pages/Mentor/MentorPage";
 import Profile from "./pages/ProfilePage";
 import Search from "./pages/SearchPage";
 import SignUp from "./pages/SignupPage";
+import VideoChat from "./pages/VideoChatPage";
 
 function App() {
   return (
@@ -61,6 +62,8 @@ function App() {
             </ProtectedRoute>
           }
         />
+
+        <Route path="/videochat" element={<VideoChat />} />
       </Routes>
     </Router>
   );
