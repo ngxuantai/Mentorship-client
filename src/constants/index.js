@@ -17,3 +17,8 @@ export const ApplicationStatus = {
   APPROVED: 1,
   REJECTED: 2,
 };
+export const PlanType = {
+  LITE: 0,
+  STANDARD: 1,
+  PRO: 2,
+};
