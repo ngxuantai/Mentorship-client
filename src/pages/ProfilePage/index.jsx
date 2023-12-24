@@ -1,30 +1,58 @@
-import {
-  Bolt,
-  Favorite,
-  Place,
-  PlayArrow,
-  Star,
-  Task,
-  WatchLater,
-} from '@mui/icons-material';
-import {List, ListItem, ListItemIcon, ListItemText} from '@mui/material';
-import {useEffect, useState} from 'react';
-import {Badge, Button, Col, Row} from 'react-bootstrap';
-import {useLocation, useNavigate} from 'react-router';
-import styled from 'styled-components';
-import mentorApi from '../../api/mentor';
-import {SkillTag} from '../../components/Tags';
-import {colors} from '../../constants/colors';
-import Comment from './components/Comment';
-import PlanItem from './components/PlanItem';
+import { Bolt, Place, Star, Task, WatchLater } from "@mui/icons-material";
+import { List, ListItem, ListItemIcon, ListItemText } from "@mui/material";
+import { useEffect, useState } from "react";
+import { Badge, Button, Col, Row } from "react-bootstrap";
+import { FaHeart } from "react-icons/fa";
+import { useNavigate, useParams } from "react-router";
+import styled from "styled-components";
+import mentorApi from "../../api/mentor";
+import { SkillTag } from "../../components/Tags";
+import { colors } from "../../constants/colors";
+import firebaseInstance from "../../services/firebase";
+import { useUserStore } from "../../store/userStore";
+import Comment from "./components/Comment";
+import PlanItem from "./components/PlanItem";
 
 function Profile() {
   const navigate = useNavigate();
-  const location = useLocation();
-  const [mentor, setMentor] = useState();
-  const queryParams = new URLSearchParams(location.search);
-  const mentorId = queryParams.get('mentorId');
+  const { mentorId } = useParams();
+  const { user } = useUserStore();
 
+  const [mentor, setMentor] = useState();
+  const [skills, setSkills] = useState([]);
+  const [isAdded, setIsAdded] = useState(false);
+
+  const fetchSkills = async () => {
+    const data = await mentorApi.getMentorSkills(mentorId);
+    setSkills(data || []);
+  };
+  const handleAddToWishList = async () => {
+    try {
+      await firebaseInstance.toggleWishlist(user.id, mentor.id);
+    } catch (error) {
+      console.error("Error adding to wishlist:", error);
+    }
+  };
+  useEffect(() => {
+    if (user) {
+      const unsubscribe = firebaseInstance.observeWishlistChanges(
+        user.id,
+        (wishlist) => {
+          if (wishlist) {
+            setIsAdded(wishlist.includes(mentor.id));
+          } else {
+            setIsAdded(false);
+          }
+        }
+      );
+      return () => unsubscribe();
+    }
+  }, [user]);
+  useEffect(() => {
+    if (mentor) {
+      fetchSkills();
+    }
+  }, [mentor]);
   useEffect(() => {
     const fetchMentor = async () => {
       const data = await mentorApi.getMentorById(mentorId);
@@ -43,7 +71,7 @@ function Profile() {
           ></img>
         </div>
         <div className="badget">
-          <Badge bg="light" style={{color: 'grey'}}>
+          <Badge bg="light" style={{ color: "grey" }}>
             <Bolt />
             Quick Responder
           </Badge>
@@ -52,7 +80,7 @@ function Profile() {
       <div className="planItem">
         <PlanItem mentor={mentor}></PlanItem>
       </div>
-      <div className="info " style={{marginTop: '100px'}}>
+      <div className="info " style={{ marginTop: "100px" }}>
         <Row sm={4} className="d-flex justify-content-center mt-5">
           <Col>
             <h3>Kristi Harper</h3>
@@ -89,14 +117,39 @@ function Profile() {
                 <ListItemText primary="Usually responds in half a day" />
               </ListItem>
             </List>
-            <div style={{display: 'flex'}}>
-              <Button variant="light">
+            <div style={{ display: "flex" }}>
+              {/* <Button variant="light">
                 <PlayArrow />
                 <span>Play intro</span>
-              </Button>
-              <Button variant="light">
-                <Favorite />
-                <span>Save</span>
+              </Button> */}
+              <Button
+                onClick={handleAddToWishList}
+                variant="secondary"
+                style={{
+                  fontWeight: "bold",
+
+                  borderRadius: "4px",
+                  textAlign: "center",
+                  marginRight: 12,
+                }}
+              >
+                <div
+                  style={{
+                    display: "flex",
+                    width: "100%",
+                    justifyContent: "center",
+                    flexDirection: "row",
+                    alignItems: "center",
+                  }}
+                >
+                  <FaHeart
+                    style={{
+                      marginRight: 8,
+                      color: isAdded ? "tomato" : null,
+                    }}
+                  ></FaHeart>{" "}
+                  {isAdded ? "Đã thích" : "Yêu thích"}
+                </div>
               </Button>
             </div>
           </Col>
@@ -106,21 +159,20 @@ function Profile() {
               <h5>Skills</h5>
             </Col>
             <Col>
-              <SkillTag>Product Design</SkillTag>
-              <SkillTag>UX Design</SkillTag>
-              <SkillTag>UX Strategy</SkillTag>
-              <SkillTag>UI Design</SkillTag>
-              <a href="">+11 more</a>
+              {skills.slice(0, 4).map((skill, index) => (
+                <SkillTag key={skill.id}>{skill.name}</SkillTag>
+              ))}
+              {skills.length > 4 && <a href="">+{skills.length - 4} more</a>}
             </Col>
           </Col>
           <Col></Col>
         </Row>
-        <hr style={{position: 'relative', zIndex: '-1'}} />
+        <hr style={{ position: "relative", zIndex: "-1" }} />
         <Row sm={4} className="d-flex justify-content-center">
           <Col sm={6}>
             <h3>About</h3>
             <p>
-              {' '}
+              {" "}
               Hi there! My name is Kristi Harper. I'm passionate about UX Design
               and mentoring. I have hands-on experience as an end-to-end
               designer. With effective leadership, strategic planning, and user
@@ -151,7 +203,7 @@ function Profile() {
           </Col>
           <Col></Col>
         </Row>
-        <hr style={{position: 'relative', zIndex: '-1'}} />
+        <hr style={{ position: "relative", zIndex: "-1" }} />
         <Row sm={4} className="d-flex justify-content-center">
           <Col sm={6}>
             <h3>What mentees say</h3>

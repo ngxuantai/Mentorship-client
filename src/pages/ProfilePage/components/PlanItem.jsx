@@ -5,12 +5,12 @@ import {
   WatchLater,
   Whatshot,
   Work,
-} from '@mui/icons-material';
-import {List, ListItem, ListItemIcon, ListItemText} from '@mui/material';
-import {Button, Container, Row} from 'react-bootstrap';
-import {useNavigate} from 'react-router';
-import styled from 'styled-components';
-import {colors} from './../../../constants/colors';
+} from "@mui/icons-material";
+import { List, ListItem, ListItemIcon, ListItemText } from "@mui/material";
+import { Button, Container, Row } from "react-bootstrap";
+import { useNavigate } from "react-router";
+import styled from "styled-components";
+import { colors } from "./../../../constants/colors";
 
 const StyledContainer = styled(Container)`
   border: 1px solid black;
@@ -35,7 +35,7 @@ const StyledButton = styled(Button)`
   margin: 12px;
 `;
 
-function PlanItem({mentor}) {
+function PlanItem({ mentor }) {
   const navigate = useNavigate();
   const handleNavigateToApply = () => {
     navigate(`/mentee/apply?mentorId=${mentor.id}`);
@@ -78,12 +78,17 @@ function PlanItem({mentor}) {
         </Row>
         <Row>
           <Button
+            style={{
+              fontWeight: "bold",
+            }}
             onClick={handleNavigateToApply}
             className="my-2"
             variant="secondary"
           >
             Apply now
           </Button>
+
+          <div></div>
           <List>
             <ListItem className="py-0 px-0">
               <ListItemIcon>

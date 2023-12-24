@@ -24,7 +24,6 @@ class Firebase {
     this.auth = authService.getAuth();
     this.realtimeDb = databaseService.getDatabase();
   }
-  // AUTH ACTIONS ------------
 
   createAccount = async (email, password) => {
     const userCredential = await authService.createUserWithEmailAndPassword(
@@ -73,7 +72,6 @@ class Firebase {
         .catch((error) => reject(error));
     });
 
-  // generateKey = () => firestoreService.getDoc().id;
   onAuthStateChanged = () =>
     new Promise((resolve, reject) => {
       this.auth.onAuthStateChanged((user) => {
@@ -110,86 +108,105 @@ class Firebase {
   // deleteImage = (id) => this.storage.ref("products").child(id).delete();
 
   //db realtime
-  // Hàm trợ giúp để lấy các sự kiện
-
   getEvents = async (userId, dayOfWeek) => {
     const snapshot = await databaseService.get(
-      databaseService.ref(
-        this.realtimeDb,
-        "calendars/" + userId + "/" + dayOfWeek
-      )
+      databaseService.ref(this.realtimeDb, userId + "/calendars/" + dayOfWeek)
     );
     return snapshot.val() || [];
   };
 
-  // Thêm sự kiện
   addEvent = async (userId, dayOfWeek, event) => {
     const eventId = Date.now();
     const eventRef = databaseService.ref(
       this.realtimeDb,
-      "calendars/" + userId + "/" + dayOfWeek
+      userId + "/calendars/" + dayOfWeek
     );
 
-    // Lấy tất cả các sự kiện hiện tại
     const events = await this.getEvents(userId, dayOfWeek);
 
-    // Thêm sự kiện mới vào mảng
     events.push({ ...event, id: eventId });
 
-    // Cập nhật mảng sự kiện trong cơ sở dữ liệu
     await databaseService.set(eventRef, events);
 
     return eventId;
   };
 
-  // Cập nhật sự kiện
   updateEvent = async (userId, dayOfWeek, eventId, event) => {
     const eventRef = databaseService.ref(
       this.realtimeDb,
-      "calendars/" + userId + "/" + dayOfWeek
+      userId + "/calendars/" + dayOfWeek
     );
 
-    // Lấy tất cả các sự kiện hiện tại
     const events = await this.getEvents(userId, dayOfWeek);
 
-    // Tìm sự kiện cần cập nhật và cập nhật nó
     const index = events.findIndex((e) => e.id === eventId);
     if (index !== -1) {
       events[index] = { ...event, id: eventId };
 
-      // Cập nhật mảng sự kiện trong cơ sở dữ liệu
       await databaseService.set(eventRef, events);
     }
   };
 
-  // Xóa sự kiện
   deleteEvent = async (userId, dayOfWeek, eventId) => {
     const eventRef = databaseService.ref(
       this.realtimeDb,
-      "calendars/" + userId + "/" + dayOfWeek
+      userId + "/calendars/" + dayOfWeek
     );
 
-    // Lấy tất cả các sự kiện hiện tại
     const events = await this.getEvents(userId, dayOfWeek);
 
-    // Tìm sự kiện cần xóa và xóa nó
     const index = events.findIndex((e) => e.id === eventId);
     if (index !== -1) {
       events.splice(index, 1);
 
-      // Cập nhật mảng sự kiện trong cơ sở dữ liệu
       await databaseService.set(eventRef, events);
     }
   };
-  // Theo dõi sự thay đổi của lịch
+
   observeCalendarChanges(userId, onEventChange) {
     return databaseService.onValue(
-      databaseService.ref(this.realtimeDb, "calendars/" + userId),
+      databaseService.ref(this.realtimeDb, userId + "/calendars"),
       (snapshot) => {
         const weekEvents = snapshot.val();
         console.log("calendar", weekEvents);
 
         onEventChange(weekEvents);
+      }
+    );
+  }
+
+  getWishlist = async (userId) => {
+    const snapshot = await databaseService.get(
+      databaseService.ref(this.realtimeDb, userId + "/wishlists/")
+    );
+    return snapshot.val() || [];
+  };
+  toggleWishlist = async (userId, mentorId) => {
+    const wishlistRef = databaseService.ref(
+      this.realtimeDb,
+      userId + "/wishlists"
+    );
+    const wishlist = await this.getWishlist(userId);
+
+    console.log("toggleWishlist", wishlist, mentorId);
+    const index = wishlist.findIndex((id) => id === mentorId);
+
+    if (index !== -1) {
+      wishlist.splice(index, 1);
+    } else {
+      wishlist.push(mentorId);
+    }
+
+    await databaseService.set(wishlistRef, wishlist);
+    return wishlist;
+  };
+  observeWishlistChanges(userId, onWishlistChange) {
+    return databaseService.onValue(
+      databaseService.ref(this.realtimeDb, userId + "/wishlists"),
+      (snapshot) => {
+        const wishlist = snapshot.val();
+
+        onWishlistChange(wishlist);
       }
     );
   }

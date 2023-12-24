@@ -45,6 +45,17 @@ const mentorApi = {
       return null;
     }
   },
+  getMentorSkills: async (mentorId) => {
+    try {
+      const url = `/api/mentor/getMentorSkills/${mentorId}`;
+      const res = await axiosClient.get(url);
+      console.log("mentor skills data", res.data);
+      return res.data.data;
+    } catch (error) {
+      console.error(error);
+      return null;
+    }
+  },
   searchMentor: async (name = "", filters = {}) => {
     try {
       const { skill = null, minPrice = null, maxPrice = null } = filters;

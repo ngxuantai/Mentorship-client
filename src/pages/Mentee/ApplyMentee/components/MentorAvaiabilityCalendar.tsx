@@ -1,23 +1,24 @@
-import { Chip, TextField } from "@mui/material";
+import { Chip } from "@mui/material";
 import { addDays, startOfWeek } from "date-fns";
 import moment from "moment";
 import { useEffect, useState } from "react";
 import { Button } from "react-bootstrap";
 import { useNavigate } from "react-router";
 import { rrulestr } from "rrule";
-import TeachingCalendar from "../../../components/Calendar";
-import firebaseInstance from "../../../services/firebase";
-import { useUserStore } from "../../../store/userStore";
-import MenteesAvatar from "./components/MenteesAvatar";
+import TeachingCalendar from "../../../../components/Calendar";
+import firebaseInstance from "../../../../services/firebase";
+import { useUserStore } from "../../../../store/userStore";
 
 let rule = rrulestr("RRULE:FREQ=WEEKLY;UNTIL=20240228T000000Z;BYDAY=MO");
 
 let dates = rule.all();
 const daysOfWeek = ["SU", "MO", "TU", "WE", "TH", "FR", "SA"];
-export default function MentorCalendar() {
+
+export default function MentorAvailabilityCalendar({ mentorId }) {
   const navigate = useNavigate();
   const { user } = useUserStore();
   const [events, setEvents] = useState([]);
+
   const onEventChange = (weekList) => {
     if (!weekList) return;
     const filteredEvents = weekList
@@ -34,15 +35,15 @@ export default function MentorCalendar() {
     const repeatEvents = filteredEvents
       .map((e) => createRecurringEvent(e))
       .flat();
-
+    console.log("events", repeatEvents, filteredEvents);
     setEvents([...repeatEvents, ...filteredEvents]);
   };
   const createRecurringEvent = (event) => {
     const day = event.start.getDay();
     // Nếu event có trường lastingTime, sử dụng nó. Ngược lại, sự kiện sẽ kéo dài đến cuối năm hiện tại
     const until = event.lastingTime
-      ? `UNTIL=${moment().endOf("year").format("YYYYMMDDTHHmmss")}Z`
-      : `UNTIL=20231231T000000Z`;
+      ? `UNTIL=${moment(event.lastingTime).format("YYYYMMDDTHHmmss")}Z`
+      : `UNTIL=${moment().add(3, "months").format("YYYYMMDDTHHmmss")}Z`;
 
     // Tạo chuỗi RRULE
     const rrule = `RRULE:FREQ=WEEKLY;${until};BYDAY=${daysOfWeek[day]}`;
@@ -75,30 +76,27 @@ export default function MentorCalendar() {
     return recurringEvents;
   };
   useEffect(() => {
-    if (user) {
+    if (mentorId) {
       const unsubscribe = firebaseInstance.observeCalendarChanges(
-        user.id,
+        mentorId,
         onEventChange
       );
       return () => unsubscribe();
     }
-  }, [user]);
+  }, [mentorId]);
   return (
-    <div style={{ height: 500 }}>
+    <div style={{}}>
       <div className="px-4 py-4">
-        <h3>Lịch dạy của bạn</h3>
+        <h3>Gói Pro / Standard</h3>
       </div>
-      <p style={{ fontWeight: "500", marginLeft: 24 }}>
-        Đừng quên đánh dấu khoảng thời gian bận trong tuần để tránh xung đột với
-        mentee của bạn
-      </p>
-      <BusyTimeManager events={events}></BusyTimeManager>
+      <AddTimeButton events={events}></AddTimeButton>
+      <p style={{ fontWeight: "bold", marginLeft: 24 }}>Số buổi còn lại {2}</p>
       <TeachingCalendar events={events}></TeachingCalendar>
     </div>
   );
 }
 
-function BusyTimeManager({ events }) {
+function AddTimeButton({ events }) {
   const [startTime, setStartTime] = useState("09:00");
   const [endTime, setEndTime] = useState("18:00");
   const [busyTimes, setBusyTimes] = useState([]);
@@ -253,7 +251,7 @@ function BusyTimeManager({ events }) {
             marginRight: 12,
           }}
         >
-          Thêm
+          Chọn
         </Button>
       </div>
       <div>
@@ -268,15 +266,13 @@ function BusyTimeManager({ events }) {
           );
         })}
       </div>
-      <TextField
+      {/* <TextField
         id="event-title"
         style={{ width: 500, marginTop: 12 }}
         value={title}
         onChange={(e) => setTitle(e.target.value)}
         placeholder="Tiêu đề sự kiện (bỏ trống sẽ được đánh dấu là thời gian bận)"
-      />
-
-      <MenteesAvatar></MenteesAvatar>
+      /> */}
     </div>
   );
 }

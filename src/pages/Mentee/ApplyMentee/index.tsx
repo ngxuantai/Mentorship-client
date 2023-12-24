@@ -10,10 +10,16 @@ import { useUserStore } from "../../../store/userStore";
 import AboutYou from "./components/AboutYou";
 import Expectation from "./components/Expectation";
 import Goal from "./components/Goal";
+import MentorAvailabilityCalendar from "./components/MentorAvaiabilityCalendar";
 import ApplyStep from "./components/Step";
 import Success from "./components/Success";
 
-const steps = ["About you", "Your goal", "Expectations"];
+const steps = [
+  "Chọn thời gian học",
+  "Về bản thân bạn",
+  "Mục tiêu",
+  "Kỳ vọng của bạn",
+];
 
 export default function ApplyMentee() {
   const [page, setPage] = useState(0);
@@ -53,9 +59,16 @@ export default function ApplyMentee() {
   };
 
   const stepComponents = {
-    0: <AboutYou values={values} handleInputChange={handleInputChange} />,
-    1: <Goal values={values} handleInputChange={handleInputChange} />,
-    2: <Expectation values={values} handleInputChange={handleInputChange} />,
+    0: (
+      <MentorAvailabilityCalendar
+        mentorId={mentor.id}
+        values={values}
+        handleInputChange={handleInputChange}
+      />
+    ),
+    1: <AboutYou values={values} handleInputChange={handleInputChange} />,
+    2: <Goal values={values} handleInputChange={handleInputChange} />,
+    3: <Expectation values={values} handleInputChange={handleInputChange} />,
   };
 
   const handleNext = () => {
@@ -124,11 +137,11 @@ export default function ApplyMentee() {
                   onClick={handleBack}
                   sx={{}}
                 >
-                  <Text>Back</Text>
+                  <Text>Trước</Text>
                 </Button>
                 <Box sx={{ flex: "1 1 auto" }} />
                 <Button onClick={handleNext} sx={{}}>
-                  <Text> Next</Text>
+                  <Text> Tiếp</Text>
                 </Button>
               </Box>
             </React.Fragment>

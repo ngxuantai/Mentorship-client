@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import { Button } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
+import { useUserStore } from "../../../store/userStore";
+import { useWishlistStore } from "../../../store/wishListStore";
 import RecommendList from "./components/RecommendList";
 // import { CenteredRow, CenteredCol } from "@src/components/sharedComponents";
 const StyledContainer = styled.div`
@@ -31,6 +33,8 @@ const Content = styled.div`
 function DashBoard() {
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(true);
+  const { user } = useUserStore();
+  const { wishlist, setWishlist } = useWishlistStore();
   const handleNavigateToSearchScreen = () => {
     navigate("/mentor/search");
   };

@@ -1,8 +1,11 @@
+import { useEffect, useState } from "react";
 import { Button, Col, Container, Row } from "react-bootstrap";
 import { FaHeart } from "react-icons/fa";
 import { useNavigate } from "react-router";
 import styled from "styled-components";
 import { SkillTag } from "../../../components/Tags";
+import firebaseInstance from "../../../services/firebase";
+import { useUserStore } from "../../../store/userStore";
 // import { CenteredRow, CenteredCol } from "@src/components/sharedComponents";
 const StyledContainer = styled(Container)`
   border: 1px solid black;
@@ -10,6 +13,7 @@ const StyledContainer = styled(Container)`
   border-color: gray;
   padding: 24px;
   width: 80%;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
 `;
 
 const Text = styled.p`
@@ -17,12 +21,36 @@ const Text = styled.p`
 `;
 
 function MentorItem({ mentor }) {
+  const [isAdded, setIsAdded] = useState(false);
   const navigate = useNavigate();
+  const { user } = useUserStore();
+  // const { wishlist } = useWishlistStore();
 
   const handleNavigateToProfile = () => {
-    navigate(`/mentor/profile?mentorId=${mentor.id}`);
+    navigate(`/mentor/profile/${mentor.id}`);
   };
-  const handleAddToWishList = () => {};
+  useEffect(() => {
+    if (user) {
+      const unsubscribe = firebaseInstance.observeWishlistChanges(
+        user.id,
+        (wishlist) => {
+          if (wishlist) {
+            setIsAdded(wishlist.includes(mentor.id));
+          } else {
+            setIsAdded(false);
+          }
+        }
+      );
+      return () => unsubscribe();
+    }
+  }, [user]);
+  const handleAddToWishList = async () => {
+    try {
+      await firebaseInstance.toggleWishlist(user.id, mentor.id);
+    } catch (error) {
+      console.error("Error adding to wishlist:", error);
+    }
+  };
   return (
     <StyledContainer fluid>
       <Row className="justify-content-between align-items-start">
@@ -85,11 +113,18 @@ function MentorItem({ mentor }) {
               <div
                 style={{
                   display: "flex",
+                  minWidth: 130,
                   flexDirection: "row",
                   alignItems: "center",
                 }}
               >
-                <FaHeart style={{ marginRight: 8 }}></FaHeart> Yêu thích
+                <FaHeart
+                  style={{
+                    marginRight: 8,
+                    color: isAdded ? "tomato" : null,
+                  }}
+                ></FaHeart>{" "}
+                {isAdded ? "Đã thích" : "Yêu thích"}
               </div>
             </Button>
           </div>
