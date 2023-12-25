@@ -1,11 +1,12 @@
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import React, { useEffect, useState } from "react";
-import { useLocation } from "react-router";
+import { useLocation, useParams } from "react-router";
 import "react-step-progress-bar/styles.css";
 import styled from "styled-components";
 import menteeApplicationApi from "../../../api/menteeApplication";
 import mentorApi from "../../../api/mentor";
+import { PlanType } from "../../../constants";
 import { useUserStore } from "../../../store/userStore";
 import AboutYou from "./components/AboutYou";
 import Expectation from "./components/Expectation";
@@ -24,17 +25,22 @@ const steps = [
 export default function ApplyMentee() {
   const [page, setPage] = useState(0);
   const [mentor, setMentor] = useState();
+  const [allowNext, setAllowNext] = useState(true);
   const [isSuccess, setIsSuccess] = useState(false);
   const location = useLocation();
   const { user } = useUserStore();
-  const queryParams = new URLSearchParams(location.search);
-  const mentorId = queryParams.get("mentorId");
+  const { mentorId } = useParams();
+  const plan = location.state?.plan;
+
+  console.log("selectedPlan", plan);
 
   const [values, setValues] = useState({
+    plan: plan,
     personalDescription: "",
     goal: "",
     expectation: "",
     contactTimes: "",
+    learningTime: [],
   });
   const handleInputChange = (name, value) => {
     setValues((prevValues) => ({
@@ -44,10 +50,18 @@ export default function ApplyMentee() {
   };
   const handleFinish = async () => {
     try {
+      const learningTimeInTimestamp = values.learningTime.map((e) => ({
+        ...e,
+        id: null,
+        start: e.start.getTime(),
+        end: e.end.getTime(),
+      }));
+      
       const application = {
         ...values,
-        fee: mentor.price,
+        fee: plan.price,
         mentorId,
+        learningTime: learningTimeInTimestamp,
         menteeProfile: { ...user },
       };
       console.log("handleFinish", application);
@@ -61,9 +75,10 @@ export default function ApplyMentee() {
   const stepComponents = {
     0: (
       <MentorAvailabilityCalendar
-        mentorId={mentor.id}
+        mentorId={mentorId}
+        plan={plan}
         values={values}
-        handleInputChange={handleInputChange}
+        onInputChange={handleInputChange}
       />
     ),
     1: <AboutYou values={values} handleInputChange={handleInputChange} />,
@@ -74,9 +89,9 @@ export default function ApplyMentee() {
   const handleNext = () => {
     if (page === steps.length - 1) {
       handleFinish();
+
       return;
     }
-
     setPage(page + 1);
   };
 
@@ -87,6 +102,19 @@ export default function ApplyMentee() {
     const mentor = await mentorApi.getMentorById(id);
 
     setMentor(mentor);
+  };
+
+  const getPlanName = (planName) => {
+    switch (planName) {
+      case PlanType.LITE:
+        return "Lite";
+      case PlanType.STANDARD:
+        return "Standard";
+      case PlanType.PRO:
+        return "Pro";
+      default:
+        return "";
+    }
   };
   useEffect(() => {
     if (mentorId) {
@@ -112,6 +140,16 @@ export default function ApplyMentee() {
       >
         Ứng tuyển mentor {mentor?.firstName} {mentor?.lastName}
       </h1>
+      <h4
+        style={{
+          textAlign: "center",
+          width: "100%",
+          color: "gray",
+          marginTop: 12,
+        }}
+      >
+        Gói {getPlanName(plan.name)}
+      </h4>
       {isSuccess ? (
         <Success></Success>
       ) : (

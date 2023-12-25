@@ -38,17 +38,26 @@ function App() {
         <Route path="/auth/login" element={<Login />} />
         <Route path="/auth/signup" element={<SignUp />} />
 
+        {/* mentor routes */}
         <Route path="/mentor" element={<Mentor />} />
         <Route path="/mentor/search" element={<Search />} />
         <Route path="/mentor/profile/:mentorId" element={<Profile />} />
         <Route path="/mentor/calendar" element={<MentorCalendar />} />
         <Route path="/mentor/settings" element={<MentorSettings />} />
         <Route path="/mentor/apply" element={<ApplyMentor />} />
+        <Route path="/mentor/examination" element={<Examination />} />
+        <Route path="/mentor/examination/:id" element={<DetailExam />} />
+        <Route path="/mentor/list-mentee" element={<ListMentee />} />
+        <Route
+          path="mentor/mentee-application"
+          element={<MenteeApplication />}
+        />
+        {/* mentee routes */}
 
         <Route path="/mentee" element={<DashBoard />} />
         <Route path="/mentee1" element={<InformationForm />} />
         <Route path="/mentee2" element={<ApplyProcess />} />
-        <Route path="/mentee/apply" element={<ApplyMentee />} />
+        <Route path="/mentee/apply/:mentorId" element={<ApplyMentee />} />
         <Route path="/mentee/settings" element={<MenteeSettings />} />
         <Route
           path="/mentee/applications"
@@ -78,13 +87,6 @@ function App() {
         <Route path="/mentee/exam" element={<ListExam />} />
         <Route path="/mentee/exam/:id" element={<DoExam />} />
         <Route path="/mentee/payment" element={<Payment />} />
-        <Route path="mentor/examination" element={<Examination />} />
-        <Route path="mentor/examination/:id" element={<DetailExam />} />
-        <Route path="mentor/list-mentee" element={<ListMentee />} />
-        <Route
-          path="mentor/mentee-application"
-          element={<MenteeApplication />}
-        />
 
         <Route path="/videochat" element={<VideoChat />} />
         <Route

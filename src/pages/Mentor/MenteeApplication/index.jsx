@@ -6,10 +6,10 @@ import {
   Modal,
   Table,
   TextInput,
-} from 'flowbite-react';
-import Datepicker from 'tailwind-datepicker-react';
-import Select from 'react-select';
-import {useState, useEffect} from 'react';
+} from "flowbite-react";
+import Datepicker from "tailwind-datepicker-react";
+import Select from "react-select";
+import { useState, useEffect } from "react";
 import {
   HiChevronLeft,
   HiChevronRight,
@@ -19,28 +19,28 @@ import {
   HiOutlineEye,
   HiTrash,
   HiX,
-} from 'react-icons/hi';
-import {FaCopy} from 'react-icons/fa';
+} from "react-icons/hi";
+import { FaCopy } from "react-icons/fa";
 // import NavbarSidebarLayout from '../../layouts/navbar-sidebar';
-import {format} from 'date-fns';
+import { format } from "date-fns";
 // import {useApplicationStore} from '../../store/application';
 // import {useUserStore} from '../../store/user';
-import {useMenteeAppliStore} from '../../../store/menteeAppli';
-import {ApplicationStatus} from '../../../constants';
-import {applicationToExcelData} from '../../../utils/excelDataHelper';
-import {exportExcel} from '../../../utils/excelHelper';
-import ListApplications from './components/ListApplications';
+import { useMenteeAppliStore } from "../../../store/menteeAppli";
+import { ApplicationStatus } from "../../../constants";
+import { applicationToExcelData } from "../../../utils/excelDataHelper";
+import { exportExcel } from "../../../utils/excelHelper";
+import ListApplications from "./components/ListApplications";
 
 // import ViewDetailApplication from './components/ViewDetailApplication';
 // import DeleteApplication from './components/DeleteApplication';
 
 const dropdownOption = [
-  {value: 'id', label: 'Id'},
-  {value: 'displayName', label: 'Tên học viên'},
+  { value: "id", label: "Id" },
+  { value: "displayName", label: "Tên học viên" },
 ];
 
 const ApplicationListPage = () => {
-  const [searchTerm, setSearchTerm] = useState('');
+  const [searchTerm, setSearchTerm] = useState("");
   const [selectedDate, setSelectedDate] = useState(null);
   const [applicationList, setApplicationList] = useState([]);
 
@@ -65,7 +65,7 @@ const ApplicationListPage = () => {
   useEffect(() => {
     const fetchAndSetApplications = async () => {
       try {
-        await getMenteeAppliByMentorId('65840127a47c189dd995cdf3');
+        await getMenteeAppliByMentorId("65840127a47c189dd995cdf3");
       } catch (er) {
         console.error(er);
       }
@@ -75,8 +75,8 @@ const ApplicationListPage = () => {
   }, []);
 
   useEffect(() => {
-    console.log('menteeAppli75', menteeApplications);
-    console.log('menteeAppliApproved', menteeAppliApproved);
+    console.log("menteeAppli75", menteeApplications);
+    console.log("menteeAppliApproved", menteeAppliApproved);
   }, [menteeApplications]);
 
   useEffect(() => {
@@ -91,7 +91,7 @@ const ApplicationListPage = () => {
             .toLowerCase()
             .includes(searchTerm.toLowerCase())
         );
-        console.log('applicationList', results, applicationList, searchTerm);
+        console.log("applicationList", results, applicationList, searchTerm);
         setApplicationList(results);
       } else {
         setApplicationList(menteeApplications);
@@ -125,35 +125,35 @@ const ApplicationListPage = () => {
   //   };
 
   const options = {
-    title: 'Select date',
+    title: "Select date",
     autoHide: true,
     todayBtn: false,
     clearBtn: true,
-    clearBtnText: 'Clear',
-    maxDate: new Date('2030-01-01'),
-    minDate: new Date('1950-01-01'),
+    clearBtnText: "Clear",
+    maxDate: new Date("2030-01-01"),
+    minDate: new Date("1950-01-01"),
     icons: {
       // () => ReactElement | JSX.Element
     },
-    datepickerClassNames: 'top-12',
+    datepickerClassNames: "top-12",
     defaultDate: new Date(),
-    language: 'en',
+    language: "en",
     disabledDates: [],
-    weekDays: ['Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa', 'Su'],
-    inputNameProp: 'date',
-    inputIdProp: 'date',
-    inputPlaceholderProp: 'Select Date',
+    weekDays: ["Mo", "Tu", "We", "Th", "Fr", "Sa", "Su"],
+    inputNameProp: "date",
+    inputIdProp: "date",
+    inputPlaceholderProp: "Select Date",
     inputDateFormatProp: {
-      day: 'numeric',
-      month: 'long',
-      year: 'numeric',
+      day: "numeric",
+      month: "long",
+      year: "numeric",
     },
   };
 
   const handleExportFileExcel = () => {
     const jsonData = applicationList.map((a) => applicationToExcelData(a));
-    console.log('jsonData', jsonData);
-    exportExcel(jsonData, 'application_list');
+    console.log("jsonData", jsonData);
+    exportExcel(jsonData, "application_list");
   };
 
   return (
@@ -181,17 +181,17 @@ const ApplicationListPage = () => {
                   />
                 </div>
               </form>
-              <div style={{marginRight: 8, minWidth: 200}}>
+              <div style={{ marginRight: 8, minWidth: 200 }}>
                 <Select
                   styles={{
                     control: (baseStyles, state) => ({
                       ...baseStyles,
-                      color: 'black',
+                      color: "black",
                       // backgroundColor: '#374151',
                     }),
                     singleValue: (baseStyles, state) => ({
                       ...baseStyles,
-                      color: 'black',
+                      color: "black",
                       // backgroundColor: '#374151',
                     }),
                     option: (baseStyles, state) => ({
@@ -239,7 +239,7 @@ const ApplicationListPage = () => {
 
 const styles = {
   text: {
-    color: 'white',
+    color: "white",
   },
 };
 

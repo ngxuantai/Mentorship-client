@@ -17,15 +17,17 @@ import { useUserStore } from "../../store/userStore";
 
 const pages = [
   // { name: "Trang chủ", link: "/" },
+  { name: "Danh sách mentee", link: "/mentor/list-mentee" },
   { name: "Lịch dạy", link: "/mentor/calendar" },
+  { name: "Kho bài tập", link: "/mentor/examination" },
+  { name: "Đơn xin học", link: "/mentor/mentee-application" },
   { name: "Cài đặt", link: "/mentor/settings" },
-  // thêm các trang khác tại đây
 ];
 
 const LOGGOUT = "Đăng xuất";
 const settings = [
   { name: "Hồ sơ", link: "/" },
-  { name: "Lịch sử thanh toán", link: "/mentee/wishlist" },
+  { name: "Lịch sử thanh toán", link: "/" },
   { name: LOGGOUT, link: "" },
   // thêm các trang khác tại đây
 ];

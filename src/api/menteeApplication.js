@@ -1,9 +1,9 @@
-import axiosClient from '../config/axiosClient';
+import axiosClient from "../config/axiosClient";
 
 const menteeApplicationApi = {
   getAllMenteeApplication: async () => {
     try {
-      const url = '/menteeApplication/getAllMenteeApplication';
+      const url = "/menteeApplication/getAllMenteeApplication";
       const res = await axiosClient.get(url);
       return res.data.data;
     } catch (error) {
@@ -50,7 +50,7 @@ const menteeApplicationApi = {
     try {
       const url = `/menteeApplication/updateMenteeApplicationStatus/${id}`;
       const res = await axiosClient.put(url, status);
-      console.log('res', res.data.data);
+      console.log("res", res.data.data);
       return res.data.data;
     } catch (error) {
       console.error(error);
@@ -71,12 +71,22 @@ const menteeApplicationApi = {
 
   createMenteeApplication: async (menteeApplication) => {
     try {
-      const url = '/menteeApplication/createMenteeApplication';
+      const url = "/menteeApplication/createMenteeApplication";
       const res = await axiosClient.post(url, menteeApplication);
 
       return res.data.data;
     } catch (error) {
       throw error;
+    }
+  },
+  checkMenteeRegistration: async (menteeId, mentorId) => {
+    try {
+      const url = `/menteeApplication/checkRegistration`;
+      const res = await axiosClient.post(url, { menteeId, mentorId });
+      return res.data;
+    } catch (error) {
+      console.error(error);
+      return null;
     }
   },
 };

@@ -1,4 +1,4 @@
-import { Avatar, TextField } from "@mui/material";
+import { Avatar, FormControlLabel, Switch, TextField } from "@mui/material";
 import React, { useRef } from "react";
 import styled from "styled-components";
 import firebaseInstance from "../../../../services/firebase";
@@ -15,6 +15,7 @@ export default function PersonalInfor() {
     jobTitle: user.jobTitle,
     email: user.email,
     linkedin: user.linkedin,
+    isUnavailable: false,
     dateOfBirth: user.dateOfBirth ? new Date(user.dateOfBirth) : null,
   });
 
@@ -45,7 +46,7 @@ export default function PersonalInfor() {
   };
   const handleChange = (event) => {
     const { name, value } = event.target;
-
+    console.log("name", name, value);
     // Xử lý trường dateOfBirth riêng lẻ
     if (name === "dateOfBirth") {
       const selectedDate = new Date(value);
@@ -191,7 +192,35 @@ export default function PersonalInfor() {
                 />
               </div>
             </div>
-
+            {/* <Typography variant="body1" color="error">
+              Unavailable
+            </Typography> */}
+            <FormControlLabel
+              control={
+                <Switch
+                  checked={values.isUnavailable}
+                  onChange={(event) => {
+                    if (
+                      window.confirm(
+                        "Bạn có chắc chắn muốn thay đổi trạng thái của mình không?"
+                      )
+                    ) {
+                      setValues({
+                        ...values,
+                        isUnavailable: event.target.checked,
+                      });
+                    }
+                  }}
+                  name="isUnavailable"
+                  color="primary"
+                />
+              }
+              label={
+                values.isUnavailable
+                  ? "Bạn đã tắt chế độ nhận yêu cầu từ mentee mới "
+                  : "Bạn đang mở chế độ nhận yêu cầu từ mentee mới"
+              }
+            />
             <button>Lưu thay đổi</button>
           </InforContainer>
         </div>

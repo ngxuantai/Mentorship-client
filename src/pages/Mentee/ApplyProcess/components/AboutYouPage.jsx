@@ -1,10 +1,7 @@
 import React, { useState } from "react";
 import { Button, Form } from "react-bootstrap";
 
-type AboutYouPageProps = {
-  onButtonClick: (page: string) => void;
-};
-function AboutYouPage({ onButtonClick }: AboutYouPageProps) {
+function AboutYouPage({ onButtonClick }) {
   return (
     <div
       style={{

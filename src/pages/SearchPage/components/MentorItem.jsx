@@ -29,6 +29,7 @@ function MentorItem({ mentor }) {
   const handleNavigateToProfile = () => {
     navigate(`/mentor/profile/${mentor.id}`);
   };
+
   useEffect(() => {
     if (user) {
       const unsubscribe = firebaseInstance.observeWishlistChanges(
@@ -113,7 +114,7 @@ function MentorItem({ mentor }) {
               <div
                 style={{
                   display: "flex",
-                  minWidth: 130,
+
                   flexDirection: "row",
                   alignItems: "center",
                 }}

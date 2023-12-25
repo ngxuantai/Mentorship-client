@@ -1,16 +1,16 @@
-import React, { useState } from "react";
-import MultiStepProgressBar from "./components/MultiStepProgressBar";
+import { useState } from "react";
 import DashBoard from "../DashBoard/index.jsx";
 import AboutYouPage from "./components/AboutYouPage";
+import MultiStepProgressBar from "./components/MultiStepProgressBar";
 
 function ApplyProcess() {
   const [page, setPage] = useState("pageone");
 
-  const nextPage = (page: string) => {
+  const nextPage = (page) => {
     setPage(page);
   };
 
-  const nextPageNumber = (pageNumber: string | number) => {
+  const nextPageNumber = (pageNumber) => {
     switch (pageNumber) {
       case "1":
         setPage("pageone");
