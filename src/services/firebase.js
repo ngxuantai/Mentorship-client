@@ -1,16 +1,16 @@
-import * as firebase from "firebase/app";
-import "firebase/auth";
-import * as authService from "firebase/auth";
-import * as databaseService from "firebase/database";
-import * as firestoreService from "firebase/firestore";
+import * as firebase from 'firebase/app';
+import 'firebase/auth';
+import * as authService from 'firebase/auth';
+import * as databaseService from 'firebase/database';
+import * as firestoreService from 'firebase/firestore';
 import {
   getDownloadURL,
   getStorage,
   ref,
   uploadBytesResumable,
-} from "firebase/storage";
-import firebaseConfig from "../config/firebase";
-import { checkAndRemoveExpiredEvents } from "../utils/dataHelper";
+} from 'firebase/storage';
+import firebaseConfig from '../config/firebase';
+import {checkAndRemoveExpiredEvents} from '../utils/dataHelper';
 
 class Firebase {
   constructor() {
@@ -28,7 +28,7 @@ class Firebase {
       password
     );
     const user = userCredential.user;
-    console.log("user", user);
+    console.log('user', user);
     return user;
   };
 
@@ -46,10 +46,10 @@ class Firebase {
     authService.sendPasswordResetEmail(this.auth, email);
 
   addUser = (id, user) =>
-    firestoreService.setDoc(firestoreService.doc(this.db, "users", id), user);
+    firestoreService.setDoc(firestoreService.doc(this.db, 'users', id), user);
 
   getUser = (id) =>
-    firestoreService.getDoc(firestoreService.doc(this.db, "users", id));
+    firestoreService.getDoc(firestoreService.doc(this.db, 'users', id));
 
   passwordUpdate = (password) => this.auth.currentUser.updatePassword(password);
 
@@ -61,7 +61,7 @@ class Firebase {
           user
             .updatePassword(newPassword)
             .then(() => {
-              resolve("Password updated successfully!");
+              resolve('Password updated successfully!');
             })
             .catch((error) => reject(error));
         })
@@ -74,7 +74,7 @@ class Firebase {
         if (user) {
           resolve(user);
         } else {
-          reject(new Error("Auth State Changed failed"));
+          reject(new Error('Auth State Changed failed'));
         }
       });
     });
@@ -85,7 +85,7 @@ class Firebase {
     const uploadTask = uploadBytesResumable(imageRef, imageFile);
     return new Promise((resolve, reject) => {
       uploadTask.on(
-        "state_changed",
+        'state_changed',
         (snapshot) => {},
         (error) => {
           console.log(error);
@@ -93,7 +93,7 @@ class Firebase {
         () => {
           // Upload completed successfully, now we can get the download URL
           getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-            console.log("File available at", downloadURL);
+            console.log('File available at', downloadURL);
             resolve(downloadURL);
           });
         }
@@ -103,10 +103,50 @@ class Firebase {
 
   // deleteImage = (id) => this.storage.ref("products").child(id).delete();
 
+  storeFile = async (folder, file, mentorId) => {
+    const editName = (mnetorId, fileName) => {
+      const lastDotIndex = fileName.lastIndexOf('.');
+      let name = '',
+        extension = '';
+
+      if (lastDotIndex !== -1) {
+        name = fileName.substring(0, lastDotIndex);
+        extension = fileName.substring(lastDotIndex + 1);
+      } else {
+        name = fileName;
+      }
+
+      return name + '-' + mnetorId + '.' + extension;
+    };
+
+    const fileRef = ref(
+      this.storage,
+      `documents/${editName(mentorId, file.name)}`
+    );
+    const uploadTask = uploadBytesResumable(fileRef, file);
+    return new Promise((resolve, reject) => {
+      uploadTask.on(
+        'state_changed',
+        (snapshot) => {},
+        (error) => {
+          console.log(error);
+        },
+        () => {
+          getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+            console.log('File available at', downloadURL);
+            resolve(downloadURL);
+          });
+        }
+      );
+    });
+  };
+
+  // get file
+
   //db realtime
   getEvents = async (userId, dayOfWeek) => {
     const snapshot = await databaseService.get(
-      databaseService.ref(this.realtimeDb, userId + "/calendars/" + dayOfWeek)
+      databaseService.ref(this.realtimeDb, userId + '/calendars/' + dayOfWeek)
     );
     return snapshot.val() || [];
   };
@@ -115,12 +155,12 @@ class Firebase {
     const eventId = Date.now();
     const eventRef = databaseService.ref(
       this.realtimeDb,
-      userId + "/calendars/" + dayOfWeek
+      userId + '/calendars/' + dayOfWeek
     );
 
     const events = await this.getEvents(userId, dayOfWeek);
 
-    events.push({ ...event, id: eventId });
+    events.push({...event, id: eventId});
 
     await databaseService.set(eventRef, events);
 
@@ -130,14 +170,14 @@ class Firebase {
   updateEvent = async (userId, dayOfWeek, eventId, event) => {
     const eventRef = databaseService.ref(
       this.realtimeDb,
-      userId + "/calendars/" + dayOfWeek
+      userId + '/calendars/' + dayOfWeek
     );
 
     const events = await this.getEvents(userId, dayOfWeek);
 
     const index = events.findIndex((e) => e.id === eventId);
     if (index !== -1) {
-      events[index] = { ...event, id: eventId };
+      events[index] = {...event, id: eventId};
 
       await databaseService.set(eventRef, events);
     }
@@ -146,7 +186,7 @@ class Firebase {
   deleteEvent = async (userId, dayOfWeek, eventId) => {
     const eventRef = databaseService.ref(
       this.realtimeDb,
-      userId + "/calendars/" + dayOfWeek
+      userId + '/calendars/' + dayOfWeek
     );
 
     const events = await this.getEvents(userId, dayOfWeek);
@@ -161,11 +201,11 @@ class Firebase {
 
   observeCalendarChanges(userId, onEventChange) {
     return databaseService.onValue(
-      databaseService.ref(this.realtimeDb, userId + "/calendars"),
+      databaseService.ref(this.realtimeDb, userId + '/calendars'),
       (snapshot) => {
         const weekEvents = snapshot.val();
         const checkedEvents = checkAndRemoveExpiredEvents(weekEvents);
-        console.log("mentor weekEvents", weekEvents);
+        console.log('mentor weekEvents', weekEvents);
         this.setUserEvent(userId, checkedEvents);
         onEventChange(weekEvents);
       }
@@ -191,18 +231,18 @@ class Firebase {
 
   getWishlist = async (userId) => {
     const snapshot = await databaseService.get(
-      databaseService.ref(this.realtimeDb, userId + "/wishlists/")
+      databaseService.ref(this.realtimeDb, userId + '/wishlists/')
     );
     return snapshot.val() || [];
   };
   toggleWishlist = async (userId, mentorId) => {
     const wishlistRef = databaseService.ref(
       this.realtimeDb,
-      userId + "/wishlists"
+      userId + '/wishlists'
     );
     const wishlist = await this.getWishlist(userId);
 
-    console.log("toggleWishlist", wishlist, mentorId);
+    console.log('toggleWishlist', wishlist, mentorId);
     const index = wishlist.findIndex((id) => id === mentorId);
 
     if (index !== -1) {
@@ -216,7 +256,7 @@ class Firebase {
   };
   observeWishlistChanges(userId, onWishlistChange) {
     return databaseService.onValue(
-      databaseService.ref(this.realtimeDb, userId + "/wishlists"),
+      databaseService.ref(this.realtimeDb, userId + '/wishlists'),
       (snapshot) => {
         const wishlist = snapshot.val();
         onWishlistChange(wishlist);

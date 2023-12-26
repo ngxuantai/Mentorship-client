@@ -1,66 +1,103 @@
-import { Button } from "@mui/material";
-import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import styled from "styled-components";
-import examApi from "../../../api/exam";
-import CardExam from "./components/CardExam";
+import {Button} from '@mui/material';
+import {useEffect, useState} from 'react';
+import {useNavigate} from 'react-router-dom';
+import styled from 'styled-components';
+import examApi from '../../../api/exam';
+import CardExam from './components/CardExam';
+import ListFile from './components/ListFile';
+import {Label} from 'flowbite-react';
+import firebaseInstance from '../../../services/firebase';
+import fileApi from '../../../api/file';
+import {sendEmail} from '../../../services/email';
+// import * as nodemailer from 'nodemailer';
+
+// const nodemailer = require('nodemailer');
 
 const Examination = () => {
   const navigate = useNavigate();
-  // State để lưu trữ thông tin bài tập
-  // const [exams, setExams] = useState([
-  //   {
-  //     id: 1,
-  //     name: 'Bài tập 1',
-  //     createAt: '2021-10-10',
-  //     questions: 10,
-  //   },
-  //   {
-  //     id: 2,
-  //     name: 'Bài tập 2',
-  //     createAt: '2021-10-10',
-  //     questions: 10,
-  //   },
-  //   {
-  //     id: 3,
-  //     name: 'Bài tập 3',
-  //     createAt: '2021-10-10',
-  //     questions: 10,
-  //   },
-  //   {
-  //     id: 4,
-  //     name: 'Bài tập 4',
-  //     createAt: '2021-10-10',
-  //     questions: 10,
-  //   },
-  //   {
-  //     id: 5,
-  //     name: 'Bài tập 5',
-  //     createAt: '2021-10-10',
-  //     questions: 10,
-  //   },
-  // ]);
 
   const [exams, setExams] = useState([]);
+  const [files, setFiles] = useState([]);
 
   useEffect(() => {
     const fetchExams = async () => {
-      const res = await examApi.getExamByMentorId("65840127a47c189dd995cdf3");
+      const res = await examApi.getExamByMentorId('65840127a47c189dd995cdf3');
       console.log(res);
       setExams(res);
     };
+
+    const fetchFiles = async () => {
+      const res = await fileApi.getFilesByMentorId('65840127a47c189dd995cdf3');
+      console.log(res);
+      setFiles(res);
+    };
+
     fetchExams();
+    fetchFiles();
   }, []);
 
   const handleAddExam = () => {
-    console.log("Thêm đề thi");
+    console.log('Thêm đề thi');
     navigate(`/mentor/examination/${exams[0].id}`);
+  };
+
+  const editName = (mnetorId, fileName) => {
+    const lastDotIndex = fileName.lastIndexOf('.');
+    let name = '',
+      extension = '';
+
+    // Nếu có dấu chấm, cắt chuỗi để chỉ giữ phần đầu đến trước dấu chấm
+    if (lastDotIndex !== -1) {
+      name = fileName.substring(0, lastDotIndex);
+      extension = fileName.substring(lastDotIndex + 1);
+    } else {
+      // Nếu không có dấu chấm, trả về tên file không thay đổi
+      name = fileName;
+    }
+
+    return name + '-' + mnetorId + '.' + extension;
+  };
+
+  const handleAddFile = async () => {
+    const input = document.createElement('input');
+    input.type = 'file';
+    input.accept = '.pdf, .docx, .doc, .xlsx, .xls, .ppt, .pptx, .txt';
+    input.multiple = true;
+    // storeFile();
+
+    input.addEventListener('change', (event) => {
+      const filesInput = event.target.files;
+
+      filesInput.forEach((file) => {
+        console.log(file);
+        let fileData = {
+          mentorId: '65840127a47c189dd995cdf3',
+          name: file.name,
+          link: '',
+          size: file.size,
+          type: file.type,
+          createdDate: new Date().toISOString(),
+        };
+        firebaseInstance
+          .storeFile('files', file, fileData.mentorId)
+          .then(async (url) => {
+            fileData.link = url;
+            await fileApi.createFile(fileData);
+            setFiles([...files, fileData]);
+          });
+      });
+    });
+
+    // Kích hoạt sự kiện click trên input
+    input.click();
   };
 
   return (
     <Container>
       <ButtonContainer>
-        <label>Danh sách đề thi</label>
+        <Label style={{fontSize: '20px', fontWeight: 'bold'}}>
+          Danh sách đề thi
+        </Label>
         <Button
           variant="contained"
           color="primary"
@@ -76,6 +113,23 @@ const Examination = () => {
           ))}
         </ExamContainer>
       ) : null}
+      <ButtonContainer>
+        <Label style={{fontSize: '20px', fontWeight: 'bold'}}>
+          Danh sách tài liệu
+        </Label>
+        <Button
+          variant="contained"
+          color="primary"
+          onClick={() => handleAddFile()}
+        >
+          Thêm tài liệu
+        </Button>
+      </ButtonContainer>
+      {files.length > 0 ? (
+        <ListFile files={files} />
+      ) : (
+        <Label>Chưa có tài liệu</Label>
+      )}
     </Container>
   );
 };
@@ -96,6 +150,7 @@ const ButtonContainer = styled.div`
   justify-content: space-between;
   align-items: center;
   width: 90%;
+  padding: 1rem;
 `;
 
 const ExamContainer = styled.div`

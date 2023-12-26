@@ -1,10 +1,10 @@
-import { create } from "zustand";
-import menteeApplicationApi from "../api/menteeApplication";
+import {create} from 'zustand';
+import menteeApplicationApi from '../api/menteeApplication';
 
 export const useMenteeAppliStore = create((set) => ({
   menteeApplications: [],
   menteeAppliApproved: [],
-  setMenteeApplications: (menteeApplications) => set({ menteeApplications }),
+  setMenteeApplications: (menteeApplications) => set({menteeApplications}),
   getMenteeAppliByMentorId: async (mentorId) => {
     try {
       const menteeApplications =
@@ -14,8 +14,8 @@ export const useMenteeAppliStore = create((set) => ({
       const menteeAppliApproved = menteeApplications.filter(
         (app) => app.status === 1
       );
-      console.log("menteeAppliApproved", menteeAppliApproved);
-      set({ menteeApplications, menteeAppliApproved });
+      console.log('menteeAppliApproved', menteeAppliApproved);
+      set({menteeApplications, menteeAppliApproved});
     } catch (error) {
       console.error(error);
     }
@@ -29,7 +29,7 @@ export const useMenteeAppliStore = create((set) => ({
       if (status === 1) {
         set((state) => ({
           menteeApplications: state.menteeApplications.map((app) =>
-            app.id === id ? { ...app, status } : app
+            app.id === id ? {...app, status} : app
           ),
           menteeAppliApproved: [
             ...state.menteeAppliApproved,
@@ -39,7 +39,7 @@ export const useMenteeAppliStore = create((set) => ({
       } else {
         set((state) => ({
           menteeApplications: state.menteeApplications.map((app) =>
-            app.id === id ? { ...app, status } : app
+            app.id === id ? {...app, status} : app
           ),
         }));
       }

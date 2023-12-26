@@ -1,38 +1,71 @@
 import React, {useState, useEffect} from 'react';
 import {Table, Checkbox, Label, TextInput, Button} from 'flowbite-react';
-import {format} from 'date-fns';
+import {add, format} from 'date-fns';
 import {FaCopy} from 'react-icons/fa';
 import {handleCopyClick, shortenId} from '../../../../utils/dataHelper';
 import mentorApi from '../../../../api/mentor';
 import paymentApi from '../../../../api/payment';
 import {PaymentStatus} from '../../../../constants';
 import usePaymentStore from '../../../../store/paymentStore';
+import currencyFormatter from '../../../../utils/moneyConverter';
 
 export default function ListPayment({applications}) {
   const [mentorInfo, setMentorInfo] = useState([]);
   const [url, setUrl] = useState('');
   const {setPayment} = usePaymentStore();
 
-  const getStatusColor = (status) => {
-    switch (status) {
-      case PaymentStatus.SUCCESS:
-        return 'bg-green-400';
-      case PaymentStatus.FAILED:
-        return 'bg-red-500';
-      default:
-        return '';
+  // const getStatusColor = (status, isPaid, approvedDate) => {
+  //   const currentDate = new Date();
+  //   const approved = new Date(approvedDate);
+  //   if (isPaid) return 'bg-green-400';
+  //   else if (currentDate - approved > 3 * 86400000) return 'bg-red-500';
+  //   switch (status) {
+  //     case PaymentStatus.SUCCESS:
+  //       return 'bg-green-400';
+  //     case PaymentStatus.FAILED:
+  //       return 'bg-red-500';
+  //     default:
+  //       return '';
+  //   }
+  // };
+
+  // const getStatusText = (status, isPaid, approvedDate) => {
+  //   const currentDate = new Date();
+  //   const approved = new Date(approvedDate);
+  //   if (isPaid) return 'Đã thanh toán';
+  //   else if (currentDate - approved > 3 * 86400000) return 'Quá hạn thanh toán';
+  //   switch (status) {
+  //     case PaymentStatus.SUCCESS:
+  //       return 'Đã thanh toán';
+  //     case PaymentStatus.FAILED:
+  //       return 'Chưa thanh toán';
+  //     default:
+  //       return '';
+  //   }
+  // };
+
+  const getStatusColor = (isPaid, approvedDate) => {
+    if (isPaid) {
+      return 'bg-green-400';
     }
+
+    const overdue = isPaymentOverdue(approvedDate);
+    return 'bg-red-500';
   };
 
-  const getStatusText = (status) => {
-    switch (status) {
-      case PaymentStatus.SUCCESS:
-        return 'Đã thanh toán';
-      case PaymentStatus.FAILED:
-        return 'Chưa thanh toán';
-      default:
-        return '';
+  const getStatusText = (isPaid, approvedDate) => {
+    if (isPaid) {
+      return 'Đã thanh toán';
     }
+
+    const overdue = isPaymentOverdue(approvedDate);
+    return overdue ? 'Quá hạn thanh toán' : 'Chưa thanh toán';
+  };
+
+  const isPaymentOverdue = (approvedDate) => {
+    const currentDate = new Date();
+    const approved = new Date(approvedDate);
+    return currentDate - approved > 3 * 86400000;
   };
 
   const getMentorInfor = async (mentorId) => {
@@ -70,7 +103,8 @@ export default function ListPayment({applications}) {
       <Table.Head className="bg-gray-100 dark:bg-gray-700">
         <Table.HeadCell>Khóa học</Table.HeadCell>
         <Table.HeadCell>Giáo viên</Table.HeadCell>
-        <Table.HeadCell>Ngày bắt đầu học</Table.HeadCell>
+        <Table.HeadCell>Học phí</Table.HeadCell>
+        <Table.HeadCell>Hạn nộp</Table.HeadCell>
         <Table.HeadCell>Trạng thái</Table.HeadCell>
         <Table.HeadCell></Table.HeadCell>
       </Table.Head>
@@ -105,22 +139,35 @@ export default function ListPayment({applications}) {
               </div>
             </Table.Cell>
             <Table.Cell className="whitespace-nowrap p-4 text-base font-medium text-gray-900 dark:text-white">
-              {format(new Date(application.applicationDate), 'dd-MM-yyyy')}
+              {currencyFormatter(application.fee)}
+            </Table.Cell>
+            <Table.Cell className="whitespace-nowrap p-4 text-base font-medium text-gray-900 dark:text-white">
+              {format(
+                add(new Date(application.approvedDate), {days: 3}),
+                'dd/MM/yyyy'
+              )}
             </Table.Cell>
             <Table.Cell className="whitespace-nowrap p-4 text-base font-normal text-gray-900 dark:text-white">
               <div className="flex items-center">
                 <div
                   className={`mr-2 h-2.5 w-2.5 rounded-full ${getStatusColor(
-                    application.paymentStatus
+                    application.isPaid,
+                    application.approvedDate
                   )}`}
                 ></div>
-                {getStatusText(application.paymentStatus)}
+                {getStatusText(application.isPaid, application.approvedDate)}
               </div>
             </Table.Cell>
             <Table.Cell>
               <div className="flex items-center gap-x-3 whitespace-nowrap">
                 <Button
-                  disabled={application.paymentStatus === PaymentStatus.SUCCESS}
+                  disabled={
+                    application.isPaid === true ||
+                    getStatusText(
+                      application.isPaid,
+                      application.approvedDate
+                    ) === 'Quá hạn thanh toán'
+                  }
                   onClick={() => handleCheckOut(application)}
                 >
                   Thanh toán

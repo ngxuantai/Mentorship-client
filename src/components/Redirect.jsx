@@ -32,19 +32,10 @@ const RedirectComponent = () => {
               price: menteeApplication.fee,
               status: PaymentStatus.SUCCESS,
             });
-            await paymentApi.deletePayment(res.id);
+            await paymentApi.deletePayment(menteeApplication.id);
             window.location.href = 'http://localhost:5173/mentee/payment';
           }
         }
-
-        // if (res) {
-        //   await paymentApi.deletePayment(menteeApplication.id);
-        // }
-
-        // if (window.location.pathname.includes('/ReturnUrl')) {
-        //   // Chuyển hướng đến http://localhost:5173
-        //   window.location.href = 'http://localhost:5173/mentee/payment';
-        // }
       } else {
         console.log('Thanh toán không thành công');
       }

@@ -1,4 +1,6 @@
 import {Button, Checkbox, Label, Modal, Table, TextInput} from 'flowbite-react';
+import Tab from '@mui/material/Tab';
+import Tabs from '@mui/material/Tabs';
 import Datepicker from 'tailwind-datepicker-react';
 import Select from 'react-select';
 import {useState, useEffect} from 'react';
@@ -15,6 +17,7 @@ import {
 // import {useApplicationStore} from '../../store/application';
 // import {useUserStore} from '../../store/user';
 import ListPayment from './components/ListPayment';
+import HistoryPayment from './components/HistoryPayment';
 import {useMenteeAppliStore} from '../../../store/menteeAppli';
 import {applicationToExcelData} from '../../../utils/excelDataHelper';
 import {exportExcel} from '../../../utils/excelHelper';
@@ -111,13 +114,35 @@ const ListMentee = () => {
     exportExcel(jsonData, 'application_list');
   };
 
+  const [value, setValue] = useState(0);
+
+  const handleChange = (event, newValue) => {
+    setValue(newValue);
+  };
+
   return (
     <div>
       <div className="flex flex-col">
         <div className="overflow-x-auto">
           <div className="inline-block min-w-full align-middle">
             <div className="overflow-hidden shadow">
-              <ListPayment applications={menteeApplications} />
+              <Tabs value={value} onChange={handleChange}>
+                <Tab
+                  label="Thanh toán"
+                  value={0}
+                  style={{fontWeight: 'bold'}}
+                />
+                <Tab
+                  label="Lịch sử thanh toán"
+                  value={1}
+                  style={{fontWeight: 'bold'}}
+                />
+              </Tabs>
+              {value === 0 && (
+                <ListPayment applications={menteeAppliApproved} />
+              )}
+              {value === 1 && <HistoryPayment />}
+              {/* {value === 2 && <Profiles />} */}
             </div>
           </div>
         </div>
