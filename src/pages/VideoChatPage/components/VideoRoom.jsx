@@ -3,7 +3,10 @@ import AgoraRTC from 'agora-rtc-sdk-ng'
 import AgoraRTM from 'agora-rtm-sdk'
 import {Link, useNavigate} from 'react-router-dom';
 import { VideoPlayer } from './VideoPlayer'
-import { ScreenShare, StopScreenShare, CallEnd, Mic, MicOff, Videocam, VideocamOff, Send } from '@mui/icons-material';
+import { ScreenShare, StopScreenShare, CallEnd, Mic, MicOff, Videocam, VideocamOff, Send, VideoChat, Create, Chat, Save} from '@mui/icons-material';
+import 'quill/dist/quill.snow.css'
+import ReactQuill from 'react-quill'
+import { set } from 'date-fns';
 
 
 const APP_ID = '5ad93fd0de6d4b74b2b1e150004c3ebe';
@@ -38,9 +41,23 @@ function VideoRoom(props){
 
   const [selectedUser, setSelectedUser] = useState(null);
 
+  const [showNoteForm, setShowNoteForm] = useState(false);
+  const [noteTitle, setNoteTitle] = useState('');
+  const [noteText, setNoteText] = useState('');
+
+  const [isHighlighting, setIsHighlighting] = useState(false);
+  const [selectedText, setSelectedText] = useState('');
+
   const messageRef = useRef();
+  const textAreaRef = useRef();
 
   const navigate = useNavigate();
+
+
+  const toggleCreateNote = (e) => {
+    e.preventDefault();
+    setShowNoteForm(!showNoteForm);
+  };
 
   const appendMessage = (message) => {
     setMessages((messages) => [...messages, message]);
@@ -161,9 +178,9 @@ function VideoRoom(props){
   }, []);
   
 
-  // useEffect(() => {
-  //   messageRef.current.scrollTop = messageRef.current.scrollHeight;
-  // }, [messages]);
+  useEffect(() => {
+    messageRef.current.scrollTop = messageRef.current.scrollHeight;
+  }, [messages]);
 
   const handleScreenSharing = async (e) => {
     e.preventDefault();
@@ -226,7 +243,6 @@ function VideoRoom(props){
 
   const sendMessage = () => {
     if (text === '') return;
-    console.log(text);
     channel.sendMessage({
       text,
       type: 'text',
@@ -255,63 +271,153 @@ function VideoRoom(props){
 
   // Sắp xếp mảng users để đưa user được chọn lên trên cùng
   const sortedUsers = users.sort((a, b) => (a.uid === selectedUser ? -1 : 1));
-  
+
+  // Create note
+  const createNote = () => {
+    console.log('Saved note:', noteText);
+
+    // Add note to list
+    
+    setNoteTitle('');
+    setNoteText('');
+  };
+  const handleCreateNote = (e) => {
+    e.preventDefault();
+    createNote();
+  };
+
+  // Highlight text
+  const handleTextSelection = () => {
+    const textarea = textAreaRef.current;
+    const selectedText = textarea.value.substring(textarea.selectionStart, textarea.selectionEnd);
+    setSelectedText(selectedText);
+    console.log('Selected text:', selectedText);
+  };
+
+  var modules = {
+    toolbar: [
+      [{ size: ["small", false, "large", "huge"] }],
+      ["bold", "italic", "underline"],
+      [{ "color": ["#000000", "#e60000", "#ff9900", "#ffff00", "#008a00", "#0066cc", "#9933ff", "#ffffff", "#facccc", "#ffebcc", "#ffffcc", "#cce8cc", "#cce0f5", "#ebd6ff", "#bbbbbb", "#f06666", "#ffc266", "#ffff66", "#66b966", "#66a3e0", "#c285ff", "#888888", "#a10000", "#b26b00", "#b2b200", "#006100", "#0047b2", "#6b24b2", "#444444", "#5c0000", "#663d00", "#666600", "#003700", "#002966", "#3d1466", 'custom-color'] }],
+    ]
+  };
+
+  var formats = [
+    "header", "height", "bold", "italic","underline",
+    "color", "indent", "size",
+  ];
+
+ 
   return (
-    <div className='video-room-container bg-black w-screen p-2 h-screen overflow-auto' >      
-      <h1 className='font-bold text-center text-white'>Room: {roomName}</h1>
-      <div className='flex justify-between'>
+    <div className='video-room-container bg-gradient-to-r from-primary-900 to-blue-300 w-screen p-2 h-screen overflow-auto' >     
+      <div className='flex justify-center items-center'>
+        <div className='text-primary-700 bg-white rounded p-4 mr-4' >
+          <VideoChat className='scale-[2.0]'/>
+        </div>
+        <div className='text-white font-bold text-3xl'>
+          {roomName}
+        </div>
+        
+      </div>
+
+      <div className='flex justify-between mt-3'>
+        
         <div container className='w-2/3 grid grid-cols-2 gap-2'>        
             {sortedUsers.map((user) => (
-              <div key={user.uid} className={`w-full mt-4 ${selectedUser === user.uid ? 'col-span-2' : ''}`}
+              <div key={user.uid} className={`w-full ${selectedUser === user.uid ? 'col-span-2' : ''}` }
                     onClick={() => handleUserClick(user.uid)}>
-                <h6 className='text-white text-lg font-bold'>UID: {user.uid}</h6>
-                <VideoPlayer key={user.uid} user={user} />                                 
+                <VideoPlayer key={user.uid} user={user} />  
               </div>
             ))}
         </div>
         <div className='w-1/3' >
-          <div className='bg-white p-3 h-[530px] mt-14 mx-2 w-[100%] rounded-lg '>
-            <div className='panel h-3/4 p-2'>
-              <div className='messages'>
-                {messages.map((message, idx) => (
-                  <div key={idx} className="message flex">
-                    {`${message.uid}` === RTMUID && (
-                      <div className="user-self font-bold text-primary-700">
-                        You: &nbsp;
-                      </div>
-                    )}
-                    {`${message.uid}` !== RTMUID && (
-                      <div className="user-them font-bold text-black">
-                        {message.uid}: &nbsp;
-                      </div>
-                    )}
-                  <div className="text">{message.text}</div>
-                </div>
-                ))}
-              </div>               
-            </div>
-            <form className='flex items-center h-1/8 w-full'
-              onSubmit={sendMessage}>
-              <input className='py-2 border border-purple-900 rounded-lg w-5/6 px-4 '
-                value={text}
-                placeholder='Enter your message...'
-                onChange={(e) => setText(e.target.value)}
-              />
-              <button className='bg-primary-400 text-white font-bold  rounded-lg py-2 px-4 ml-3 hover:bg-primary-500'
+          <div className='bg-white p-3 mx-2 h-[530px] w-[100%] rounded-lg '>
+            {!showNoteForm && 
+            <div>
+              <div className='panel h-[380px] max-h-[380px] flex flex-col overflow-hidden p-2'>
+                <div className='messages overflow-auto h-full w-full '
+                    ref={messageRef}>
+                  <h4 className='text-center font-semibold text-primary-700'>Chat</h4>
+                  {messages.map((message, idx) => (
+                    <div key={idx} className="message flex">
+                      {`${message.uid}` === RTMUID && (
+                        <div className="user-self font-bold text-primary-700">
+                            You: &nbsp;
+                        </div>
+                      )}
+                      {`${message.uid}` !== RTMUID && (
+                        <div className="user-them font-bold text-black">
+                          {message.uid}: &nbsp;
+                        </div>
+                      )}
+                      <div className="text">{message.text}</div>
+                    </div>
+                  ))}
+                </div>               
+              </div>
+              <form className='flex items-center h-1/8 w-full'
+                  onSubmit={sendMessage}>
+                <input className='py-2 border border-purple-900 rounded-lg w-5/6 px-4 '
+                    value={text}
+                    placeholder='Enter your message...'
+                    onChange={(e) => setText(e.target.value)}
+                />
+                <button className='bg-primary-400 text-white font-bold rounded-lg py-2 px-4 ml-3 hover:bg-primary-500'
                   onClick={handleSendMessage}>
                   <Send />
+                </button>
+              </form>
+            </div>
+            }
+            {showNoteForm && (
+              <div>
+                <div className='h-[422px] max-h-[422px] overflow-hidden p-2' >
+
+                  <div className='flex flex-col items-center w-full'>
+                    <input
+                      className='py-2 border border-purple-900 rounded-lg w-full px-4 font-bold'
+                      value={noteTitle}
+                      onChange={(e) => setNoteTitle(e.target.value)}
+                      placeholder='Title...'
+                    /> 
+                    <ReactQuill className='border border-purple-900 rounded-lg w-full h-[330px] max-h-[330px] overflow-auto'
+                      theme="snow"
+                      modules={modules}
+                      formats={formats}
+                      placeholder="Enter your note"
+                      value={noteText}
+                      onChange={setNoteText}
+                    />
+                    <button
+                      type='submit'
+                      className='bg-primary-400 text-white font-bold rounded-lg py-2 px-4 ml-3 hover:bg-primary-500'
+                      onClick={handleCreateNote}
+                    >
+                      <Save />
+                    </button>
+
+                  </div>
+                </div>
+              </div>
+            )}
+            <div className='flex justify-center items-center h-1/8 p-3 mt-2'>
+              <button className='bg-primary-400 text-white rounded-full py-2 px-4 transition duration-150 ease-in-out hover:transition-all hover:scale-110 hover:bg-primary-500 mx-4'
+                  onClick={toggleCreateNote}>
+                  {showNoteForm ? <Chat /> : <Create />}
               </button>
-            </form>
-            <div className='flex justify-center items-center h-1/8 p-3'>
+
               <button id="inItScreen" onClick={handleScreenSharing} className='bg-primary-400 text-white rounded-full py-2 px-4 transition duration-150 ease-in-out hover:transition-all hover:scale-110 hover:bg-primary-500 mx-4'>
                   {isSharingEnabled ? <StopScreenShare /> : <ScreenShare />} 
               </button>
-              <button id="leave" onClick={() => navigate(`/videochat`)} className=' bg-red-600 text-white rounded-full py-2 px-4 transition duration-150 ease-in-out hover:transition-all hover:scale-110 hover:bg-red-700 mx-4'>
-                  <CallEnd />
-              </button>
+
               <button id="muteVideo" onClick={handleMute} className='bg-primary-400 text-white rounded-full py-2 px-4 transition duration-150 ease-in-out hover:transition-all hover:scale-110 hover:bg-primary-500 mx-4'>
                   {isMuted ? <VideocamOff /> : <Videocam />}
               </button>
+
+              <button id="leave" onClick={() => navigate(`/videochat`)} className=' bg-red-600 text-white rounded-full py-2 px-4 transition duration-150 ease-in-out hover:transition-all hover:scale-110 hover:bg-red-700 mx-4'>
+                  <CallEnd />
+              </button>
+              
             </div>
           </div>              
         </div>
