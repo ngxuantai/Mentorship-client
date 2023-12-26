@@ -4,19 +4,15 @@ import * as authService from "firebase/auth";
 import * as databaseService from "firebase/database";
 import * as firestoreService from "firebase/firestore";
 import {
-  FirebaseStorage,
   getDownloadURL,
   getStorage,
   ref,
   uploadBytesResumable,
 } from "firebase/storage";
 import firebaseConfig from "../config/firebase";
+import { checkAndRemoveExpiredEvents } from "../utils/dataHelper";
 
 class Firebase {
-  db: firestoreService.Firestore;
-  realtimeDb: databaseService.Database;
-  storage: FirebaseStorage;
-  auth: authService.Auth;
   constructor() {
     firebase.initializeApp(firebaseConfig);
     this.db = firestoreService.getFirestore();
@@ -168,12 +164,30 @@ class Firebase {
       databaseService.ref(this.realtimeDb, userId + "/calendars"),
       (snapshot) => {
         const weekEvents = snapshot.val();
-        console.log("calendar", weekEvents);
-
+        const checkedEvents = checkAndRemoveExpiredEvents(weekEvents);
+        console.log("mentor weekEvents", weekEvents);
+        this.setUserEvent(userId, checkedEvents);
         onEventChange(weekEvents);
       }
     );
   }
+  setUserEvent = async (userId, weekEvents) => {
+    const eventRef = databaseService.ref(
+      this.realtimeDb,
+      `${userId}/calendars`
+    );
+
+    // Duyệt qua tất cả các sự kiện trong weekEvents và cập nhật chúng
+    for (let dayOfWeek = 0; dayOfWeek < 7; dayOfWeek++) {
+      const dayEvents = weekEvents[dayOfWeek];
+
+      // Cập nhật sự kiện cho ngày trong tuần
+      await databaseService.set(
+        databaseService.ref(eventRef, `${dayOfWeek}`),
+        dayEvents
+      );
+    }
+  };
 
   getWishlist = async (userId) => {
     const snapshot = await databaseService.get(
@@ -205,7 +219,6 @@ class Firebase {
       databaseService.ref(this.realtimeDb, userId + "/wishlists"),
       (snapshot) => {
         const wishlist = snapshot.val();
-
         onWishlistChange(wishlist);
       }
     );

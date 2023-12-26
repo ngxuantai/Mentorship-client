@@ -4,11 +4,11 @@ import DashBoard from "../DashBoard/index.jsx";
 function App() {
   const [page, setPage] = useState("pageone");
 
-  const nextPage = (page: string) => {
+  const nextPage = (page) => {
     setPage(page);
   };
 
-  const nextPageNumber = (pageNumber: string | number) => {
+  const nextPageNumber = (pageNumber) => {
     switch (pageNumber) {
       case "1":
         setPage("pageone");

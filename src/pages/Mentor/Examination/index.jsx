@@ -1,9 +1,9 @@
-import React, {useEffect, useState} from 'react';
-import {useNavigate} from 'react-router-dom';
-import {Button} from '@mui/material';
-import styled from 'styled-components';
-import CardExam from './components/CardExam';
-import examApi from '../../../api/exam';
+import { Button } from "@mui/material";
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import styled from "styled-components";
+import examApi from "../../../api/exam";
+import CardExam from "./components/CardExam";
 
 const Examination = () => {
   const navigate = useNavigate();
@@ -45,7 +45,7 @@ const Examination = () => {
 
   useEffect(() => {
     const fetchExams = async () => {
-      const res = await examApi.getExamByMentorId('657f048f3819a4512c8ff9cb');
+      const res = await examApi.getExamByMentorId("65840127a47c189dd995cdf3");
       console.log(res);
       setExams(res);
     };
@@ -53,7 +53,7 @@ const Examination = () => {
   }, []);
 
   const handleAddExam = () => {
-    console.log('Thêm đề thi');
+    console.log("Thêm đề thi");
     navigate(`/mentor/examination/${exams[0].id}`);
   };
 

@@ -1,24 +1,18 @@
-import { Chip } from "@mui/material";
+import { Chip, TextField } from "@mui/material";
 import { addDays, startOfWeek } from "date-fns";
 import moment from "moment";
 import { useEffect, useState } from "react";
 import { Button } from "react-bootstrap";
 import { useNavigate } from "react-router";
-import { rrulestr } from "rrule";
-import TeachingCalendar from "../../../../components/Calendar";
-import firebaseInstance from "../../../../services/firebase";
-import { useUserStore } from "../../../../store/userStore";
+import TeachingCalendar from "../../../components/Calendar";
+import firebaseInstance from "../../../services/firebase";
+import { useUserStore } from "../../../store/userStore";
+import MenteesAvatar from "./components/MenteesAvatar";
 
-let rule = rrulestr("RRULE:FREQ=WEEKLY;UNTIL=20240228T000000Z;BYDAY=MO");
-
-let dates = rule.all();
-const daysOfWeek = ["SU", "MO", "TU", "WE", "TH", "FR", "SA"];
-
-export default function MentorAvailabilityCalendar({ mentorId }) {
+export default function MentorCalendar() {
   const navigate = useNavigate();
   const { user } = useUserStore();
   const [events, setEvents] = useState([]);
-
   const onEventChange = (weekList) => {
     if (!weekList) return;
     const filteredEvents = weekList
@@ -32,71 +26,34 @@ export default function MentorAvailabilityCalendar({ mentorId }) {
         });
       })
       .flat();
-    const repeatEvents = filteredEvents
-      .map((e) => createRecurringEvent(e))
-      .flat();
-    console.log("events", repeatEvents, filteredEvents);
-    setEvents([...repeatEvents, ...filteredEvents]);
-  };
-  const createRecurringEvent = (event) => {
-    const day = event.start.getDay();
-    // Nếu event có trường lastingTime, sử dụng nó. Ngược lại, sự kiện sẽ kéo dài đến cuối năm hiện tại
-    const until = event.lastingTime
-      ? `UNTIL=${moment(event.lastingTime).format("YYYYMMDDTHHmmss")}Z`
-      : `UNTIL=${moment().add(3, "months").format("YYYYMMDDTHHmmss")}Z`;
 
-    // Tạo chuỗi RRULE
-    const rrule = `RRULE:FREQ=WEEKLY;${until};BYDAY=${daysOfWeek[day]}`;
-
-    // Tạo rule từ chuỗi RRULE
-    let rule = rrulestr(rrule);
-
-    // Lấy tất cả các ngày mà sự kiện diễn ra
-    let dates = rule.all();
-
-    // Tạo một mảng các sự kiện lặp lại
-    let recurringEvents = dates.map((date) => ({
-      ...event,
-      start: new Date(
-        date.getFullYear(),
-        date.getMonth(),
-        date.getDate(),
-        event.start.getHours(),
-        event.start.getMinutes()
-      ),
-      end: new Date(
-        date.getFullYear(),
-        date.getMonth(),
-        date.getDate(),
-        event.end.getHours(),
-        event.end.getMinutes()
-      ),
-    }));
-
-    return recurringEvents;
+    setEvents(filteredEvents);
   };
   useEffect(() => {
-    if (mentorId) {
+    if (user) {
       const unsubscribe = firebaseInstance.observeCalendarChanges(
-        mentorId,
+        user.id,
         onEventChange
       );
       return () => unsubscribe();
     }
-  }, [mentorId]);
+  }, [user]);
   return (
     <div style={{}}>
       <div className="px-4 py-4">
-        <h3>Gói Pro / Standard</h3>
+        <h3>Lịch dạy của bạn</h3>
       </div>
-      <AddTimeButton events={events}></AddTimeButton>
-      <p style={{ fontWeight: "bold", marginLeft: 24 }}>Số buổi còn lại {2}</p>
+      <p style={{ fontWeight: "500", marginLeft: 24 }}>
+        Đừng quên đánh dấu khoảng thời gian bận trong tuần để tránh xung đột với
+        mentee của bạn
+      </p>
+      <BusyTimeManager events={events}></BusyTimeManager>
       <TeachingCalendar events={events}></TeachingCalendar>
     </div>
   );
 }
 
-function AddTimeButton({ events }) {
+function BusyTimeManager({ events }) {
   const [startTime, setStartTime] = useState("09:00");
   const [endTime, setEndTime] = useState("18:00");
   const [busyTimes, setBusyTimes] = useState([]);
@@ -251,7 +208,7 @@ function AddTimeButton({ events }) {
             marginRight: 12,
           }}
         >
-          Chọn
+          Thêm
         </Button>
       </div>
       <div>
@@ -266,13 +223,15 @@ function AddTimeButton({ events }) {
           );
         })}
       </div>
-      {/* <TextField
+      <TextField
         id="event-title"
         style={{ width: 500, marginTop: 12 }}
         value={title}
         onChange={(e) => setTitle(e.target.value)}
         placeholder="Tiêu đề sự kiện (bỏ trống sẽ được đánh dấu là thời gian bận)"
-      /> */}
+      />
+
+      <MenteesAvatar></MenteesAvatar>
     </div>
   );
 }

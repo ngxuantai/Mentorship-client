@@ -11,8 +11,8 @@ import fieldApi from "../../../../api/field";
 import skillApi from "../../../../api/skill";
 
 export default function Profile({ values, onInputChange, onButtonClick }) {
-  const [fields, setFields] = useState([]);
   const [selectedField, setSelectedField] = useState([]);
+  const [fields, setFields] = useState([]);
   const [skills, setSkills] = useState([]);
   console.log("profile: field", fields);
   useEffect(() => {
@@ -65,10 +65,6 @@ export default function Profile({ values, onInputChange, onButtonClick }) {
                   </MenuItem>
                 );
               })}
-              {/* <MenuItem value="1">Engineering & Data</MenuItem>
-              <MenuItem value="2">UX & Design</MenuItem>
-              <MenuItem value="3">Business & Management</MenuItem>
-              <MenuItem value="4">Product & Marketing</MenuItem> */}
             </Select>
           </FormControl>
           <FormControl style={{ width: "50%" }}>
@@ -87,10 +83,6 @@ export default function Profile({ values, onInputChange, onButtonClick }) {
                   </MenuItem>
                 );
               })}
-              {/* <MenuItem value="1">Engineering & Data</MenuItem>
-              <MenuItem value="2">UX & Design</MenuItem>
-              <MenuItem value="3">Business & Management</MenuItem>
-              <MenuItem value="4">Product & Marketing</MenuItem> */}
             </Select>
           </FormControl>
           <div className="content">

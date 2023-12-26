@@ -3,6 +3,7 @@ import Tabs from "@mui/material/Tabs";
 import React from "react";
 import styled from "styled-components";
 import Payment from "./components/Payment";
+import Plan from "./components/Plan";
 
 import Profiles from "./components/Profiles";
 
@@ -21,12 +22,14 @@ export default function MentorSettings() {
           style={{ fontWeight: "bold", padding: "0 14rem" }}
         >
           <Tab label="Thông tin cá nhân" value={0} />
-          <Tab label="Thanh toán" value={1} />
-          <Tab label="Thống kê" value={2} />
+          <Tab label="Gói học" value={1} />
+          <Tab label="Thanh toán" value={2} />
+          <Tab label="Thống kê" value={3} />
         </Tabs>
         {value === 0 && <Profiles />}
-        {value === 1 && <Payment />}
-        {value === 2 && <Profiles />}
+        {value === 1 && <Plan />}
+        {value === 2 && <Payment />}
+        {value === 3 && <Profiles />}
       </Container>
     </div>
   );

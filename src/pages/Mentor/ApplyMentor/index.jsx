@@ -8,10 +8,10 @@ import Experience from "./components/Experience";
 import Profile from "./components/Profile";
 import ProgressBar from "./components/ProgressBar";
 import Success from "./components/Success";
-
 export default function ApplyPage() {
   const [page, setPage] = useState("pageone");
   const [isSuccess, setIsSuccess] = useState(false);
+
   const [otherInfor, setOtherInfor] = useState({
     reason: "",
     achievement: "",
@@ -33,7 +33,6 @@ export default function ApplyPage() {
   const nextPage = (page) => {
     setPage(page);
   };
-
   const nextPageNumber = (pageNumber) => {
     switch (pageNumber) {
       case "1":

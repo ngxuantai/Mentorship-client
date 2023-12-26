@@ -1,21 +1,12 @@
-import React from "react";
-import "../css/multiStepProgressBar.css";
 import { ProgressBar, Step } from "react-step-progress-bar";
+import "../css/multiStepProgressBar.css";
 
-type MultiStepProgressBarProps = {
-  page: string;
-  onPageNumberClick: (pageNumber: string) => void;
-};
-
-const MultiStepProgressBar = ({
-  page,
-  onPageNumberClick,
-}: MultiStepProgressBarProps) => {
+const MultiStepProgressBar = ({ page, onPageNumberClick }) => {
   const pages = ["pageone", "pagetwo", "pagethree"];
   const percentages = [0, 50, 100];
 
   var stepPercentage = percentages[pages.indexOf(page)] || 0;
-  const getPageLabel = (pageName: string) => {
+  const getPageLabel = (pageName) => {
     switch (pageName) {
       case "pageone": {
         return "About you";
@@ -34,7 +25,7 @@ const MultiStepProgressBar = ({
     <ProgressBar percent={stepPercentage}>
       {pages.map((item, index) => (
         <Step key={index}>
-          {({ accomplished }: any) => (
+          {({ accomplished }) => (
             <div
               className={`indexedStep ${accomplished ? "accomplished" : null}`}
               onClick={() => onPageNumberClick((index + 1).toString())}

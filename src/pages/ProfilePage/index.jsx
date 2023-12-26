@@ -11,7 +11,7 @@ import { colors } from "../../constants/colors";
 import firebaseInstance from "../../services/firebase";
 import { useUserStore } from "../../store/userStore";
 import Comment from "./components/Comment";
-import PlanItem from "./components/PlanItem";
+import PlanList from "./components/PlanList";
 
 function Profile() {
   const navigate = useNavigate();
@@ -66,7 +66,11 @@ function Profile() {
       <div className="wallpaper">
         <div className="avatar">
           <img
-            src="https://static.wixstatic.com/media/e6b07b_e53a78fec61344aa8ea18d85b00dabe9~mv2.png/v1/crop/x_23,y_23,w_570,h_607/fill/w_588,h_624,al_c,lg_1,q_90,enc_auto/%E9%A6%96%E6%AC%A1%E7%B7%9A%E4%B8%8A%E9%96%8B%E5%B1%95.png"
+            src={
+              mentor?.avatar
+                ? mentor.avatar
+                : "https://static.wixstatic.com/media/e6b07b_e53a78fec61344aa8ea18d85b00dabe9~mv2.png/v1/crop/x_23,y_23,w_570,h_607/fill/w_588,h_624,al_c,lg_1,q_90,enc_auto/%E9%A6%96%E6%AC%A1%E7%B7%9A%E4%B8%8A%E9%96%8B%E5%B1%95.png"
+            }
             alt="avatar"
           ></img>
         </div>
@@ -78,7 +82,7 @@ function Profile() {
         </div>
       </div>
       <div className="planItem">
-        <PlanItem mentor={mentor}></PlanItem>
+        <PlanList mentor={mentor}></PlanList>
       </div>
       <div className="info " style={{ marginTop: "100px" }}>
         <Row sm={4} className="d-flex justify-content-center mt-5">

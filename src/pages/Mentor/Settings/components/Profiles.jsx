@@ -1,8 +1,8 @@
-import {useEffect, useState} from 'react';
-import styled from 'styled-components';
-import OtherInfor from './OtherInfor';
-import PersonalInfor from './PersonalInfor';
-import Plan from './Plan';
+import { useEffect, useState } from "react";
+import styled from "styled-components";
+import MentorSkills from "./MentorSkills";
+import OtherInfor from "./OtherInfor";
+import PersonalInfor from "./PersonalInfor";
 
 export default function Profiles() {
   const [notifications, setNotifications] = useState({
@@ -12,16 +12,16 @@ export default function Profiles() {
   });
 
   useEffect(() => {
-    const savedNotifications = localStorage.getItem('notifications');
+    const savedNotifications = localStorage.getItem("notifications");
     if (savedNotifications) {
-      console.log('savedNotifications', savedNotifications);
+      console.log("savedNotifications", savedNotifications);
       setNotifications(() => JSON.parse(savedNotifications));
     }
   }, []);
 
   const saveChange = () => {
-    localStorage.setItem('notifications', JSON.stringify(notifications));
-    console.log('setsavedNotifications', notifications);
+    localStorage.setItem("notifications", JSON.stringify(notifications));
+    console.log("setsavedNotifications", notifications);
   };
   const handleCheckboxChange = (event) => {
     setNotifications({
@@ -33,8 +33,8 @@ export default function Profiles() {
   return (
     <Container>
       <PersonalInfor />
+      <MentorSkills />
       <OtherInfor />
-      <Plan />
       {/* <TimeAvailable /> */}
       {/* <EmailContainer>
         <h5 style={{ fontWeight: "bold" }}>Tùy chọn email</h5>
@@ -85,7 +85,7 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  font-family: 'Roboto', 'Helvetica', 'Arial', sans-serif;
+  font-family: "Roboto", "Helvetica", "Arial", sans-serif;
   gap: 2rem;
   padding: 2rem;
 `;
