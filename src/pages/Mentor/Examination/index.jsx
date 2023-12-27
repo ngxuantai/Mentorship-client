@@ -1,14 +1,13 @@
-import {Button} from '@mui/material';
-import {useEffect, useState} from 'react';
-import {useNavigate} from 'react-router-dom';
-import styled from 'styled-components';
-import examApi from '../../../api/exam';
-import CardExam from './components/CardExam';
-import ListFile from './components/ListFile';
-import {Label} from 'flowbite-react';
-import firebaseInstance from '../../../services/firebase';
-import fileApi from '../../../api/file';
-import {sendEmail} from '../../../services/email';
+import { Button } from "@mui/material";
+import { Label } from "flowbite-react";
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import styled from "styled-components";
+import examApi from "../../../api/exam";
+import fileApi from "../../../api/file";
+import firebaseInstance from "../../../services/firebase";
+import CardExam from "./components/CardExam";
+import ListFile from "./components/ListFile";
 // import * as nodemailer from 'nodemailer';
 
 // const nodemailer = require('nodemailer');
@@ -21,13 +20,13 @@ const Examination = () => {
 
   useEffect(() => {
     const fetchExams = async () => {
-      const res = await examApi.getExamByMentorId('65840127a47c189dd995cdf3');
+      const res = await examApi.getExamByMentorId("65840127a47c189dd995cdf3");
       console.log(res);
       setExams(res);
     };
 
     const fetchFiles = async () => {
-      const res = await fileApi.getFilesByMentorId('65840127a47c189dd995cdf3');
+      const res = await fileApi.getFilesByMentorId("65840127a47c189dd995cdf3");
       console.log(res);
       setFiles(res);
     };
@@ -37,14 +36,14 @@ const Examination = () => {
   }, []);
 
   const handleAddExam = () => {
-    console.log('Thêm đề thi');
+    console.log("Thêm đề thi");
     navigate(`/mentor/examination/${exams[0].id}`);
   };
 
   const editName = (mnetorId, fileName) => {
-    const lastDotIndex = fileName.lastIndexOf('.');
-    let name = '',
-      extension = '';
+    const lastDotIndex = fileName.lastIndexOf(".");
+    let name = "",
+      extension = "";
 
     // Nếu có dấu chấm, cắt chuỗi để chỉ giữ phần đầu đến trước dấu chấm
     if (lastDotIndex !== -1) {
@@ -55,31 +54,31 @@ const Examination = () => {
       name = fileName;
     }
 
-    return name + '-' + mnetorId + '.' + extension;
+    return name + "-" + mnetorId + "." + extension;
   };
 
   const handleAddFile = async () => {
-    const input = document.createElement('input');
-    input.type = 'file';
-    input.accept = '.pdf, .docx, .doc, .xlsx, .xls, .ppt, .pptx, .txt';
+    const input = document.createElement("input");
+    input.type = "file";
+    input.accept = ".pdf, .docx, .doc, .xlsx, .xls, .ppt, .pptx, .txt";
     input.multiple = true;
     // storeFile();
 
-    input.addEventListener('change', (event) => {
+    input.addEventListener("change", (event) => {
       const filesInput = event.target.files;
 
       filesInput.forEach((file) => {
         console.log(file);
         let fileData = {
-          mentorId: '65840127a47c189dd995cdf3',
+          mentorId: "65840127a47c189dd995cdf3",
           name: file.name,
-          link: '',
+          link: "",
           size: file.size,
           type: file.type,
           createdDate: new Date().toISOString(),
         };
         firebaseInstance
-          .storeFile('files', file, fileData.mentorId)
+          .storeFile("files", file, fileData.mentorId)
           .then(async (url) => {
             fileData.link = url;
             await fileApi.createFile(fileData);
@@ -95,7 +94,7 @@ const Examination = () => {
   return (
     <Container>
       <ButtonContainer>
-        <Label style={{fontSize: '20px', fontWeight: 'bold'}}>
+        <Label style={{ fontSize: "20px", fontWeight: "bold" }}>
           Danh sách đề thi
         </Label>
         <Button
@@ -114,7 +113,7 @@ const Examination = () => {
         </ExamContainer>
       ) : null}
       <ButtonContainer>
-        <Label style={{fontSize: '20px', fontWeight: 'bold'}}>
+        <Label style={{ fontSize: "20px", fontWeight: "bold" }}>
           Danh sách tài liệu
         </Label>
         <Button
