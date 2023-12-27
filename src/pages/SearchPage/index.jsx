@@ -81,7 +81,9 @@ function Search() {
               width: "100%",
             }}
           >
-            Tìm thấy {searchResult.length} mentor
+            {searchResult.length === 0
+              ? "Không tìm thấy mentor nào "
+              : `Tìm thấy ${searchResult.length} mentor`}
           </h5>
           {searchResult.map((mentor, index) => {
             const mentorSkills = skills.filter((skill) =>

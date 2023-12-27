@@ -52,7 +52,15 @@ class Firebase {
     firestoreService.getDoc(firestoreService.doc(this.db, 'users', id));
 
   passwordUpdate = (password) => this.auth.currentUser.updatePassword(password);
+  changePassword = (currentPassword, newPassword) => {
+    const user = this.auth.currentUser;
+    console.log("changePassword", user, currentPassword, newPassword);
+    const credential = authService.EmailAuthProvider.credential(
+      user.email,
+      currentPassword
+    );
 
+<<<<<<< HEAD
   changePassword = (currentPassword, newPassword) =>
     new Promise((resolve, reject) => {
       this.reauthenticate(currentPassword)
@@ -67,6 +75,16 @@ class Firebase {
         })
         .catch((error) => reject(error));
     });
+=======
+    // Reauthenticate the user
+    return authService
+      .reauthenticateWithCredential(user, credential)
+      .then(() => {
+        // Update the password
+        return authService.updatePassword(user, newPassword);
+      });
+  };
+>>>>>>> b5e30db (update UI, add change password)
 
   onAuthStateChanged = () =>
     new Promise((resolve, reject) => {

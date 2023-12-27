@@ -1,56 +1,57 @@
-import React, {useState} from 'react';
-import {Table, Checkbox, Label} from 'flowbite-react';
-import ViewDetailApplication from './ViewDetailApplication';
-import RejectedApplication from './RejectedApplication';
-import {format} from 'date-fns';
-import {FaCopy} from 'react-icons/fa';
-import {handleCopyClick, shortenId} from '../../../../utils/dataHelper';
-import {ApprovalStatus} from '../../../../constants';
+import { format } from "date-fns";
+import { Checkbox, Label, Table } from "flowbite-react";
+import { useState } from "react";
+import { FaCopy } from "react-icons/fa";
+import { ApprovalStatus } from "../../../../constants";
+import { handleCopyClick, shortenId } from "../../../../utils/dataHelper";
+import RejectedApplication from "./RejectedApplication";
+import ViewDetailApplication from "./ViewDetailApplication";
 
-export default function ListApplications({applications}) {
-  const [checkedItems, setCheckedItems] = useState({});
+export default function ListApplications({
+  checkedItems,
+  resetSelectedItems,
+  applications,
+  onSelectedItems,
+}) {
+  // const [checkedItems, setCheckedItems] = useState({});
   const [selectAll, setSelectAll] = useState(false);
 
   const handleChange = (event) => {
-    setCheckedItems({
-      ...checkedItems,
-      [event.target.name]: event.target.checked,
-    });
+    onSelectedItems(event);
   };
-  console.log('checkbox', checkedItems);
+  console.log("checkbox", checkedItems);
 
   const handleSelectAll = () => {
-    const newCheckedItems = {};
-    applications.forEach((_, index) => {
-      newCheckedItems[`checkbox-${index}`] = !selectAll;
-    });
-    setCheckedItems(newCheckedItems);
-    setSelectAll(!selectAll);
+    // const newCheckedItems = {};
+    // applications.forEach((_, index) => {
+    //   newCheckedItems[`checkbox-${index}`] = !selectAll;
+    // });
+    // setSelectAll(!selectAll);
   };
 
   const getStatusColor = (status) => {
     switch (status) {
       case ApprovalStatus.PENDING:
-        return 'bg-yellow-500'; // Hoặc màu khác tùy thuộc vào yêu cầu của bạn
+        return "bg-yellow-500"; // Hoặc màu khác tùy thuộc vào yêu cầu của bạn
       case ApprovalStatus.APPROVED:
-        return 'bg-green-400';
+        return "bg-green-400";
       case ApprovalStatus.REJECTED:
-        return 'bg-red-500';
+        return "bg-red-500";
       default:
-        return '';
+        return "";
     }
   };
 
   const getStatusText = (status) => {
     switch (status) {
       case ApprovalStatus.PENDING:
-        return 'Đang chờ duyệt';
+        return "Đang chờ duyệt";
       case ApprovalStatus.APPROVED:
-        return 'Đã duyệt';
+        return "Đã duyệt";
       case ApprovalStatus.REJECTED:
-        return 'Bị từ chối';
+        return "Bị từ chối";
       default:
-        return '';
+        return "";
     }
   };
 
@@ -84,11 +85,11 @@ export default function ListApplications({applications}) {
             <Table.Cell className="w-4 p-4">
               <div className="flex items-center">
                 <Checkbox
-                  checked={checkedItems[`checkbox-${index}`] || false} // Sử dụng trạng thái từ state
+                  checked={checkedItems[`${application.id}`] || false} // Sử dụng trạng thái từ state
                   onChange={handleChange} // Thêm hàm xử lý sự kiện thay đổi
                   aria-describedby={`checkbox-${index}`}
                   id={`checkbox-${index}`}
-                  name={`checkbox-${index}`} // Thêm thuộc tính name để xác định checkbox cụ thể nào đang được thay đổi
+                  name={`${application.id}`} // Thêm thuộc tính name để xác định checkbox cụ thể nào đang được thay đổi
                 />
                 <label htmlFor={`checkbox-${index}`} className="sr-only">
                   checkbox
@@ -115,7 +116,7 @@ export default function ListApplications({applications}) {
               <div className="text-sm font-normal text-gray-500 dark:text-gray-400">
                 <div className="text-base font-semibold text-gray-900 dark:text-white">
                   {application.menteeProfile.firstName +
-                    ' ' +
+                    " " +
                     application.menteeProfile.lastName}
                 </div>
                 <div className="text-sm font-normal text-gray-500 dark:text-gray-400">
@@ -124,7 +125,7 @@ export default function ListApplications({applications}) {
               </div>
             </Table.Cell>
             <Table.Cell className="whitespace-nowrap p-4 text-base font-medium text-gray-900 dark:text-white">
-              {format(new Date(application.applicationDate), 'dd-MM-yyyy')}
+              {format(new Date(application.applicationDate), "dd-MM-yyyy")}
             </Table.Cell>
             <Table.Cell className="whitespace-nowrap p-4 text-base font-normal text-gray-900 dark:text-white">
               <div className="flex items-center">
@@ -139,7 +140,10 @@ export default function ListApplications({applications}) {
 
             <Table.Cell>
               <div className="flex items-center gap-x-3 whitespace-nowrap">
-                <ViewDetailApplication application={application} />
+                <ViewDetailApplication
+                  resetSelectedItems={resetSelectedItems}
+                  application={application}
+                />
                 <RejectedApplication application={application} />
               </div>
             </Table.Cell>

@@ -69,7 +69,7 @@ export default function MentorAvailabilityCalendar({
         addEvent={handleAddEvent}
         removeEvent={handleRemoveEvent}
       ></AddTimeButton>
-      <TeachingCalendar events={[...events]}></TeachingCalendar>
+      <TeachingCalendar events={events}></TeachingCalendar>
     </div>
   );
 }
@@ -125,7 +125,7 @@ function AddTimeButton({ plan, events, learningTime, removeEvent, addEvent }) {
     const end = getDateAndTime(targetDate, endTime);
 
     const newEvent = {
-      id: Date.now(),
+      id: Date.now().toString(),
       start,
       title: title,
       weeks: plan.weeks,

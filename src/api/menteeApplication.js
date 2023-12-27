@@ -57,6 +57,17 @@ const menteeApplicationApi = {
       return null;
     }
   },
+  updateMenteeApplication: async (id, application) => {
+    try {
+      const url = `/menteeApplication/update/${id}`;
+      const res = await axiosClient.put(url, application);
+      console.log("res", res.data);
+      return res.data;
+    } catch (error) {
+      console.error(error);
+      return null;
+    }
+  },
 
   deleteMenteeApplication: async (id) => {
     try {

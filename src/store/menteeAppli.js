@@ -47,4 +47,18 @@ export const useMenteeAppliStore = create((set) => ({
       console.error(error);
     }
   },
+  updateMenteeApplication: async (id, application) => {
+    try {
+      const updatedMenteeApplication =
+        await menteeApplicationApi.updateMenteeApplication(id, application);
+
+      set((state) => ({
+        menteeApplications: state.menteeApplications.map((app) =>
+          app.id === id ? updatedMenteeApplication : app
+        ),
+      }));
+    } catch (error) {
+      console.error(error);
+    }
+  },
 }));

@@ -25,7 +25,6 @@ const steps = [
 export default function ApplyMentee() {
   const [page, setPage] = useState(0);
   const [mentor, setMentor] = useState();
-  const [allowNext, setAllowNext] = useState(true);
   const [isSuccess, setIsSuccess] = useState(false);
   const location = useLocation();
   const { user } = useUserStore();
@@ -56,7 +55,7 @@ export default function ApplyMentee() {
         start: e.start.getTime(),
         end: e.end.getTime(),
       }));
-      
+
       const application = {
         ...values,
         fee: plan.price,

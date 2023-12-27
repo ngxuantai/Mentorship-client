@@ -1,13 +1,14 @@
-import PrivacyTipIcon from "@mui/icons-material/PrivacyTip";
 import { Button } from "flowbite-react";
 import { useEffect, useState } from "react";
 import styled from "styled-components";
 import paymentApi from "../../../../api/payment";
 import planApi from "../../../../api/plan";
 import { PlanType } from "../../../../constants";
+import { useUserStore } from "../../../../store/userStore";
 import PlanItem from "./PlanItem";
 
 const Plan = () => {
+  const { user } = useUserStore();
   const [plans, setPlans] = useState([]);
   const [planLite, setPlanLite] = useState({});
   const [planStandard, setPlanStandard] = useState({});
@@ -16,8 +17,8 @@ const Plan = () => {
 
   useEffect(() => {
     const fetchPlans = async () => {
-      const res = await planApi.getPlanByMentorId("65840127a47c189dd995cdf3");
-      console.log(res);
+      const res = await planApi.getPlanByMentorId(user.id);
+      console.log("fetchPlans", res);
       setPlans(res);
     };
     // get request payment
@@ -50,7 +51,17 @@ const Plan = () => {
     }
   }, [plans]);
 
+  const checkIsOnePlanActive = () => {
+    const liteActive = planLite.isActive;
+    const standardActive = planStandard.isActive;
+    const proActive = planPro.isActive;
+    return liteActive || standardActive || proActive;
+  };
   const handleUpdatePlan = async (updatedPlan) => {
+    if (!checkIsOnePlanActive()) {
+      alert("Phải có ít nhất 1 gói học hoạt động");
+      return;
+    }
     const checkPlan = plans.find((plan) => plan.id === updatedPlan.id);
     if (checkPlan) {
       try {

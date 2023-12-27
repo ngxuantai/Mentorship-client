@@ -53,7 +53,8 @@ function PlanList({ mentor }) {
   const fetchPlans = async () => {
     const res = await planApi.getPlanByMentorId(mentor.id);
     console.log("fetchPlans", res);
-    setPlans(res);
+
+    setPlans(res.filter((plan) => plan.isActive));
   };
   const getPlanName = (planName) => {
     switch (planName) {
@@ -96,16 +97,14 @@ export default PlanList;
 function PlanItem({ plan, mentor }) {
   const navigate = useNavigate();
   const { user } = useUserStore();
-  const [isApplied, setIsApplied] = useState(false);
+  const [notApplied, setNotAppied] = useState(false);
   const handleNavigateToApply = () => {
-    if (!isApplied) {
+    if (notApplied) {
       navigate(`/mentee/apply/${mentor.id}`, { state: { plan } });
     }
   };
   useEffect(() => {
     if (user) {
-      console.log("checkIsApplied x", user, mentor);
-
       const checkIsApplied = async () => {
         const data = await menteeApplicationApi.checkMenteeRegistration(
           user.id,
@@ -113,12 +112,8 @@ function PlanItem({ plan, mentor }) {
         );
         console.log("checkIsApplied", data, user, mentor);
         if (data) {
-          const { HasRegistered, HasTimeLeft } = data;
-          if (HasRegistered && HasTimeLeft) {
-            setIsApplied(true);
-          } else {
-            setIsApplied(false);
-          }
+          const { canProceed } = data;
+          setNotAppied(canProceed);
         }
       };
       checkIsApplied();
@@ -171,7 +166,7 @@ function PlanItem({ plan, mentor }) {
             className="my-2"
             variant="secondary"
           >
-            {isApplied ? "Bạn đã nộp đơn " : "Nộp đơn"}
+            {notApplied ? "Nộp đơn" : "Bạn đã nộp đơn "}
           </Button>
 
           <div></div>

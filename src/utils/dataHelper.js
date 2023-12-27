@@ -1,5 +1,5 @@
 import { addDays, addHours, addMinutes, startOfWeek } from "date-fns";
-import { ApprovalStatus, PaymentStatus } from "../constants";
+import { ApprovalStatus, PaymentStatus, PlanType } from "../constants";
 export function isEmptyObject(obj) {
   for (var prop in obj) {
     if (Object.prototype.hasOwnProperty.call(obj, prop)) {
@@ -63,6 +63,18 @@ export const mappingPaymentStatus = (status) => {
       return null;
   }
 };
+export const mappingPlanName = (planName) => {
+  switch (planName) {
+    case PlanType.LITE:
+      return "Lite";
+    case PlanType.STANDARD:
+      return "Standard";
+    case PlanType.PRO:
+      return "Pro";
+    default:
+      return "";
+  }
+};
 
 // Hàm trợ giúp để kiểm tra xem hai khoảng thời gian có chồng chéo nhau không
 const isOverlap = (newStart, newEnd, eventStart, eventEnd) => {
@@ -102,7 +114,7 @@ export const checkIfEventOverlap = (events, newEvent) => {
 };
 export const checkAndRemoveExpiredEvents = (weekList) => {
   const now = new Date().getTime();
-
+  
   return weekList.map((week) =>
     week.filter((event) => {
       // Kiểm tra xem sự kiện có thuộc tính 'weeks' hay không
