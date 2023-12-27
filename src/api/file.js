@@ -23,4 +23,28 @@ const fileApi = {
   },
 };
 
-export default fileApi;
+const folderApi = {
+  getFoldersByMentorId: async (mentorId) => {
+    try {
+      const url = `/api/folder/getByMentorId/${mentorId}`;
+      const res = await axiosClient.get(url);
+      console.log('folder res data', res.data);
+      return res.data;
+    } catch (error) {
+      console.error(error);
+      return null;
+    }
+  },
+  createFolder: async (folder) => {
+    try {
+      const url = '/api/folder/create';
+      const res = await axiosClient.post(url, folder);
+      return res.data;
+    } catch (error) {
+      console.error(error);
+      return null;
+    }
+  },
+};
+
+export {fileApi, folderApi};

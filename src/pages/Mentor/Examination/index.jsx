@@ -5,18 +5,17 @@ import styled from 'styled-components';
 import examApi from '../../../api/exam';
 import CardExam from './components/CardExam';
 import ListFile from './components/ListFile';
+import ListFolder from './components/ListFolder';
 import {Label} from 'flowbite-react';
 import firebaseInstance from '../../../services/firebase';
-import fileApi from '../../../api/file';
-import {sendEmail} from '../../../services/email';
-// import * as nodemailer from 'nodemailer';
-
+import {fileApi, folderApi} from '../../../api/file';
 // const nodemailer = require('nodemailer');
 
 const Examination = () => {
   const navigate = useNavigate();
 
   const [exams, setExams] = useState([]);
+  const [folders, setFolders] = useState([]);
   const [files, setFiles] = useState([]);
 
   useEffect(() => {
@@ -32,7 +31,16 @@ const Examination = () => {
       setFiles(res);
     };
 
+    const fecthFolders = async () => {
+      const res = await folderApi.getFoldersByMentorId(
+        '65840127a47c189dd995cdf3'
+      );
+      console.log(res);
+      setFolders(res);
+    };
+
     fetchExams();
+    fecthFolders();
     fetchFiles();
   }, []);
 
@@ -113,22 +121,25 @@ const Examination = () => {
           ))}
         </ExamContainer>
       ) : null}
-      <ButtonContainer>
-        <Label style={{fontSize: '20px', fontWeight: 'bold'}}>
-          Danh sách tài liệu
-        </Label>
-        <Button
-          variant="contained"
-          color="primary"
-          onClick={() => handleAddFile()}
-        >
-          Thêm tài liệu
-        </Button>
-      </ButtonContainer>
       {files.length > 0 ? (
-        <ListFile files={files} />
+        // <ListFile files={files} />
+        <ListFolder folders={folders} />
       ) : (
-        <Label>Chưa có tài liệu</Label>
+        <>
+          <ButtonContainer>
+            <Label style={{fontSize: '20px', fontWeight: 'bold'}}>
+              Danh sách tài liệu
+            </Label>
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={() => handleAddExam()}
+            >
+              Thêm tài liệu
+            </Button>
+          </ButtonContainer>
+          <Label>Chưa có tài liệu</Label>
+        </>
       )}
     </Container>
   );
