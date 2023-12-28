@@ -38,7 +38,7 @@ const Plan = () => {
   }, []);
 
   useEffect(() => {
-    if (plans.length > 0) {
+    if (plans && plans.length > 0) {
       const planLite = plans.find((plan) => plan.name === PlanType.LITE);
       const planStandard = plans.find(
         (plan) => plan.name === PlanType.STANDARD
@@ -75,10 +75,6 @@ const Plan = () => {
   };
 
   const [url, setUrl] = useState("");
-  const handleCheckOut = () => {
-    //redirect to url
-    window.location.href = url;
-  };
 
   return (
     <Container>
@@ -99,7 +95,7 @@ const Plan = () => {
       </TipsContainer> */}
 
       <ContentContainer>
-        {plans.length === 0 ? (
+        {plans?.length === 0 ? (
           <p>Chưa có kế hoạch dạy</p>
         ) : (
           <>
@@ -149,7 +145,6 @@ const Plan = () => {
           </>
         )}
       </ContentContainer>
-      <Button onClick={() => handleCheckOut()}>Thanh toan</Button>
     </Container>
   );
 };

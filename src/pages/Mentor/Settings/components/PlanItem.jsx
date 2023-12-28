@@ -14,11 +14,12 @@ import currencyFormatter from "../../../../utils/moneyConverter";
 const PlanItem = ({ plan, onUpdatePlan }) => {
   const [editedPlan, setEditedPlan] = useState(plan);
   const [isPlanModified, setIsPlanModified] = useState(false);
-
   useEffect(() => {
     const isModified =
       plan.callTimes !== editedPlan.callTimes ||
       plan.price !== editedPlan.price ||
+      plan.weeks !== editedPlan.weeks ||
+      plan.isActive !== editedPlan.isActive ||
       plan.description !== editedPlan.description;
 
     setIsPlanModified(isModified);
