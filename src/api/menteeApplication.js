@@ -34,10 +34,9 @@ const menteeApplicationApi = {
       return null;
     }
   },
-
   getMenteeApplicationByMentorId: async (mentorId) => {
     try {
-      const url = `/menteeApplication/getMenteeApplicationByMentorId/${mentorId}`;
+      const url = `/menteeApplication/getMenteeApplicationByMentorId?mentorId=${mentorId}`;
       const res = await axiosClient.get(url);
       return res.data.data;
     } catch (error) {

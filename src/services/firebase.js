@@ -10,7 +10,6 @@ import {
   uploadBytesResumable,
 } from "firebase/storage";
 import firebaseConfig from "../config/firebase";
-import { checkAndRemoveExpiredEvents } from "../utils/dataHelper";
 
 class Firebase {
   constructor() {
@@ -168,20 +167,9 @@ class Firebase {
     return eventId;
   };
 
-  updateEvent = async (userId, dayOfWeek, eventId, event) => {
-    const eventRef = databaseService.ref(
-      this.realtimeDb,
-      userId + "/calendars/" + dayOfWeek
-    );
-
-    const events = await this.getEvents(userId, dayOfWeek);
-
-    const index = events.findIndex((e) => e.id === eventId);
-    if (index !== -1) {
-      events[index] = { ...event, id: eventId };
-
-      await databaseService.set(eventRef, events);
-    }
+  updateEvent = async (userId, oldDayOfWeek, newDayOfWeek, eventId, event) => {
+    await this.addEvent(userId, newDayOfWeek, event);
+    await this.deleteEvent(userId, oldDayOfWeek, eventId);
   };
 
   deleteEvent = async (userId, dayOfWeek, eventId) => {
@@ -189,7 +177,6 @@ class Firebase {
       this.realtimeDb,
       userId + "/calendars/" + dayOfWeek
     );
-
     const events = await this.getEvents(userId, dayOfWeek);
 
     const index = events.findIndex((e) => e.id === eventId);
@@ -205,9 +192,9 @@ class Firebase {
       databaseService.ref(this.realtimeDb, userId + "/calendars"),
       (snapshot) => {
         const weekEvents = snapshot.val();
-        const checkedEvents = checkAndRemoveExpiredEvents(weekEvents);
-        console.log("mentor weekEvents", weekEvents);
-        this.setUserEvent(userId, checkedEvents);
+        // const checkedEvents = checkAndRemoveExpiredEvents(weekEvents);
+        // console.log("mentor weekEvents",checkedEvents, weekEvents);
+        // this.setUserEvent(userId, checkedEvents);
         onEventChange(weekEvents);
       }
     );

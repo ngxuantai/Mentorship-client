@@ -1,3 +1,4 @@
+import { format, getDay } from "date-fns";
 import { DaysInVietnamese } from "../constants";
 
 export function formatTime(date) {
@@ -23,4 +24,21 @@ export function convertTimestampRange(start, end) {
   const dayOfWeek = date1.getDay();
 
   return `${hours1}:${minutes1} - ${hours2}:${minutes2} ${DaysInVietnamese[dayOfWeek]}`;
+}
+export const getDateAndTime = (date, time) => {
+  const [hours, minutes] = time.split(":");
+  return new Date(
+    date.getFullYear(),
+    date.getMonth(),
+    date.getDate(),
+    Number(hours),
+    Number(minutes)
+  );
+};
+
+export function convertTimestamp(timestamp) {
+  const date = new Date(timestamp);
+  const dayOfWeek = getDay(date);
+  const time = format(date, "HH:mm");
+  return { dayOfWeek, time };
 }

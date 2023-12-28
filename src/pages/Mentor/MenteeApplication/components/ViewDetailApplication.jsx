@@ -2,11 +2,11 @@ import { format } from "date-fns";
 import { Button, Label, Modal } from "flowbite-react";
 import { useEffect, useState } from "react";
 import { HiOutlineEye } from "react-icons/hi";
-import learningProgressApi from "../../../../api/learningProgress";
 import { ApprovalStatus } from "../../../../constants";
 import firebaseInstance from "../../../../services/firebase";
 import { useMenteeAppliStore } from "../../../../store/menteeAppli";
 import { useUserStore } from "../../../../store/userStore";
+import { checkIfEventOverlap } from "../../../../utils/dataHelper";
 
 export default function ViewApplicationDetail({
   resetSelectedItems,
@@ -17,12 +17,35 @@ export default function ViewApplicationDetail({
   const menteeProfile = application.menteeProfile;
   const [isOpen, setOpen] = useState(false);
   const [isShow, setShow] = useState(false);
+  const [events, setEvents] = useState(false);
 
   const { updateMenteeAppliStatus } = useMenteeAppliStore();
-  //   const {applications, updateApplicationStatus} = useApplicationStore();
-  // const onImageClick = () => {
-  //   setShow(true);
-  // };
+
+  const onEventChange = (weekList) => {
+    if (!weekList) return;
+    const filteredEvents = weekList
+      .map((week) => {
+        return week.map((e) => {
+          return {
+            ...e,
+            start: new Date(e.start),
+            end: new Date(e.end),
+          };
+        });
+      })
+      .flat();
+
+    setEvents(filteredEvents);
+  };
+  useEffect(() => {
+    if (application) {
+      const unsubscribe = firebaseInstance.observeCalendarChanges(
+        application.mentorId,
+        onEventChange
+      );
+      return () => unsubscribe();
+    }
+  }, [application]);
 
   const closeModal = () => {
     if (isOpen && !isShow) {
@@ -31,19 +54,29 @@ export default function ViewApplicationDetail({
     setShow(false);
   };
 
+  const checkHasEventOverLap = (learningEvents) => {
+    return learningEvents.some((l) => checkIfEventOverlap(events, l));
+  };
   const saveEventToMentorCalendar = async () => {
-    console.log("saveEventToMentorCalendar", application.learningTime);
     await Promise.all(
-      application.learningTime.map(async (time) => {
-        const dayOfWeek = new Date(time.start).getDay();
-        await firebaseInstance.addEvent(user.id, dayOfWeek, time);
+      application.learningTime.map(async (e) => {
+        const dayOfWeek = new Date(e.start).getDay();
+
+        await firebaseInstance.addEvent(application.mentorId, dayOfWeek, {
+          ...e,
+          applicationId: application.id,
+        });
       })
     );
   };
   const handleAcceptApplication = async () => {
     try {
+      if (checkHasEventOverLap(application.learningTime)) {
+        alert("Lịch học bị trùng");
+        return;
+      }
+      // await learningProgressApi.createLearningProgress(application);
       await updateMenteeAppliStatus(application.id, ApprovalStatus.APPROVED);
-      await learningProgressApi.createLearningProgress(application);
       await saveEventToMentorCalendar();
       resetSelectedItems();
       setOpen(false);

@@ -34,9 +34,22 @@ const learningProgressApi = {
       return null;
     }
   },
-  getLearningProgressByMentorId: async (mentorId) => {
+  getLearningProgressByMentorId: async (mentorId, year) => {
     try {
-      const url = `/learningProgress/getLearningProgressByMentorId/${mentorId}`;
+      const url = `/learningProgress/getLearningProgressByMentorId/${mentorId}${
+        year ? `/${year}` : ""
+      }`;
+      const res = await axiosClient.get(url);
+      return res.data.data;
+    } catch (error) {
+      console.error(error);
+      return null;
+    }
+  },
+
+  getLearningProgressByApplicationId: async (applicationId) => {
+    try {
+      const url = `/learningProgress/getLearningProgressByApplicationId/${applicationId}`;
       const res = await axiosClient.get(url);
       return res.data.data;
     } catch (error) {

@@ -35,6 +35,7 @@ const ApplicationListPage = () => {
   const [mentorEvents, setMentorEvents] = useState([]);
   const [selectedApplications, setSelectedApplication] = useState({});
   const [selectedOption, setSelectedOption] = useState(dropdownOption[1]);
+  console.log("mentorEvents", mentorEvents);
 
   const [show, setShow] = useState(false);
 
@@ -246,10 +247,10 @@ const ApplicationListPage = () => {
           <div className="inline-block min-w-full align-middle">
             <div className="overflow-hidden shadow">
               <ListApplications
-                resetSelectedItems={resetSelectedItems}
                 checkedItems={selectedApplications}
-                onSelectedItems={handleSetSelectedItem}
                 applications={applicationList}
+                resetSelectedItems={resetSelectedItems}
+                onSelectedItems={handleSetSelectedItem}
               />
             </div>
           </div>

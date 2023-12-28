@@ -10,11 +10,16 @@ import { rrulestr } from "rrule";
 const localizer = momentLocalizer(moment);
 const daysOfWeek = ["SU", "MO", "TU", "WE", "TH", "FR", "SA"];
 
-export default function TeachingCalendar({ events }) {
+export default function TeachingCalendar({
+  events,
+  selectedEvent: parentSelectedEvent,
+  handleSelectEvent: parentHandleSelectEvent,
+}) {
   const startOfWeek = moment().startOf("week").toDate();
   startOfWeek.setHours(7, 0, 0);
   const [recuringEvents, setRecuringEvents] = useState(events);
 
+  const handleSelectEvent = parentHandleSelectEvent || ((event) => {});
   useEffect(() => {
     if (events) {
       const data = events.map((e) => createRecurringEvent(e)).flat();
@@ -67,11 +72,13 @@ export default function TeachingCalendar({ events }) {
   return (
     <div style={{ width: 1000, margin: "auto" }}>
       <Calendar
+        selected={parentSelectedEvent}
         localizer={localizer}
         events={recuringEvents}
         startAccessor="start"
         min={startOfWeek}
         defaultView="week"
+        onSelectEvent={handleSelectEvent}
         max={new Date(2023, 11, 20, 23, 0)}
         endAccessor="end"
         onNavigate={handleNavigate}

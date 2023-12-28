@@ -8,6 +8,7 @@ import menteeApplicationApi from "../../../api/menteeApplication";
 import mentorApi from "../../../api/mentor";
 import { PlanType } from "../../../constants";
 import { useUserStore } from "../../../store/userStore";
+import { getRandomColor } from "../../../utils/randomColor";
 import AboutYou from "./components/AboutYou";
 import Expectation from "./components/Expectation";
 import Goal from "./components/Goal";
@@ -31,7 +32,7 @@ export default function ApplyMentee() {
   const { mentorId } = useParams();
   const plan = location.state?.plan;
 
-  console.log("selectedPlan", plan);
+  console.log("selectedPlan user", plan, user);
 
   const [values, setValues] = useState({
     plan: plan,
@@ -48,12 +49,15 @@ export default function ApplyMentee() {
     }));
   };
   const handleFinish = async () => {
+    const color = getRandomColor();
     try {
       const learningTimeInTimestamp = values.learningTime.map((e) => ({
         ...e,
         id: null,
+        title: `Lịch dạy ${user.lastName} ${user.firstName}`,
         start: e.start.getTime(),
         end: e.end.getTime(),
+        color,
       }));
 
       const application = {
