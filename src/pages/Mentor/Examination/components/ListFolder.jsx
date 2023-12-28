@@ -4,7 +4,9 @@ import {Table, TextInput, Button, Label} from 'flowbite-react';
 import CheckIcon from '@mui/icons-material/Check';
 import CloseIcon from '@mui/icons-material/Close';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
+import CreateNewFolderIcon from '@mui/icons-material/CreateNewFolder';
 import ListFile from './ListFile';
+import AddFile from './AddFile';
 import {format, set} from 'date-fns';
 import {folderApi} from '../../../../api/file';
 
@@ -38,7 +40,13 @@ export default function ListFolder({folders}) {
     <Container>
       <ButtonContainer>
         <div>
-          <Label style={{fontSize: '20px', fontWeight: 'bold'}}>
+          <Label
+            style={{fontSize: '20px', fontWeight: 'bold'}}
+            onClick={() => {
+              setShowDetail(false);
+              setFolderDetail({});
+            }}
+          >
             Danh sách tài liệu
           </Label>
           <Label style={{fontSize: '16px'}}>
@@ -46,10 +54,10 @@ export default function ListFolder({folders}) {
             {showDetail && folderDetail.name}
           </Label>
         </div>
-        <Button onClick={() => handleAddExam()}>Thêm tài liệu</Button>
+        <AddFile folderDeatil={folderDetail} />
       </ButtonContainer>
       {showDetail ? (
-        <ListFile />
+        <ListFile folder={folderDetail} />
       ) : (
         <Table className="min-w-full divide-y divide-gray-200 dark:divide-gray-600">
           <Table.Head
@@ -60,37 +68,42 @@ export default function ListFolder({folders}) {
               color: 'black',
             }}
           >
-            <Table.HeadCell style={{width: '55%'}}>Tên</Table.HeadCell>
-            <Table.HeadCell style={{width: '40%'}}>Ngày đăng</Table.HeadCell>
+            <Table.HeadCell style={{width: '65%'}}>Tên</Table.HeadCell>
+            <Table.HeadCell style={{width: '30%'}}>Ngày đăng</Table.HeadCell>
             <Table.HeadCell style={{display: 'flex', justifyContent: 'center'}}>
               <Button
                 onClick={() => {
                   setAddingFolder(true);
                 }}
+                size="xs"
               >
-                Thêm
+                <CreateNewFolderIcon /> Thêm
               </Button>
             </Table.HeadCell>
           </Table.Head>
           <Table.Body className="divide-y divide-gray-200 bg-white dark:divide-gray-700 dark:bg-gray-800">
-            {listFolder.map((folder, index) => (
-              <Table.Row
-                key={index}
-                className="hover:bg-gray-100 dark:hover:bg-gray-700"
-                onClick={() => handleDetailFolder(folder)}
-              >
-                <Table.Cell className="whitespace-nowrap p-4 text-base font-medium text-black dark:text-white">
-                  <div className="text-sm font-normal text-gray-500 dark:text-gray-400">
-                    <div className="text-base font-semibold text-gray-900 dark:text-white">
-                      {folder.name}
-                    </div>
-                  </div>
-                </Table.Cell>
-                <Table.Cell className="whitespace-nowrap p-4 text-base text-black dark:text-white">
-                  {format(new Date(folder.createdDate), 'dd-MM-yyyy')}
-                </Table.Cell>
-              </Table.Row>
-            ))}
+            {listFolder.length > 0 ? (
+              <>
+                {listFolder.map((folder, index) => (
+                  <Table.Row
+                    key={index}
+                    className="hover:bg-gray-100 dark:hover:bg-gray-700"
+                    onClick={() => handleDetailFolder(folder)}
+                  >
+                    <Table.Cell className="whitespace-nowrap p-4 text-base font-medium text-black dark:text-white">
+                      <div className="text-sm font-normal text-gray-500 dark:text-gray-400">
+                        <div className="text-base font-semibold text-gray-900 dark:text-white">
+                          {folder.name}
+                        </div>
+                      </div>
+                    </Table.Cell>
+                    <Table.Cell className="whitespace-nowrap p-4 text-base text-black dark:text-white">
+                      {format(new Date(folder.createdDate), 'dd-MM-yyyy')}
+                    </Table.Cell>
+                  </Table.Row>
+                ))}
+              </>
+            ) : null}
             {addingFolder && (
               <Table.Row>
                 <Table.Cell className="whitespace-nowrap p-4 text-base font-medium text-black dark:text-white">
@@ -110,14 +123,15 @@ export default function ListFolder({folders}) {
                 <Table.Cell>
                   <div style={{display: 'flex', gap: '10px'}}>
                     <Button
-                      style={{width: '50px'}}
+                      // style={{width: '50px'}}
                       color="blue"
                       onClick={() => handleAddFolder()}
+                      size="xs"
                     >
                       <CheckIcon />
                     </Button>
                     <Button
-                      style={{width: '50px'}}
+                      size="xs"
                       color="failure"
                       onClick={() => {
                         setAddingFolder(false);

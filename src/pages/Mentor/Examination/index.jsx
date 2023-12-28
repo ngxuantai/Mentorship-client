@@ -4,8 +4,8 @@ import {useNavigate} from 'react-router-dom';
 import styled from 'styled-components';
 import examApi from '../../../api/exam';
 import CardExam from './components/CardExam';
-import ListFile from './components/ListFile';
 import ListFolder from './components/ListFolder';
+import AddFile from './components/AddFile';
 import {Label} from 'flowbite-react';
 import firebaseInstance from '../../../services/firebase';
 import {fileApi, folderApi} from '../../../api/file';
@@ -121,8 +121,7 @@ const Examination = () => {
           ))}
         </ExamContainer>
       ) : null}
-      {files.length > 0 ? (
-        // <ListFile files={files} />
+      {folders.length > 0 ? (
         <ListFolder folders={folders} />
       ) : (
         <>
@@ -130,13 +129,14 @@ const Examination = () => {
             <Label style={{fontSize: '20px', fontWeight: 'bold'}}>
               Danh sách tài liệu
             </Label>
-            <Button
+            {/* <Button
               variant="contained"
               color="primary"
               onClick={() => handleAddExam()}
             >
               Thêm tài liệu
-            </Button>
+            </Button> */}
+            <AddFile />
           </ButtonContainer>
           <Label>Chưa có tài liệu</Label>
         </>
