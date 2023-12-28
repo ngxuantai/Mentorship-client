@@ -12,7 +12,7 @@ export const useMenteeAppliStore = create((set) => ({
 
       // Lọc và thêm và o menteeAppliApproved nếu status = 1
       const menteeAppliApproved = menteeApplications.filter(
-        (app) => app.status === 1
+        (app) => app.status === 1 || app.status === 2
       );
       console.log('menteeAppliApproved', menteeAppliApproved);
       set({menteeApplications, menteeAppliApproved});
@@ -25,8 +25,7 @@ export const useMenteeAppliStore = create((set) => ({
       const updatedMenteeApplication =
         await menteeApplicationApi.updateMenteeApplicationStatus(id, status);
 
-      // Nếu status = 1, thêm vào menteeAppliApproved
-      if (status === 1) {
+      if (status === 1 || status === 2) {
         set((state) => ({
           menteeApplications: state.menteeApplications.map((app) =>
             app.id === id ? {...app, status} : app

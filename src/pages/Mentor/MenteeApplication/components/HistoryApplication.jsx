@@ -8,16 +8,16 @@ import {handleCopyClick, shortenId} from '../../../../utils/dataHelper';
 import {ApprovalStatus} from '../../../../constants';
 
 export default function ListApplications({applications}) {
-  const [checkedItems, setCheckedItems] = useState({});
-  const [selectAll, setSelectAll] = useState(false);
+  //   const [checkedItems, setCheckedItems] = useState({});
+  //   const [selectAll, setSelectAll] = useState(false);
 
-  const handleChange = (event) => {
-    setCheckedItems({
-      ...checkedItems,
-      [event.target.name]: event.target.checked,
-    });
-  };
-  console.log('checkbox', checkedItems);
+  //   const handleChange = (event) => {
+  //     setCheckedItems({
+  //       ...checkedItems,
+  //       [event.target.name]: event.target.checked,
+  //     });
+  //   };
+  //   console.log('checkbox', checkedItems);
 
   const handleSelectAll = () => {
     const newCheckedItems = {};
@@ -30,8 +30,6 @@ export default function ListApplications({applications}) {
 
   const getStatusColor = (status) => {
     switch (status) {
-      case ApprovalStatus.PENDING:
-        return 'bg-yellow-500'; // Hoặc màu khác tùy thuộc vào yêu cầu của bạn
       case ApprovalStatus.APPROVED:
         return 'bg-green-400';
       case ApprovalStatus.REJECTED:
@@ -43,12 +41,10 @@ export default function ListApplications({applications}) {
 
   const getStatusText = (status) => {
     switch (status) {
-      case ApprovalStatus.PENDING:
-        return 'Đang chờ duyệt';
       case ApprovalStatus.APPROVED:
-        return 'Đã duyệt';
+        return 'Chấp nhận';
       case ApprovalStatus.REJECTED:
-        return 'Bị từ chối';
+        return 'Từ chối';
       default:
         return '';
     }
@@ -57,7 +53,7 @@ export default function ListApplications({applications}) {
   return (
     <Table className="min-w-full divide-y divide-gray-200 dark:divide-gray-600">
       <Table.Head className="bg-gray-100 dark:bg-gray-700">
-        <Table.HeadCell>
+        {/* <Table.HeadCell>
           <Label htmlFor="select-all" className="sr-only">
             Select all
           </Label>
@@ -67,12 +63,12 @@ export default function ListApplications({applications}) {
             checked={selectAll}
             onChange={handleSelectAll}
           />
-        </Table.HeadCell>
+        </Table.HeadCell> */}
         <Table.HeadCell>Id</Table.HeadCell>
         <Table.HeadCell>Tên</Table.HeadCell>
-        <Table.HeadCell>Ngày gửi</Table.HeadCell>
+        <Table.HeadCell>Ngày duyệt</Table.HeadCell>
         <Table.HeadCell>Trạng thái</Table.HeadCell>
-        <Table.HeadCell></Table.HeadCell>
+        <Table.HeadCell>Lý do từ chối</Table.HeadCell>
       </Table.Head>
 
       <Table.Body className="divide-y divide-gray-200 bg-white dark:divide-gray-700 dark:bg-gray-800">
@@ -81,7 +77,7 @@ export default function ListApplications({applications}) {
             key={index}
             className="hover:bg-gray-100 dark:hover:bg-gray-700"
           >
-            <Table.Cell className="w-4 p-4">
+            {/* <Table.Cell className="w-4 p-4">
               <div className="flex items-center">
                 <Checkbox
                   checked={checkedItems[`checkbox-${index}`] || false} // Sử dụng trạng thái từ state
@@ -94,7 +90,7 @@ export default function ListApplications({applications}) {
                   checkbox
                 </label>
               </div>
-            </Table.Cell>
+            </Table.Cell> */}
             <Table.Cell className="whitespace-nowrap p-4 text-base font-medium text-gray-900 dark:text-white">
               <div className="flex items-center">
                 {shortenId(application.id)}
@@ -133,11 +129,11 @@ export default function ListApplications({applications}) {
                 {getStatusText(application.status)}
               </div>
             </Table.Cell>
-
-            <Table.Cell>
-              <div className="flex items-center gap-x-3 whitespace-nowrap">
-                <ViewDetailApplication application={application} />
-                <RejectedApplication application={application} />
+            <Table.Cell className="whitespace-nowrap p-4 text-base font-normal text-gray-900 dark:text-white">
+              <div className="text-sm font-normal text-gray-500 dark:text-gray-400">
+                <div className="text-base font-semibold text-gray-900 dark:text-white">
+                  {application.reason}
+                </div>
               </div>
             </Table.Cell>
           </Table.Row>
