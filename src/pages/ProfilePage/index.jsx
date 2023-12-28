@@ -28,7 +28,7 @@ function Profile() {
   };
   const handleAddToWishList = async () => {
     try {
-      await firebaseInstance.toggleWishlist(user.id, mentor.id);
+      await firebaseInstance.toggleWishlist(user.id, mentorId);
     } catch (error) {
       console.error("Error adding to wishlist:", error);
     }
@@ -39,7 +39,7 @@ function Profile() {
         user.id,
         (wishlist) => {
           if (wishlist) {
-            setIsAdded(wishlist.includes(mentor.id));
+            setIsAdded(wishlist.includes(mentorId));
           } else {
             setIsAdded(false);
           }

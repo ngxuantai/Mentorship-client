@@ -17,7 +17,13 @@ import {
   HiChevronRight,
   HiDocumentDownload,
 } from 'react-icons/hi';
+import Select from 'react-select';
+import Datepicker from 'tailwind-datepicker-react';
+import TeachingCalendar from '../../../components/Calendar';
+import firebaseInstance from '../../../services/firebase';
 import {useMenteeAppliStore} from '../../../store/menteeAppli';
+import {useUserStore} from '../../../store/userStore';
+import {checkIfEventOverlap} from '../../../utils/dataHelper';
 import {applicationToExcelData} from '../../../utils/excelDataHelper';
 import {exportExcel} from '../../../utils/excelHelper';
 import ListApplications from './components/ListApplications';
@@ -29,28 +35,50 @@ const dropdownOption = [
 ];
 
 const ApplicationListPage = () => {
+  const {user} = useUserStore();
   const [searchTerm, setSearchTerm] = useState('');
-  const [selectedDate, setSelectedDate] = useState(null);
   const [applicationList, setApplicationList] = useState([]);
-
+  const [events, setEvents] = useState([]);
+  const [mentorEvents, setMentorEvents] = useState([]);
+  const [selectedApplications, setSelectedApplication] = useState({});
   const [selectedOption, setSelectedOption] = useState(dropdownOption[1]);
+  console.log('mentorEvents', mentorEvents);
 
   const [show, setShow] = useState(false);
   const [value, setValue] = useState(0);
 
-  const {
-    menteeApplications,
-    menteeAppliApproved,
-    setMenteeApplications,
-    getMenteeAppliByMentorId,
-  } = useMenteeAppliStore();
-  //   const {applications, setApplications, fetchApplications} =
-  //     useApplicationStore();
-  //   const {user, getUserById} = useUserStore();
+  const {menteeApplications, menteeAppliApproved, getMenteeAppliByMentorId} =
+    useMenteeAppliStore();
 
   const handleClose = (state) => {
     setShow(state);
   };
+
+  const onEventChange = (weekList) => {
+    if (!weekList) return;
+    const filteredEvents = weekList
+      .map((week) => {
+        return week.map((e) => {
+          return {
+            ...e,
+            start: new Date(e.start),
+            color: 'gray',
+            end: new Date(e.end),
+          };
+        });
+      })
+      .flat();
+    setMentorEvents(filteredEvents);
+  };
+  useEffect(() => {
+    if (user) {
+      const unsubscribe = firebaseInstance.observeCalendarChanges(
+        user.id,
+        onEventChange
+      );
+      return () => unsubscribe();
+    }
+  }, [user]);
 
   useEffect(() => {
     const fetchAndSetApplications = async () => {
@@ -107,6 +135,9 @@ const ApplicationListPage = () => {
     },
   };
 
+  const checkIfHasEventOverLap = (newEvents) => {
+    return newEvents.some((e) => checkIfEventOverlap(events, e));
+  };
   const handleExportFileExcel = () => {
     const jsonData = applicationList.map((a) => applicationToExcelData(a));
     console.log('jsonData', jsonData);
@@ -116,7 +147,42 @@ const ApplicationListPage = () => {
   const handleChangeValue = (event, newValue) => {
     setValue(newValue);
   };
+  const resetSelectedItems = () => {
+    setSelectedApplication({});
+  };
+  const handleSetSelectedItem = (event) => {
+    setSelectedApplication({
+      ...selectedApplications,
+      [event.target.name]: event.target.checked,
+    });
+  };
+  const handleSelectedApplicationChange = () => {
+    const selectedTime = [];
+    for (const [applicationId, isSelected] of Object.entries(
+      selectedApplications
+    )) {
+      if (isSelected) {
+        const application = applicationList.find((a) => a.id === applicationId);
+        selectedTime.push(application.learningTime);
+      }
+    }
+    //convert start, end (timestamp) to Date instance
+    const filteredSelectedTime = selectedTime.flat().map((t) => ({
+      ...t,
+      start: new Date(t.start),
+      end: new Date(t.end),
+    }));
 
+    if (checkIfHasEventOverLap(filteredSelectedTime)) {
+      alert('Thời gian bạn chọn không hợp lệ');
+      return;
+    }
+    console.log('selectedTime', filteredSelectedTime, selectedTime);
+    setEvents(filteredSelectedTime);
+  };
+  useEffect(() => {
+    handleSelectedApplicationChange();
+  }, [selectedApplications]);
   return (
     <div>
       <div className="block items-center justify-between border-b border-gray-200 bg-white p-4 dark:border-gray-700 dark:bg-gray-800 sm:flex">
@@ -201,7 +267,12 @@ const ApplicationListPage = () => {
                 />
               </Tabs>
               {value === 0 && (
-                <ListApplications applications={applicationList} />
+                <ListApplications
+                  checkedItems={selectedApplications}
+                  applications={applicationList}
+                  resetSelectedItems={resetSelectedItems}
+                  onSelectedItems={handleSetSelectedItem}
+                />
               )}
               {value === 1 && (
                 <HistoryApplication applications={menteeAppliApproved} />
@@ -211,6 +282,9 @@ const ApplicationListPage = () => {
         </div>
       </div>
       <Pagination />
+      <TeachingCalendar
+        events={[...mentorEvents, ...events]}
+      ></TeachingCalendar>
     </div>
   );
 };

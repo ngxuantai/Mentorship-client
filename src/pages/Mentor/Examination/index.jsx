@@ -1,13 +1,15 @@
 import {Button} from '@mui/material';
+import {Label} from 'flowbite-react';
 import {useEffect, useState} from 'react';
 import {useNavigate} from 'react-router-dom';
 import styled from 'styled-components';
-import examApi from '../../../api/exam';
+import firebaseInstance from '../../../services/firebase';
 import CardExam from './components/CardExam';
+import ListFile from './components/ListFile';
 import ListFolder from './components/ListFolder';
 import AddFile from './components/AddFile';
-import {Label} from 'flowbite-react';
 import firebaseInstance from '../../../services/firebase';
+import examApi from '../../../api/exam';
 import {fileApi, folderApi} from '../../../api/file';
 // const nodemailer = require('nodemailer');
 
@@ -129,13 +131,6 @@ const Examination = () => {
             <Label style={{fontSize: '20px', fontWeight: 'bold'}}>
               Danh sách tài liệu
             </Label>
-            {/* <Button
-              variant="contained"
-              color="primary"
-              onClick={() => handleAddExam()}
-            >
-              Thêm tài liệu
-            </Button> */}
             <AddFile />
           </ButtonContainer>
           <Label>Chưa có tài liệu</Label>

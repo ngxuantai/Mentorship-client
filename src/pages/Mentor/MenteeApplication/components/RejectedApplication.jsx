@@ -1,27 +1,39 @@
-import React, {useState} from 'react';
+import { useState } from "react";
 // import {format} from 'date-fns';
 // import {FaCopy} from 'react-icons/fa';
 // import {shortenId} from '../../../../utils/shortenId';
-import {Button, Modal} from 'flowbite-react';
-import {HiOutlineExclamationCircle, HiX} from 'react-icons/hi';
-import {ApprovalStatus} from '../../../../constants';
-import {useMenteeAppliStore} from '../../../../store/menteeAppli';
+import { TextField } from "@mui/material";
+import { Button, Modal } from "flowbite-react";
+import { HiX } from "react-icons/hi";
+import { ApprovalStatus } from "../../../../constants";
+import { useMenteeAppliStore } from "../../../../store/menteeAppli";
 
-export default function RejectedApplication({application}) {
-  const {updateMenteeAppliStatus} = useMenteeAppliStore();
+export default function RejectedApplication({ application }) {
+  const { updateMenteeAppliStatus, updateMenteeApplication } =
+    useMenteeAppliStore();
 
   const [isOpen, setOpen] = useState(false);
-  //   const {applications, updateApplicationStatus} = useApplicationStore();
+  const [reason, setReason] = useState("");
+
+  const handleInputChange = (event) => {
+    setReason(event.target.value);
+  };
 
   const handleRejectApplication = async () => {
     try {
+      //TODO: chỉ cần 1 update API
       await updateMenteeAppliStatus(application.id, ApprovalStatus.REJECTED);
-      //   await updateApplicationStatus(application.id, ApplicationStatus.REJECTED);
+      await updateMenteeApplication(application.id, {
+        ...application,
+        status: ApprovalStatus.REJECTED,
+        reason,
+      });
       setOpen(false);
     } catch (er) {
-      console.error('update application er', er);
+      console.error("update application er", er);
     }
   };
+
   return (
     <>
       <Button
@@ -37,22 +49,36 @@ export default function RejectedApplication({application}) {
           Từ chối
         </div>
       </Button>
-      <Modal onClose={() => setOpen(false)} show={isOpen} size="md">
-        <Modal.Header className="px-6 pb-0 pt-6">
-          <span className="sr-only">Delete user</span>
-        </Modal.Header>
+      <Modal
+        style={{ minWidth: "50%" }}
+        onClose={() => setOpen(false)}
+        show={isOpen}
+        size="md"
+      >
+        <Modal.Header className="px-6 pb-0 pt-6"></Modal.Header>
         <Modal.Body className="px-6 pb-6 pt-0">
           <div className="flex flex-col items-center gap-y-6 text-center">
-            <HiOutlineExclamationCircle className="text-7xl text-red-500" />
             <p className="text-xl text-gray-500">
-              Are you sure you want to delete this user?
+              Bạn có muốn huỷ đơn đăng ký này?
             </p>
-            <div className="flex items-center gap-x-3">
+            <TextField // Add the TextField component
+              label="Lý do từ chối (tuỳ chọn) "
+              variant="outlined"
+              value={reason}
+              style={{ width: "100%" }}
+              multiline
+              rows={4}
+              onChange={handleInputChange}
+            />
+            <div
+              style={{ alignSelf: "flex-end" }}
+              className="flex items-center gap-x-3"
+            >
               <Button color="failure" onClick={() => handleRejectApplication()}>
-                Yes, I'm sure
+                Từ chối
               </Button>
               <Button color="gray" onClick={() => setOpen(false)}>
-                No, cancel
+                Huỷ
               </Button>
             </div>
           </div>

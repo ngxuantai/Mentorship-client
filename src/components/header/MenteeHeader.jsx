@@ -17,8 +17,9 @@ import { useUserStore } from "../../store/userStore";
 
 const pages = [
   { name: "Trang chủ", link: "/" },
-  { name: "Danh sách mentor", link: "/mentee/wishlist" },
-  { name: "Yêu cầu", link: "/mentee/inquires" },
+  { name: "Danh sách mentor", link: "/mentee/learning-progress" },
+  // { name: "Yêu cầu", link: "/mentee/inquires" },
+  { name: "Thanh toán", link: "/mentee/payment" },
   { name: "Danh sách yêu cầu", link: "/mentee/applications" },
   { name: "Cài đặt", link: "/mentee/settings" },
   // thêm các trang khác tại đây

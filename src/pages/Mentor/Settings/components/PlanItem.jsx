@@ -3,21 +3,23 @@ import {
   Card,
   CardActions,
   CardContent,
+  FormControlLabel,
+  Switch,
   TextField,
   Typography,
 } from "@mui/material";
 import { useEffect, useState } from "react";
-import styled from "styled-components";
 import { PlanType } from "../../../../constants/index";
 import currencyFormatter from "../../../../utils/moneyConverter";
 const PlanItem = ({ plan, onUpdatePlan }) => {
   const [editedPlan, setEditedPlan] = useState(plan);
   const [isPlanModified, setIsPlanModified] = useState(false);
-
   useEffect(() => {
     const isModified =
       plan.callTimes !== editedPlan.callTimes ||
       plan.price !== editedPlan.price ||
+      plan.weeks !== editedPlan.weeks ||
+      plan.isActive !== editedPlan.isActive ||
       plan.description !== editedPlan.description;
 
     setIsPlanModified(isModified);
@@ -63,6 +65,9 @@ const PlanItem = ({ plan, onUpdatePlan }) => {
       ...editedPlan,
       [name]: value,
     });
+  };
+  const handleTogglePlan = (plan) => {
+    setEditedPlan(plan);
   };
   const handleSaveClick = () => {
     // Call the onUpdatePlan function to update the plan in the parent component
@@ -114,6 +119,7 @@ const PlanItem = ({ plan, onUpdatePlan }) => {
           style={{ marginTop: "10px" }}
         />
       </CardContent>
+      <PlanSwitch plan={plan} onTogglePlan={handleTogglePlan}></PlanSwitch>
       <CardActions style={{ justifyContent: "flex-end" }}>
         <Button
           variant="contained"
@@ -128,13 +134,22 @@ const PlanItem = ({ plan, onUpdatePlan }) => {
   );
 };
 
-const PlanContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-  border-radius: 4px;
-  border: 1px solid #000000;
-  padding: 12px;
-`;
+const PlanSwitch = ({ plan, onTogglePlan }) => {
+  const [isActive, setIsActive] = useState(plan.isActive);
+
+  const handleToggle = (event) => {
+    setIsActive(event.target.checked);
+    onTogglePlan({ ...plan, isActive: event.target.checked });
+  };
+
+  return (
+    <FormControlLabel
+      control={
+        <Switch checked={isActive} onChange={handleToggle} name="isActive" />
+      }
+      label={isActive ? "Gói học đang hoạt động" : "Gói học không hoạt động"}
+    />
+  );
+};
 
 export default PlanItem;

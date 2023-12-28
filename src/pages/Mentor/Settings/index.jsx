@@ -2,6 +2,7 @@ import Tab from "@mui/material/Tab";
 import Tabs from "@mui/material/Tabs";
 import React from "react";
 import styled from "styled-components";
+import Statistic from "../Statistic";
 import Payment from "./components/Payment";
 import Plan from "./components/Plan";
 
@@ -29,7 +30,7 @@ export default function MentorSettings() {
         {value === 0 && <Profiles />}
         {value === 1 && <Plan />}
         {value === 2 && <Payment />}
-        {value === 3 && <Profiles />}
+        {value === 3 && <Statistic />}
       </Container>
     </div>
   );

@@ -1,6 +1,7 @@
 import { Checkbox, FormControlLabel, FormGroup } from "@mui/material";
 import { useEffect, useState } from "react";
 import styled from "styled-components";
+import AccountInfor from "./AccountInfor";
 import PersonalInfor from "./PersonalInfor";
 
 export default function Profiles() {
@@ -32,7 +33,7 @@ export default function Profiles() {
   return (
     <Container>
       <PersonalInfor />
-      {/* <TimeAvailable /> */}
+      <AccountInfor />
       <EmailContainer>
         <h5 style={{ fontWeight: "bold" }}>Tùy chọn email</h5>
         <p style={{ padding: 0, margin: 0 }}>

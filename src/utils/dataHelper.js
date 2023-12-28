@@ -1,5 +1,5 @@
 import { addDays, addHours, addMinutes, startOfWeek } from "date-fns";
-import { ApprovalStatus, PaymentStatus } from "../constants";
+import { ApprovalStatus, PaymentStatus, PlanType } from "../constants";
 export function isEmptyObject(obj) {
   for (var prop in obj) {
     if (Object.prototype.hasOwnProperty.call(obj, prop)) {
@@ -63,6 +63,18 @@ export const mappingPaymentStatus = (status) => {
       return null;
   }
 };
+export const mappingPlanName = (planName) => {
+  switch (planName) {
+    case PlanType.LITE:
+      return "Lite";
+    case PlanType.STANDARD:
+      return "Standard";
+    case PlanType.PRO:
+      return "Pro";
+    default:
+      return "";
+  }
+};
 
 // Hàm trợ giúp để kiểm tra xem hai khoảng thời gian có chồng chéo nhau không
 const isOverlap = (newStart, newEnd, eventStart, eventEnd) => {
@@ -101,10 +113,31 @@ export const checkIfEventOverlap = (events, newEvent) => {
   return false;
 };
 export const checkAndRemoveExpiredEvents = (weekList) => {
+  console.log(
+    "checkAndRemoveExpiredEvents",
+    new Array(Object.values(weekList))
+  );
   const now = new Date().getTime();
 
-  return weekList.map((week) =>
-    week.filter((event) => {
+  // for (const [day, events] of Object.entries(weekList)) {
+  //   newWeekList[day] = events.filter((event) => {
+  //     // Kiểm tra xem sự kiện có thuộc tính 'weeks' hay không
+  //     if (event.weeks) {
+  //       // Tính thời gian kết thúc dự kiến của sự kiện
+  //       const eventEndTime =
+  //         new Date(event.start).getTime() +
+  //         event.weeks * 7 * 24 * 60 * 60 * 1000;
+  //       // Nếu sự kiện đã hết hạn, loại bỏ nó
+  //       if (now > eventEndTime) {
+  //         return false;
+  //       }
+  //     }
+  //     // Giữ lại sự kiện nếu nó chưa hết hạn
+  //     return true;
+  //   });
+  // }
+  const newWeekList = new Array(Object.values(weekList)).map((events) =>
+    events.filter((event) => {
       // Kiểm tra xem sự kiện có thuộc tính 'weeks' hay không
       if (event.weeks) {
         // Tính thời gian kết thúc dự kiến của sự kiện
@@ -120,6 +153,8 @@ export const checkAndRemoveExpiredEvents = (weekList) => {
       return true;
     })
   );
+
+  return newWeekList;
 };
 export const isApplicationExpired = (application) => {
   // Lấy ngày hiện tại
