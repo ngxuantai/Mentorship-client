@@ -1,87 +1,32 @@
-import ChatIcon from '@mui/icons-material/Chat';
-import {Divider} from '@mui/material';
-import Avatar from '@mui/material/Avatar';
-import Box from '@mui/material/Box';
-import Card from '@mui/material/Card';
-import CardContent from '@mui/material/CardContent';
-import Chip from '@mui/material/Chip';
-import {useTheme} from '@mui/material/styles';
-import Typography from '@mui/material/Typography';
-import CardHeader from '@mui/material/CardHeader';
-import Tooltip from '@mui/material/Tooltip';
+import {
+  Box,
+  Card,
+  CardHeader,
+  CardContent,
+  Chip,
+  Typography,
+  Avatar,
+  Tooltip,
+  IconButton,
+  CardActions,
+} from '@mui/material';
+import MoreVertIcon from '@mui/icons-material/MoreVert';
 import {Button, Progress} from 'flowbite-react';
-import {List} from 'flowbite-react';
+import CancelTestProgress from './CancelTestProgress';
 import moment from 'moment';
-
 import {useEffect, useRef, useState} from 'react';
-import {useNavigate} from 'react-router';
-import learningProgressApi from '../../../../api/learningProgress';
 import menteeApplicationApi from '../../../../api/menteeApplication';
 import mentorApi from '../../../../api/mentor';
-import {useUserStore} from '../../../../store/userStore';
 import {mappingPlanName} from '../../../../utils/dataHelper';
 import {convertTimestampRange} from '../../../../utils/dateConverter';
 
-const ListAppliedMentor = () => {
-  const navigate = useNavigate();
-  const {user, setUser} = useUserStore();
-  const [progressList, setProgressList] = useState([]);
-
-  useEffect(() => {
-    if (user) {
-      const fetchProgress = async () => {
-        const data = await learningProgressApi.getLearningProgressByMenteeId(
-          '65825627600fc966c46f60f8'
-        );
-        if (data) {
-          const list = data.sort((a, b) => {
-            const dateA = new Date(a.endDate).getTime();
-            const dateB = new Date(b.endDate).getTime();
-            return dateB - dateA;
-          });
-          console.log('getLearningProgressByMenteeId', List);
-          setProgressList(list);
-        }
-      };
-      fetchProgress();
-    }
-  }, [user]);
-
-  const handleOnClick = (mentorId) => {
-    navigate(`/profile/${mentorId}`);
-  };
-
-  const renderMentorItems = () => {
-    return progressList.map((progress) => (
-      <ProgressItem
-        key={progress.id}
-        onClick={() => handleOnClick(progress)}
-        progress={progress}
-      />
-    ));
-  };
-
-  return (
-    <div
-      style={{
-        display: 'grid',
-        gridTemplateColumns: 'repeat(3, 1fr)',
-        gap: '12px',
-      }}
-    >
-      {renderMentorItems()}
-    </div>
-  );
-};
-
-export default ListAppliedMentor;
-
-function ProgressItem({progress, onClick}) {
-  const theme = useTheme();
+export default function TestProgressItem({progress, cancelProgress}) {
   const cardRef = useRef(null);
   const [mentor, setMentor] = useState(null);
-  const [remainingPercent, setRemainingPercent] = useState(100);
   const [application, setApplication] = useState(null);
+  const [endTry, setEndTry] = useState(false);
+  const [remainingPercent, setRemainingPercent] = useState(0);
+
   const fetchApplication = async () => {
     const data = await menteeApplicationApi.getMenteeApplicationById(
       progress.applicationId
@@ -90,19 +35,29 @@ function ProgressItem({progress, onClick}) {
 
     setApplication(data);
   };
+
   const fetchMentor = async () => {
     const data = await mentorApi.getMentorById(progress.mentorId);
     setMentor(data);
   };
 
-  function handleCallClick() {}
+  const checkEndDate = () => {
+    const endDate = new Date(progress.endDate).getTime();
+    const current = new Date().getTime();
+    if (endDate >= current) {
+      setEndTry(true);
+    }
+  };
 
-  function handleChatClick() {
+  const handleCallClick = () => {};
+
+  const handleChatClick = () => {
     if (chatDisabled) {
       return;
     }
-  }
-  function computeRemainPercent() {
+  };
+
+  const computeRemainPercent = () => {
     const startDate = new Date(progress.startDate).getTime();
     const endDate = new Date(progress.endDate).getTime();
     const current = new Date().getTime();
@@ -113,21 +68,22 @@ function ProgressItem({progress, onClick}) {
         ((current - startDate) / (endDate - startDate)) *
         100
       ).toFixed(2);
-      setRemainingPercent(percent);
+      setRemainingPercent(0);
     }
-  }
+  };
+
   useEffect(() => {
     fetchMentor();
     fetchApplication();
     computeRemainPercent();
   }, []);
-  console.log('remaingnPercent', remainingPercent);
 
   useEffect(() => {
     if (cardRef.current) {
       cardRef.current.style.transform = `translateX(-${remainingPercent}%)`;
     }
   }, [remainingPercent]);
+
   return (
     <Card
       sx={{
@@ -190,9 +146,13 @@ function ProgressItem({progress, onClick}) {
             gap: '6px',
           }}
         >
-          <Button size="sm" onClick={handleChatClick}>
-            Nhắn tin{' '}
-          </Button>
+          <CancelTestProgress
+            progress={progress}
+            cancelProgress={cancelProgress}
+          />
+          <Tooltip title={endTry ? 'Thanh toán và tiếp tục học' : 'Nhắn tin'}>
+            <Button size="sm">{endTry ? 'Thanh toán' : 'Nhắn tin'}</Button>
+          </Tooltip>
         </Box>
       </Box>
     </Card>

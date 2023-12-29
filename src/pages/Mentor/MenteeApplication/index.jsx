@@ -17,8 +17,6 @@ import {
   HiChevronRight,
   HiDocumentDownload,
 } from 'react-icons/hi';
-import Select from 'react-select';
-import Datepicker from 'tailwind-datepicker-react';
 import TeachingCalendar from '../../../components/Calendar';
 import firebaseInstance from '../../../services/firebase';
 import {useMenteeAppliStore} from '../../../store/menteeAppli';

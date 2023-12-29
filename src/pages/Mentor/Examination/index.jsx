@@ -3,7 +3,6 @@ import {Label} from 'flowbite-react';
 import {useEffect, useState} from 'react';
 import {useNavigate} from 'react-router-dom';
 import styled from 'styled-components';
-import firebaseInstance from '../../../services/firebase';
 import CardExam from './components/CardExam';
 import ListFile from './components/ListFile';
 import ListFolder from './components/ListFolder';
