@@ -6,66 +6,82 @@ import {
   Modal,
   Table,
   TextInput,
-} from "flowbite-react";
-import Datepicker from "tailwind-datepicker-react";
-import Select from "react-select";
-import { useState, useEffect } from "react";
+} from 'flowbite-react';
+import Tab from '@mui/material/Tab';
+import Tabs from '@mui/material/Tabs';
+import Datepicker from 'tailwind-datepicker-react';
+import Select from 'react-select';
+import {useState, useEffect} from 'react';
 import {
   HiChevronLeft,
   HiChevronRight,
   HiDocumentDownload,
-  HiHome,
-  HiOutlineExclamationCircle,
-  HiOutlineEye,
-  HiTrash,
-  HiX,
-} from "react-icons/hi";
-import { FaCopy } from "react-icons/fa";
-// import NavbarSidebarLayout from '../../layouts/navbar-sidebar';
-import { format } from "date-fns";
-// import {useApplicationStore} from '../../store/application';
-// import {useUserStore} from '../../store/user';
-import { useMenteeAppliStore } from "../../../store/menteeAppli";
-import { ApplicationStatus } from "../../../constants";
-import { applicationToExcelData } from "../../../utils/excelDataHelper";
-import { exportExcel } from "../../../utils/excelHelper";
-import ListApplications from "./components/ListApplications";
-
-// import ViewDetailApplication from './components/ViewDetailApplication';
-// import DeleteApplication from './components/DeleteApplication';
+} from 'react-icons/hi';
+import TeachingCalendar from '../../../components/Calendar';
+import firebaseInstance from '../../../services/firebase';
+import {useMenteeAppliStore} from '../../../store/menteeAppli';
+import {useUserStore} from '../../../store/userStore';
+import {checkIfEventOverlap} from '../../../utils/dataHelper';
+import {applicationToExcelData} from '../../../utils/excelDataHelper';
+import {exportExcel} from '../../../utils/excelHelper';
+import ListApplications from './components/ListApplications';
+import HistoryApplication from './components/HistoryApplication';
 
 const dropdownOption = [
-  { value: "id", label: "Id" },
-  { value: "displayName", label: "Tên học viên" },
+  {value: 'id', label: 'Id'},
+  {value: 'displayName', label: 'Tên học viên'},
 ];
 
 const ApplicationListPage = () => {
-  const [searchTerm, setSearchTerm] = useState("");
-  const [selectedDate, setSelectedDate] = useState(null);
+  const {user} = useUserStore();
+  const [searchTerm, setSearchTerm] = useState('');
   const [applicationList, setApplicationList] = useState([]);
-
+  const [events, setEvents] = useState([]);
+  const [mentorEvents, setMentorEvents] = useState([]);
+  const [selectedApplications, setSelectedApplication] = useState({});
   const [selectedOption, setSelectedOption] = useState(dropdownOption[1]);
+  console.log('mentorEvents', mentorEvents);
 
   const [show, setShow] = useState(false);
+  const [value, setValue] = useState(0);
 
-  const {
-    menteeApplications,
-    menteeAppliApproved,
-    setMenteeApplications,
-    getMenteeAppliByMentorId,
-  } = useMenteeAppliStore();
-  //   const {applications, setApplications, fetchApplications} =
-  //     useApplicationStore();
-  //   const {user, getUserById} = useUserStore();
+  const {menteeApplications, menteeAppliApproved, getMenteeAppliByMentorId} =
+    useMenteeAppliStore();
 
   const handleClose = (state) => {
     setShow(state);
   };
 
+  const onEventChange = (weekList) => {
+    if (!weekList) return;
+    const filteredEvents = weekList
+      .map((week) => {
+        return week.map((e) => {
+          return {
+            ...e,
+            start: new Date(e.start),
+            color: 'gray',
+            end: new Date(e.end),
+          };
+        });
+      })
+      .flat();
+    setMentorEvents(filteredEvents);
+  };
+  useEffect(() => {
+    if (user) {
+      const unsubscribe = firebaseInstance.observeCalendarChanges(
+        user.id,
+        onEventChange
+      );
+      return () => unsubscribe();
+    }
+  }, [user]);
+
   useEffect(() => {
     const fetchAndSetApplications = async () => {
       try {
-        await getMenteeAppliByMentorId("65840127a47c189dd995cdf3");
+        await getMenteeAppliByMentorId('65840127a47c189dd995cdf3');
       } catch (er) {
         console.error(er);
       }
@@ -75,15 +91,6 @@ const ApplicationListPage = () => {
   }, []);
 
   useEffect(() => {
-    console.log("menteeAppli75", menteeApplications);
-    console.log("menteeAppliApproved", menteeAppliApproved);
-  }, [menteeApplications]);
-
-  useEffect(() => {
-    // const applicationsWithUser = applications.map((application) => {
-    //   // const user = await getUserById(application.mentorId);
-    //   return {...user, ...application};
-    // });
     const delayDebounceFn = setTimeout(() => {
       if (searchTerm) {
         const results = applicationsWithUser.filter((application) =>
@@ -91,7 +98,7 @@ const ApplicationListPage = () => {
             .toLowerCase()
             .includes(searchTerm.toLowerCase())
         );
-        console.log("applicationList", results, applicationList, searchTerm);
+        console.log('applicationList', results, applicationList, searchTerm);
         setApplicationList(results);
       } else {
         setApplicationList(menteeApplications);
@@ -99,63 +106,81 @@ const ApplicationListPage = () => {
     }, 1200);
     return () => clearTimeout(delayDebounceFn);
   }, [searchTerm, menteeApplications]);
-  //   useEffect(() => {
-  //     const applicationsWithUser = applications.map((application) => {
-  //       // const user = await getUserById(application.mentorId);
-  //       return {...user, ...application};
-  //     });
-  //     setApplicationList(applicationsWithUser);
-  //     console.log('applicationWIghtUser', applicationsWithUser);
-  //   }, [applications]);
-  //   console.log('applications', applications);
-  //   const handleChange = (date) => {
-  //     setSelectedDate(date);
-  //     console.log(('seletedDate', date.getTime()));
-  //     const filtered = data.filter((application) => {
-  //       const month = application.submitDate.getMonth();
-  //       const year = application.submitDate.getFullYear();
-  //       const d = application.submitDate.getDate();
-
-  //       const submitDate = new Date(year, month, d).getTime();
-
-  //       console.log('submitDate', submitDate, date.getTime());
-  //       return submitDate === date.getTime();
-  //     });
-  //     // setApplications(filtered);
-  //   };
 
   const options = {
-    title: "Select date",
+    title: 'Select date',
     autoHide: true,
     todayBtn: false,
     clearBtn: true,
-    clearBtnText: "Clear",
-    maxDate: new Date("2030-01-01"),
-    minDate: new Date("1950-01-01"),
+    clearBtnText: 'Clear',
+    maxDate: new Date('2030-01-01'),
+    minDate: new Date('1950-01-01'),
     icons: {
       // () => ReactElement | JSX.Element
     },
-    datepickerClassNames: "top-12",
+    datepickerClassNames: 'top-12',
     defaultDate: new Date(),
-    language: "en",
+    language: 'en',
     disabledDates: [],
-    weekDays: ["Mo", "Tu", "We", "Th", "Fr", "Sa", "Su"],
-    inputNameProp: "date",
-    inputIdProp: "date",
-    inputPlaceholderProp: "Select Date",
+    weekDays: ['Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa', 'Su'],
+    inputNameProp: 'date',
+    inputIdProp: 'date',
+    inputPlaceholderProp: 'Select Date',
     inputDateFormatProp: {
-      day: "numeric",
-      month: "long",
-      year: "numeric",
+      day: 'numeric',
+      month: 'long',
+      year: 'numeric',
     },
   };
 
+  const checkIfHasEventOverLap = (newEvents) => {
+    return newEvents.some((e) => checkIfEventOverlap(events, e));
+  };
   const handleExportFileExcel = () => {
     const jsonData = applicationList.map((a) => applicationToExcelData(a));
-    console.log("jsonData", jsonData);
-    exportExcel(jsonData, "application_list");
+    console.log('jsonData', jsonData);
+    exportExcel(jsonData, 'application_list');
   };
 
+  const handleChangeValue = (event, newValue) => {
+    setValue(newValue);
+  };
+  const resetSelectedItems = () => {
+    setSelectedApplication({});
+  };
+  const handleSetSelectedItem = (event) => {
+    setSelectedApplication({
+      ...selectedApplications,
+      [event.target.name]: event.target.checked,
+    });
+  };
+  const handleSelectedApplicationChange = () => {
+    const selectedTime = [];
+    for (const [applicationId, isSelected] of Object.entries(
+      selectedApplications
+    )) {
+      if (isSelected) {
+        const application = applicationList.find((a) => a.id === applicationId);
+        selectedTime.push(application.learningTime);
+      }
+    }
+    //convert start, end (timestamp) to Date instance
+    const filteredSelectedTime = selectedTime.flat().map((t) => ({
+      ...t,
+      start: new Date(t.start),
+      end: new Date(t.end),
+    }));
+
+    if (checkIfHasEventOverLap(filteredSelectedTime)) {
+      alert('Thời gian bạn chọn không hợp lệ');
+      return;
+    }
+    console.log('selectedTime', filteredSelectedTime, selectedTime);
+    setEvents(filteredSelectedTime);
+  };
+  useEffect(() => {
+    handleSelectedApplicationChange();
+  }, [selectedApplications]);
   return (
     <div>
       <div className="block items-center justify-between border-b border-gray-200 bg-white p-4 dark:border-gray-700 dark:bg-gray-800 sm:flex">
@@ -181,17 +206,17 @@ const ApplicationListPage = () => {
                   />
                 </div>
               </form>
-              <div style={{ marginRight: 8, minWidth: 200 }}>
+              <div style={{marginRight: 8, minWidth: 200}}>
                 <Select
                   styles={{
                     control: (baseStyles, state) => ({
                       ...baseStyles,
-                      color: "black",
+                      color: 'black',
                       // backgroundColor: '#374151',
                     }),
                     singleValue: (baseStyles, state) => ({
                       ...baseStyles,
-                      color: "black",
+                      color: 'black',
                       // backgroundColor: '#374151',
                     }),
                     option: (baseStyles, state) => ({
@@ -227,20 +252,39 @@ const ApplicationListPage = () => {
         <div className="overflow-x-auto">
           <div className="inline-block min-w-full align-middle">
             <div className="overflow-hidden shadow">
-              <ListApplications applications={applicationList} />
+              <Tabs value={value} onChange={handleChangeValue}>
+                <Tab
+                  label="Thanh toán"
+                  value={0}
+                  style={{fontWeight: 'bold'}}
+                />
+                <Tab
+                  label="Lịch sử thanh toán"
+                  value={1}
+                  style={{fontWeight: 'bold'}}
+                />
+              </Tabs>
+              {value === 0 && (
+                <ListApplications
+                  checkedItems={selectedApplications}
+                  applications={applicationList}
+                  resetSelectedItems={resetSelectedItems}
+                  onSelectedItems={handleSetSelectedItem}
+                />
+              )}
+              {value === 1 && (
+                <HistoryApplication applications={menteeAppliApproved} />
+              )}
             </div>
           </div>
         </div>
       </div>
       <Pagination />
+      <TeachingCalendar
+        events={[...mentorEvents, ...events]}
+      ></TeachingCalendar>
     </div>
   );
-};
-
-const styles = {
-  text: {
-    color: "white",
-  },
 };
 
 export const Pagination = () => {

@@ -10,8 +10,8 @@ export const PaymentStatus = {
   FAILED: 1,
 };
 export const UserRole = {
-  MENTEE: 'mentee',
-  MENTOR: 'mentor',
+  MENTEE: "mentee",
+  MENTOR: "mentor",
 };
 export const ApplicationStatus = {
   APPROVED: 1,
@@ -22,3 +22,14 @@ export const PlanType = {
   STANDARD: 1,
   PRO: 2,
 };
+export const DaysInVietnamese = [
+  "Chủ Nhật",
+  "Thứ Hai",
+  "Thứ Ba",
+  "Thứ Tư",
+  "Thứ Năm",
+  "Thứ Sáu",
+  "Thứ Bảy",
+];
+//max day limit that user must pay their applications
+export const Max_Pay_Day = 3;

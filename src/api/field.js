@@ -1,11 +1,11 @@
-import axiosClient from "../config/axiosClient";
+import axiosClient from '../config/axiosClient';
 
 const fieldApi = {
   getAllFields: async () => {
     try {
-      const url = "/field/getAllFields";
+      const url = '/field/getAllFields';
       const res = await axiosClient.get(url);
-      console.log("field res data", res.data.data);
+      console.log('field res data', res.data.data);
       return res.data.data;
     } catch (error) {
       console.error(error);
@@ -14,7 +14,7 @@ const fieldApi = {
   },
   createField: async (field) => {
     try {
-      const url = "/field/createField";
+      const url = '/field/createField';
       const res = await axiosClient.post(url, field);
       return res.data.data;
     } catch (error) {

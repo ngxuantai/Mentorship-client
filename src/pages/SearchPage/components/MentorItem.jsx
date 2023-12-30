@@ -21,7 +21,7 @@ const Text = styled.p`
 `;
 
 function MentorItem({ mentor }) {
-  const [isAdded, setIsAdded] = useState(false);
+  const [isFavourite, setIsFavourite] = useState(false);
   const navigate = useNavigate();
   const { user } = useUserStore();
   // const { wishlist } = useWishlistStore();
@@ -36,9 +36,9 @@ function MentorItem({ mentor }) {
         user.id,
         (wishlist) => {
           if (wishlist) {
-            setIsAdded(wishlist.includes(mentor.id));
+            setIsFavourite(wishlist.includes(mentor.id));
           } else {
-            setIsAdded(false);
+            setIsFavourite(false);
           }
         }
       );
@@ -122,10 +122,10 @@ function MentorItem({ mentor }) {
                 <FaHeart
                   style={{
                     marginRight: 8,
-                    color: isAdded ? "tomato" : null,
+                    color: isFavourite ? "tomato" : null,
                   }}
                 ></FaHeart>{" "}
-                {isAdded ? "Đã thích" : "Yêu thích"}
+                {isFavourite ? "Đã thích" : "Yêu thích"}
               </div>
             </Button>
           </div>

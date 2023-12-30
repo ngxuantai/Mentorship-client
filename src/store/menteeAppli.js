@@ -1,10 +1,10 @@
-import { create } from "zustand";
-import menteeApplicationApi from "../api/menteeApplication";
+import {create} from 'zustand';
+import menteeApplicationApi from '../api/menteeApplication';
 
 export const useMenteeAppliStore = create((set) => ({
   menteeApplications: [],
   menteeAppliApproved: [],
-  setMenteeApplications: (menteeApplications) => set({ menteeApplications }),
+  setMenteeApplications: (menteeApplications) => set({menteeApplications}),
   getMenteeAppliByMentorId: async (mentorId) => {
     try {
       const menteeApplications =
@@ -12,10 +12,10 @@ export const useMenteeAppliStore = create((set) => ({
 
       // Lọc và thêm và o menteeAppliApproved nếu status = 1
       const menteeAppliApproved = menteeApplications.filter(
-        (app) => app.status === 1
+        (app) => app.status === 1 || app.status === 2
       );
-      console.log("menteeAppliApproved", menteeAppliApproved);
-      set({ menteeApplications, menteeAppliApproved });
+      console.log('menteeAppliApproved', menteeAppliApproved);
+      set({menteeApplications, menteeAppliApproved});
     } catch (error) {
       console.error(error);
     }
@@ -25,11 +25,10 @@ export const useMenteeAppliStore = create((set) => ({
       const updatedMenteeApplication =
         await menteeApplicationApi.updateMenteeApplicationStatus(id, status);
 
-      // Nếu status = 1, thêm vào menteeAppliApproved
-      if (status === 1) {
+      if (status === 1 || status === 2) {
         set((state) => ({
           menteeApplications: state.menteeApplications.map((app) =>
-            app.id === id ? { ...app, status } : app
+            app.id === id ? {...app, status} : app
           ),
           menteeAppliApproved: [
             ...state.menteeAppliApproved,
@@ -39,10 +38,24 @@ export const useMenteeAppliStore = create((set) => ({
       } else {
         set((state) => ({
           menteeApplications: state.menteeApplications.map((app) =>
-            app.id === id ? { ...app, status } : app
+            app.id === id ? {...app, status} : app
           ),
         }));
       }
+    } catch (error) {
+      console.error(error);
+    }
+  },
+  updateMenteeApplication: async (id, application) => {
+    try {
+      const updatedMenteeApplication =
+        await menteeApplicationApi.updateMenteeApplication(id, application);
+
+      set((state) => ({
+        menteeApplications: state.menteeApplications.map((app) =>
+          app.id === id ? updatedMenteeApplication : app
+        ),
+      }));
     } catch (error) {
       console.error(error);
     }

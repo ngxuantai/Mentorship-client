@@ -10,7 +10,6 @@ import {
   uploadBytesResumable,
 } from "firebase/storage";
 import firebaseConfig from "../config/firebase";
-import { checkAndRemoveExpiredEvents } from "../utils/dataHelper";
 
 class Firebase {
   constructor() {
@@ -52,21 +51,22 @@ class Firebase {
     firestoreService.getDoc(firestoreService.doc(this.db, "users", id));
 
   passwordUpdate = (password) => this.auth.currentUser.updatePassword(password);
+  changePassword = (currentPassword, newPassword) => {
+    const user = this.auth.currentUser;
+    console.log("changePassword", user, currentPassword, newPassword);
+    const credential = authService.EmailAuthProvider.credential(
+      user.email,
+      currentPassword
+    );
 
-  changePassword = (currentPassword, newPassword) =>
-    new Promise((resolve, reject) => {
-      this.reauthenticate(currentPassword)
-        .then(() => {
-          const user = this.auth.currentUser;
-          user
-            .updatePassword(newPassword)
-            .then(() => {
-              resolve("Password updated successfully!");
-            })
-            .catch((error) => reject(error));
-        })
-        .catch((error) => reject(error));
-    });
+    // Reauthenticate the user
+    return authService
+      .reauthenticateWithCredential(user, credential)
+      .then(() => {
+        // Update the password
+        return authService.updatePassword(user, newPassword);
+      });
+  };
 
   onAuthStateChanged = () =>
     new Promise((resolve, reject) => {
@@ -102,6 +102,46 @@ class Firebase {
   };
 
   // deleteImage = (id) => this.storage.ref("products").child(id).delete();
+
+  storeFile = async (folder, file, mentorId) => {
+    const editName = (mnetorId, fileName) => {
+      const lastDotIndex = fileName.lastIndexOf(".");
+      let name = "",
+        extension = "";
+
+      if (lastDotIndex !== -1) {
+        name = fileName.substring(0, lastDotIndex);
+        extension = fileName.substring(lastDotIndex + 1);
+      } else {
+        name = fileName;
+      }
+
+      return name + "-" + mnetorId + "." + extension;
+    };
+
+    const fileRef = ref(
+      this.storage,
+      `documents/${editName(mentorId, file.name)}`
+    );
+    const uploadTask = uploadBytesResumable(fileRef, file);
+    return new Promise((resolve, reject) => {
+      uploadTask.on(
+        "state_changed",
+        (snapshot) => {},
+        (error) => {
+          console.log(error);
+        },
+        () => {
+          getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+            console.log("File available at", downloadURL);
+            resolve(downloadURL);
+          });
+        }
+      );
+    });
+  };
+
+  // get file
 
   // message chats
   getChat = async (id) => {
@@ -224,20 +264,9 @@ class Firebase {
     return eventId;
   };
 
-  updateEvent = async (userId, dayOfWeek, eventId, event) => {
-    const eventRef = databaseService.ref(
-      this.realtimeDb,
-      userId + "/calendars/" + dayOfWeek
-    );
-
-    const events = await this.getEvents(userId, dayOfWeek);
-
-    const index = events.findIndex((e) => e.id === eventId);
-    if (index !== -1) {
-      events[index] = { ...event, id: eventId };
-
-      await databaseService.set(eventRef, events);
-    }
+  updateEvent = async (userId, oldDayOfWeek, newDayOfWeek, eventId, event) => {
+    await this.addEvent(userId, newDayOfWeek, event);
+    await this.deleteEvent(userId, oldDayOfWeek, eventId);
   };
 
   deleteEvent = async (userId, dayOfWeek, eventId) => {
@@ -245,7 +274,6 @@ class Firebase {
       this.realtimeDb,
       userId + "/calendars/" + dayOfWeek
     );
-
     const events = await this.getEvents(userId, dayOfWeek);
 
     const index = events.findIndex((e) => e.id === eventId);
@@ -261,9 +289,9 @@ class Firebase {
       databaseService.ref(this.realtimeDb, userId + "/calendars"),
       (snapshot) => {
         const weekEvents = snapshot.val();
-        const checkedEvents = checkAndRemoveExpiredEvents(weekEvents);
-        console.log("mentor weekEvents", weekEvents);
-        this.setUserEvent(userId, checkedEvents);
+        // const checkedEvents = checkAndRemoveExpiredEvents(weekEvents);
+        // console.log("mentor weekEvents",checkedEvents, weekEvents);
+        // this.setUserEvent(userId, checkedEvents);
         onEventChange(weekEvents);
       }
     );

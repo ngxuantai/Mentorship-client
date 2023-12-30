@@ -34,10 +34,9 @@ const menteeApplicationApi = {
       return null;
     }
   },
-
   getMenteeApplicationByMentorId: async (mentorId) => {
     try {
-      const url = `/menteeApplication/getMenteeApplicationByMentorId/${mentorId}`;
+      const url = `/menteeApplication/getMenteeApplicationByMentorId?mentorId=${mentorId}`;
       const res = await axiosClient.get(url);
       return res.data.data;
     } catch (error) {
@@ -52,6 +51,17 @@ const menteeApplicationApi = {
       const res = await axiosClient.put(url, status);
       console.log("res", res.data.data);
       return res.data.data;
+    } catch (error) {
+      console.error(error);
+      return null;
+    }
+  },
+  updateMenteeApplication: async (id, application) => {
+    try {
+      const url = `/menteeApplication/update/${id}`;
+      const res = await axiosClient.put(url, application);
+      console.log("res", res.data);
+      return res.data;
     } catch (error) {
       console.error(error);
       return null;

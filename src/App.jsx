@@ -11,6 +11,7 @@ import InformationForm from "./pages/Mentee/ApplyProcess/InformationForm";
 import DashBoard from "./pages/Mentee/DashBoard";
 import DoExam from "./pages/Mentee/DoExam";
 import Inquires from "./pages/Mentee/Inquires";
+import LearningProgress from "./pages/Mentee/LearningProgress";
 import ListExam from "./pages/Mentee/ListExam";
 import Payment from "./pages/Mentee/Payment";
 import RatingComment from "./pages/Mentee/RatingComment";
@@ -73,6 +74,14 @@ function App() {
           element={
             <ProtectedRoute>
               <Inquires />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/mentee/learning-progress"
+          element={
+            <ProtectedRoute>
+              <LearningProgress />
             </ProtectedRoute>
           }
         />

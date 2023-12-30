@@ -1,4 +1,4 @@
-import {Visibility, VisibilityOff} from '@mui/icons-material';
+import { Visibility, VisibilityOff } from "@mui/icons-material";
 import {
   FormControl,
   IconButton,
@@ -6,28 +6,29 @@ import {
   InputLabel,
   OutlinedInput,
   TextField,
-} from '@mui/material';
-import {useState} from 'react';
-import {Link, useNavigate} from 'react-router-dom';
-import styled from 'styled-components';
-import menteeApi from '../api/mentee';
-import {colors} from '../constants/colors';
-import firebaseInstance from '../services/firebase';
-import {useUserStore} from '../store/userStore';
+} from "@mui/material";
+import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import styled from "styled-components";
+import menteeApi from "../api/mentee";
+import { colors } from "../constants/colors";
+import firebaseInstance from "../services/firebase";
+import { useUserStore } from "../store/userStore";
 
 function SignupPage() {
   const navigate = useNavigate();
-  const {user, setUser} = useUserStore();
+  const { user, setUser } = useUserStore();
   const [values, setValues] = useState({
-    fullname: '',
-    email: '',
-    password: '',
-    confirmPassword: '',
+    firstName: "",
+    lastName: "",
+    email: "",
+    password: "",
+    confirmPassword: "",
   });
 
   const handleChange = (event) => {
-    const {name, value} = event.target;
-    setValues({...values, [name]: value});
+    const { name, value } = event.target;
+    setValues({ ...values, [name]: value });
   };
 
   const [showPassword, setShowPassword] = useState(false);
@@ -51,12 +52,12 @@ function SignupPage() {
       const mentee = await menteeApi.createMentee(values);
       await firebaseInstance.addUser(userFirebase.uid, {
         id: mentee.id,
-        role: 'mentee',
+        role: "mentee",
       });
-      setUser({...mentee, role: 'mentee'});
-      navigate('/mentee');
+      setUser({ ...mentee, role: "mentee" });
+      navigate("/mentee");
     } catch (er) {
-      console.log('er', er);
+      console.log("er", er);
     }
   };
 
@@ -72,21 +73,31 @@ function SignupPage() {
             onSubmit={(event) => handleSubmit(event)}
           >
             <h1>Đăng ký làm mentee</h1>
-            <TextField
-              name="fullname"
-              onChange={(event) => handleChange(event)}
-              autoComplete="off"
-              label="Họ và tên"
-              variant="outlined"
-              sx={{width: '100%', fontSize: '1rem'}}
-            />
+            <div style={{ display: "flex", flexDirection: "row" }}>
+              <TextField
+                name="firstName"
+                onChange={(event) => handleChange(event)}
+                autoComplete="off"
+                label="Tên"
+                variant="outlined"
+                sx={{ width: "100%", marginRight: 2, fontSize: "1rem" }}
+              />
+              <TextField
+                name="lastName"
+                onChange={(event) => handleChange(event)}
+                autoComplete="off"
+                label="Họ"
+                variant="outlined"
+                sx={{ width: "100%", fontSize: "1rem" }}
+              />
+            </div>
             <TextField
               name="email"
               onChange={(event) => handleChange(event)}
               autoComplete="off"
               label="Email"
               variant="outlined"
-              sx={{width: '100%', fontSize: '1rem'}}
+              sx={{ width: "100%", fontSize: "1rem" }}
             />
             <FormControl variant="outlined">
               <InputLabel htmlFor="outlined-adornment-password">
@@ -95,7 +106,7 @@ function SignupPage() {
               <OutlinedInput
                 name="password"
                 onChange={(event) => handleChange(event)}
-                type={showPassword ? 'text' : 'password'}
+                type={showPassword ? "text" : "password"}
                 endAdornment={
                   <InputAdornment position="end">
                     <IconButton
@@ -118,7 +129,7 @@ function SignupPage() {
               <OutlinedInput
                 name="confirmPassword"
                 onChange={(event) => handleChange(event)}
-                type={showConfirmPassword ? 'text' : 'password'}
+                type={showConfirmPassword ? "text" : "password"}
                 endAdornment={
                   <InputAdornment position="end">
                     <IconButton

@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import styled from "styled-components";
+import AccountInfor from "./AccountInfor";
 import MentorSkills from "./MentorSkills";
 import OtherInfor from "./OtherInfor";
 import PersonalInfor from "./PersonalInfor";
@@ -33,6 +34,7 @@ export default function Profiles() {
   return (
     <Container>
       <PersonalInfor />
+      <AccountInfor />
       <MentorSkills />
       <OtherInfor />
       {/* <TimeAvailable /> */}
