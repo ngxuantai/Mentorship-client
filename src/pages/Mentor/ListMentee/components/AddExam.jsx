@@ -5,7 +5,7 @@ import {HiOutlineEye} from 'react-icons/hi';
 import {PiExamFill} from 'react-icons/pi';
 import {format} from 'date-fns';
 import {ApprovalStatus} from '../../../../constants';
-import {useMenteeAppliStore} from '../../../../store/menteeAppli';
+import {useMenteeAppliStore} from '../../../../store/menteeAppliStore';
 import examApi from '../../../../api/exam';
 import mneteeExamApi from '../../../../api/menteeExam';
 import {ToastContainer, toast} from 'react-toastify';

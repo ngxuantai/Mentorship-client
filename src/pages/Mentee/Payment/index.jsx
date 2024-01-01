@@ -1,14 +1,7 @@
-import {
-  Button,
-  Checkbox,
-  Label,
-  Modal,
-  Table,
-  TextInput,
-} from "flowbite-react";
-import Datepicker from "tailwind-datepicker-react";
-import Select from "react-select";
-import { useState, useEffect } from "react";
+import {Button, Checkbox, Label, Modal, Table, TextInput} from 'flowbite-react';
+import Datepicker from 'tailwind-datepicker-react';
+import Select from 'react-select';
+import {useState, useEffect} from 'react';
 import {
   HiChevronLeft,
   HiChevronRight,
@@ -18,31 +11,31 @@ import {
   HiOutlineEye,
   HiTrash,
   HiX,
-} from "react-icons/hi";
+} from 'react-icons/hi';
 // import {useApplicationStore} from '../../store/application';
 // import {useUserStore} from '../../store/user';
-import ListPayment from "./components/ListPayment";
-import { useMenteeAppliStore } from "../../../store/menteeAppli";
-import { applicationToExcelData } from "../../../utils/excelDataHelper";
-import { exportExcel } from "../../../utils/excelHelper";
-import { PaymentStatus } from "../../../constants";
+import ListPayment from './components/ListPayment';
+import {useMenteeAppliStore} from '../../../store/menteeAppliStore';
+import {applicationToExcelData} from '../../../utils/excelDataHelper';
+import {exportExcel} from '../../../utils/excelHelper';
+import {PaymentStatus} from '../../../constants';
 
 const dropdownOption = [
-  { value: "id", label: "Id" },
-  { value: "displayName", label: "Tên học viên" },
+  {value: 'id', label: 'Id'},
+  {value: 'displayName', label: 'Tên học viên'},
 ];
 
 const ListMentee = () => {
   const [show, setShow] = useState(false);
   const [warningVisible, setWarningVisible] = useState(true); // Add this line
 
-  const { menteeApplications, menteeAppliApproved, getMenteeAppliByMentorId } =
+  const {menteeApplications, menteeAppliApproved, getMenteeAppliByMentorId} =
     useMenteeAppliStore();
 
   useEffect(() => {
     const fetchAndSetApplications = async () => {
       try {
-        await getMenteeAppliByMentorId("65840127a47c189dd995cdf3");
+        await getMenteeAppliByMentorId('65840127a47c189dd995cdf3');
       } catch (er) {
         console.error(er);
       }
@@ -79,15 +72,11 @@ const ListMentee = () => {
         <div className="inline-block min-w-full align-middle">
           <div className="overflow-hidden shadow">
             <Tabs value={value} onChange={handleChange}>
-              <Tab
-                label="Thanh toán"
-                value={0}
-                style={{ fontWeight: "bold" }}
-              />
+              <Tab label="Thanh toán" value={0} style={{fontWeight: 'bold'}} />
               <Tab
                 label="Lịch sử thanh toán"
                 value={1}
-                style={{ fontWeight: "bold" }}
+                style={{fontWeight: 'bold'}}
               />
             </Tabs>
             {value === 0 && <ListPayment applications={menteeAppliApproved} />}

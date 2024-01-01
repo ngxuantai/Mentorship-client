@@ -10,6 +10,7 @@ import AddFile from './components/AddFile';
 import firebaseInstance from '../../../services/firebase';
 import examApi from '../../../api/exam';
 import {fileApi, folderApi} from '../../../api/file';
+import {useUserStore} from '../../../store/userStore';
 // const nodemailer = require('nodemailer');
 
 const Examination = () => {
@@ -19,30 +20,30 @@ const Examination = () => {
   const [folders, setFolders] = useState([]);
   const [files, setFiles] = useState([]);
 
+  const {user} = useUserStore();
+
   useEffect(() => {
     const fetchExams = async () => {
-      const res = await examApi.getExamByMentorId('65840127a47c189dd995cdf3');
+      const res = await examApi.getExamByMentorId(user.id);
       console.log(res);
       setExams(res);
     };
 
     const fetchFiles = async () => {
-      const res = await fileApi.getFilesByMentorId('65840127a47c189dd995cdf3');
+      const res = await fileApi.getFilesByMentorId(user.id);
       console.log(res);
       setFiles(res);
     };
 
     const fecthFolders = async () => {
-      const res = await folderApi.getFoldersByMentorId(
-        '65840127a47c189dd995cdf3'
-      );
+      const res = await folderApi.getFoldersByMentorId(user.id);
       console.log(res);
       setFolders(res);
     };
 
     fetchExams();
     fecthFolders();
-    fetchFiles();
+    // fetchFiles();
   }, []);
 
   const handleAddExam = () => {

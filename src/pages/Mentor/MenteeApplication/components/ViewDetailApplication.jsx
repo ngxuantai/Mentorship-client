@@ -1,25 +1,25 @@
-import { format } from "date-fns";
-import { Button, Label, Modal } from "flowbite-react";
-import { useEffect, useState } from "react";
-import { HiOutlineEye } from "react-icons/hi";
-import { ApprovalStatus } from "../../../../constants";
-import firebaseInstance from "../../../../services/firebase";
-import { useMenteeAppliStore } from "../../../../store/menteeAppli";
-import { useUserStore } from "../../../../store/userStore";
-import { checkIfEventOverlap } from "../../../../utils/dataHelper";
+import {format} from 'date-fns';
+import {Button, Label, Modal} from 'flowbite-react';
+import {useEffect, useState} from 'react';
+import {HiOutlineEye} from 'react-icons/hi';
+import {ApprovalStatus} from '../../../../constants';
+import firebaseInstance from '../../../../services/firebase';
+import {useMenteeAppliStore} from '../../../../store/menteeAppliStore';
+import {useUserStore} from '../../../../store/userStore';
+import {checkIfEventOverlap} from '../../../../utils/dataHelper';
 
 export default function ViewApplicationDetail({
   resetSelectedItems,
   application,
 }) {
-  console.log("application6", application);
-  const { user } = useUserStore();
+  console.log('application6', application);
+  const {user} = useUserStore();
   const menteeProfile = application.menteeProfile;
   const [isOpen, setOpen] = useState(false);
   const [isShow, setShow] = useState(false);
   const [events, setEvents] = useState(false);
 
-  const { updateMenteeAppliStatus } = useMenteeAppliStore();
+  const {updateMenteeAppliStatus} = useMenteeAppliStore();
 
   const onEventChange = (weekList) => {
     if (!weekList) return;
@@ -72,7 +72,7 @@ export default function ViewApplicationDetail({
   const handleAcceptApplication = async () => {
     try {
       if (checkHasEventOverLap(application.learningTime)) {
-        alert("Lịch học bị trùng");
+        alert('Lịch học bị trùng');
         return;
       }
       // await learningProgressApi.createLearningProgress(application);
@@ -81,22 +81,22 @@ export default function ViewApplicationDetail({
       resetSelectedItems();
       setOpen(false);
     } catch (er) {
-      console.error("update application er", er);
+      console.error('update application er', er);
     }
   };
 
   useEffect(() => {
     const handleClickOutside = (event) => {
-      const modal = document.getElementById("modal");
+      const modal = document.getElementById('modal');
       if (modal && !modal.contains(event.target)) {
         closeModal();
       }
     };
 
-    document.addEventListener("mousedown", handleClickOutside);
+    document.addEventListener('mousedown', handleClickOutside);
 
     return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
+      document.removeEventListener('mousedown', handleClickOutside);
     };
   }, []);
 
@@ -115,48 +115,48 @@ export default function ViewApplicationDetail({
         <Modal.Body>
           <div
             style={{
-              display: "flex",
-              flexDirection: "row",
+              display: 'flex',
+              flexDirection: 'row',
             }}
           >
             <img
-              style={{ marginRight: 20 }}
+              style={{marginRight: 20}}
               src={menteeProfile.avatar}
               width={200}
               height={160}
             ></img>
             <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
               <div>
-                <Label style={{ fontWeight: "bold" }} htmlFor="firstName">
-                  Họ và tên:{" "}
+                <Label style={{fontWeight: 'bold'}} htmlFor="firstName">
+                  Họ và tên:{' '}
                 </Label>
                 <div className="mt-1">
                   <p style={styles.text}>
-                    {menteeProfile.firstName + " " + menteeProfile.lastName}
+                    {menteeProfile.firstName + ' ' + menteeProfile.lastName}
                   </p>
                 </div>
               </div>
               <div>
-                <Label style={{ fontWeight: "bold" }} htmlFor="lastName">
-                  Ngày sinh:{" "}
+                <Label style={{fontWeight: 'bold'}} htmlFor="lastName">
+                  Ngày sinh:{' '}
                 </Label>
                 <div className="mt-1">
                   <p style={styles.text}>
-                    {format(new Date(menteeProfile.dateOfBirth), "dd-MM-yyyy")}
+                    {format(new Date(menteeProfile.dateOfBirth), 'dd-MM-yyyy')}
                   </p>
                 </div>
               </div>
               <div>
-                <Label style={{ fontWeight: "bold" }} htmlFor="phone">
-                  Số điện thoại:{" "}
+                <Label style={{fontWeight: 'bold'}} htmlFor="phone">
+                  Số điện thoại:{' '}
                 </Label>
                 <div className="mt-1">
                   <p style={styles.text}>{menteeProfile.phoneNumber}</p>
                 </div>
               </div>
               <div>
-                <Label style={{ fontWeight: "bold" }} htmlFor="email">
-                  Email:{" "}
+                <Label style={{fontWeight: 'bold'}} htmlFor="email">
+                  Email:{' '}
                 </Label>
                 <div className="mt-1">
                   <p style={styles.text}>{menteeProfile.email}</p>
@@ -174,20 +174,20 @@ export default function ViewApplicationDetail({
               </div> */}
             </div>
           </div>
-          <div style={{ marginTop: 12 }}>
-            <Label style={{ fontWeight: "bold" }} htmlFor="department">
+          <div style={{marginTop: 12}}>
+            <Label style={{fontWeight: 'bold'}} htmlFor="department">
               Giới thiệu bản thân:
             </Label>
             <div className="mt-1">
               <p style={styles.text}>
-                {application.personalDescription || "Không có"}
+                {application.personalDescription || 'Không có'}
               </p>
             </div>
-            <Label style={{ marginTop: 12 }} htmlFor="department">
+            <Label style={{marginTop: 12}} htmlFor="department">
               Mong đợi của học viên:
             </Label>
             <div className="mt-1">
-              <p style={styles.text}>{application.expectation || "Không có"}</p>
+              <p style={styles.text}>{application.expectation || 'Không có'}</p>
             </div>
           </div>
         </Modal.Body>
@@ -197,7 +197,7 @@ export default function ViewApplicationDetail({
               application.status === ApprovalStatus.APPROVED ||
               application.status === ApprovalStatus.REJECTED
             }
-            style={{ alignSelf: "flex-end", marginLeft: "auto" }}
+            style={{alignSelf: 'flex-end', marginLeft: 'auto'}}
             color="blue"
             onClick={handleAcceptApplication}
           >
@@ -218,13 +218,13 @@ export default function ViewApplicationDetail({
         <Modal.Body>
           <div
             style={{
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
             }}
           >
             <img
-              style={{ marginRight: 20 }}
+              style={{marginRight: 20}}
               src="https://picsum.photos/200/300"
               width={200}
               height={160}
@@ -238,11 +238,11 @@ export default function ViewApplicationDetail({
 
 const styles = {
   div: {
-    display: "flex",
-    flexDirection: "row",
+    display: 'flex',
+    flexDirection: 'row',
   },
   text: {
-    color: "black",
+    color: 'black',
     margin: 0,
   },
 };

@@ -1,19 +1,19 @@
-import { useState } from "react";
+import {useState} from 'react';
 // import {format} from 'date-fns';
 // import {FaCopy} from 'react-icons/fa';
 // import {shortenId} from '../../../../utils/shortenId';
-import { TextField } from "@mui/material";
-import { Button, Modal } from "flowbite-react";
-import { HiX } from "react-icons/hi";
-import { ApprovalStatus } from "../../../../constants";
-import { useMenteeAppliStore } from "../../../../store/menteeAppli";
+import {TextField} from '@mui/material';
+import {Button, Modal} from 'flowbite-react';
+import {HiX} from 'react-icons/hi';
+import {ApprovalStatus} from '../../../../constants';
+import {useMenteeAppliStore} from '../../../../store/menteeAppliStore';
 
-export default function RejectedApplication({ application }) {
-  const { updateMenteeAppliStatus, updateMenteeApplication } =
+export default function RejectedApplication({application}) {
+  const {updateMenteeAppliStatus, updateMenteeApplication} =
     useMenteeAppliStore();
 
   const [isOpen, setOpen] = useState(false);
-  const [reason, setReason] = useState("");
+  const [reason, setReason] = useState('');
 
   const handleInputChange = (event) => {
     setReason(event.target.value);
@@ -30,7 +30,7 @@ export default function RejectedApplication({ application }) {
       });
       setOpen(false);
     } catch (er) {
-      console.error("update application er", er);
+      console.error('update application er', er);
     }
   };
 
@@ -50,7 +50,7 @@ export default function RejectedApplication({ application }) {
         </div>
       </Button>
       <Modal
-        style={{ minWidth: "50%" }}
+        style={{minWidth: '50%'}}
         onClose={() => setOpen(false)}
         show={isOpen}
         size="md"
@@ -65,13 +65,13 @@ export default function RejectedApplication({ application }) {
               label="Lý do từ chối (tuỳ chọn) "
               variant="outlined"
               value={reason}
-              style={{ width: "100%" }}
+              style={{width: '100%'}}
               multiline
               rows={4}
               onChange={handleInputChange}
             />
             <div
-              style={{ alignSelf: "flex-end" }}
+              style={{alignSelf: 'flex-end'}}
               className="flex items-center gap-x-3"
             >
               <Button color="failure" onClick={() => handleRejectApplication()}>

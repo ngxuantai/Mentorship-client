@@ -27,6 +27,17 @@ export const useUserStore = create((set) => ({
       console.error('Error updating mentee:', error);
     }
   },
+  login: (user) => {
+    localStorage.setItem(
+      'user',
+      JSON.stringify({
+        id: user.id,
+        role: user.role,
+      })
+    );
+    set({user});
+  },
+  logout: () => set({user: {}}),
 }));
 // user: null,
 // isAuthenticated: false,

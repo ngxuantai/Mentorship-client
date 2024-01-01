@@ -19,7 +19,7 @@ import {
 } from 'react-icons/hi';
 import TeachingCalendar from '../../../components/Calendar';
 import firebaseInstance from '../../../services/firebase';
-import {useMenteeAppliStore} from '../../../store/menteeAppli';
+import {useMenteeAppliStore} from '../../../store/menteeAppliStore';
 import {useUserStore} from '../../../store/userStore';
 import {checkIfEventOverlap} from '../../../utils/dataHelper';
 import {applicationToExcelData} from '../../../utils/excelDataHelper';

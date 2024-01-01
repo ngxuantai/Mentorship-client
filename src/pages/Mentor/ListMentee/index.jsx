@@ -1,29 +1,22 @@
-import {
-  Button,
-  Checkbox,
-  Label,
-  Modal,
-  Table,
-  TextInput,
-} from "flowbite-react";
-import Datepicker from "tailwind-datepicker-react";
-import Select from "react-select";
-import { useState, useEffect } from "react";
-import { HiDocumentDownload } from "react-icons/hi";
-import Mentees from "./components/Mentees";
+import {Button, Checkbox, Label, Modal, Table, TextInput} from 'flowbite-react';
+import Datepicker from 'tailwind-datepicker-react';
+import Select from 'react-select';
+import {useState, useEffect} from 'react';
+import {HiDocumentDownload} from 'react-icons/hi';
+import Mentees from './components/Mentees';
 // import {useApplicationStore} from '../../store/application';
-// import {useUserStore} from '../../store/user';
-import { useMenteeAppliStore } from "../../../store/menteeAppli";
-import { applicationToExcelData } from "../../../utils/excelDataHelper";
-import { exportExcel } from "../../../utils/excelHelper";
+import {useUserStore} from '../../../store/userStore';
+import {useMenteeAppliStore} from '../../../store/menteeAppliStore';
+import {applicationToExcelData} from '../../../utils/excelDataHelper';
+import {exportExcel} from '../../../utils/excelHelper';
 
 const dropdownOption = [
-  { value: "id", label: "Id" },
-  { value: "displayName", label: "Tên học viên" },
+  {value: 'id', label: 'Id'},
+  {value: 'displayName', label: 'Tên học viên'},
 ];
 
 const ListMentee = () => {
-  const [searchTerm, setSearchTerm] = useState("");
+  const [searchTerm, setSearchTerm] = useState('');
   const [selectedDate, setSelectedDate] = useState(null);
   const [menteeList, setMenteeList] = useState([]);
 
@@ -31,11 +24,9 @@ const ListMentee = () => {
 
   const [show, setShow] = useState(false);
 
-  const {
-    menteeAppliApproved,
-    setMenteeApplications,
-    getMenteeAppliByMentorId,
-  } = useMenteeAppliStore();
+  const {menteeAppliApproved, setMenteeApplications, getMenteeAppliByMentorId} =
+    useMenteeAppliStore();
+  const {user} = useUserStore();
   //   const {applications, setApplications, fetchApplications} =
   //     useApplicationStore();
   //   const {user, getUserById} = useUserStore();
@@ -47,7 +38,7 @@ const ListMentee = () => {
   useEffect(() => {
     const fetchAndSetApplications = async () => {
       try {
-        await getMenteeAppliByMentorId("65840127a47c189dd995cdf3");
+        await getMenteeAppliByMentorId(user.id);
       } catch (er) {
         console.error(er);
       }
@@ -68,7 +59,7 @@ const ListMentee = () => {
             .toLowerCase()
             .includes(searchTerm.toLowerCase())
         );
-        console.log("applicationList", results, applicationList, searchTerm);
+        console.log('applicationList', results, applicationList, searchTerm);
         setMenteeList(results);
       } else {
         setMenteeList(menteeAppliApproved);
@@ -102,35 +93,35 @@ const ListMentee = () => {
   //   };
 
   const options = {
-    title: "Select date",
+    title: 'Select date',
     autoHide: true,
     todayBtn: false,
     clearBtn: true,
-    clearBtnText: "Clear",
-    maxDate: new Date("2030-01-01"),
-    minDate: new Date("1950-01-01"),
+    clearBtnText: 'Clear',
+    maxDate: new Date('2030-01-01'),
+    minDate: new Date('1950-01-01'),
     icons: {
       // () => ReactElement | JSX.Element
     },
-    datepickerClassNames: "top-12",
+    datepickerClassNames: 'top-12',
     defaultDate: new Date(),
-    language: "en",
+    language: 'en',
     disabledDates: [],
-    weekDays: ["Mo", "Tu", "We", "Th", "Fr", "Sa", "Su"],
-    inputNameProp: "date",
-    inputIdProp: "date",
-    inputPlaceholderProp: "Select Date",
+    weekDays: ['Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa', 'Su'],
+    inputNameProp: 'date',
+    inputIdProp: 'date',
+    inputPlaceholderProp: 'Select Date',
     inputDateFormatProp: {
-      day: "numeric",
-      month: "long",
-      year: "numeric",
+      day: 'numeric',
+      month: 'long',
+      year: 'numeric',
     },
   };
 
   const handleExportFileExcel = () => {
     const jsonData = menteeList.map((a) => applicationToExcelData(a));
-    console.log("jsonData", jsonData);
-    exportExcel(jsonData, "application_list");
+    console.log('jsonData', jsonData);
+    exportExcel(jsonData, 'application_list');
   };
 
   return (
@@ -158,22 +149,19 @@ const ListMentee = () => {
                   />
                 </div>
               </form>
-              <div style={{ marginRight: 8, minWidth: 200 }}>
+              <div style={{marginRight: 8, minWidth: 200}}>
                 <Select
                   styles={{
                     control: (baseStyles, state) => ({
                       ...baseStyles,
-                      color: "black",
-                      // backgroundColor: '#374151',
+                      color: 'black',
                     }),
                     singleValue: (baseStyles, state) => ({
                       ...baseStyles,
-                      color: "black",
-                      // backgroundColor: '#374151',
+                      color: 'black',
                     }),
                     option: (baseStyles, state) => ({
                       ...baseStyles,
-                      // color: '#374151',
                     }),
                   }}
                   defaultValue={selectedOption}
