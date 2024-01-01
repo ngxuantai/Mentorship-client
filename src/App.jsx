@@ -29,6 +29,7 @@ import Profile from "./pages/ProfilePage";
 import Search from "./pages/SearchPage";
 import SignUp from "./pages/SignupPage";
 import VideoChat from "./pages/VideoChatPage";
+import MessagePage from "./pages/MessagePage";
 
 function App() {
   return (
@@ -98,6 +99,7 @@ function App() {
         <Route path="/mentee/payment" element={<Payment />} />
 
         <Route path="/videochat" element={<VideoChat />} />
+        <Route path="/message" element={<MessagePage />} />
         <Route
           path="/mentee/payment/ReturnUrl/*"
           element={<RedirectComponent />}

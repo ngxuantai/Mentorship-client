@@ -143,6 +143,103 @@ class Firebase {
 
   // get file
 
+  // message chats
+  getChat = async (id) => {
+    try {
+      const chatDoc = await firestoreService.getDoc(firestoreService.doc(this.db, "chats", id));
+      
+      if (chatDoc.exists()) {
+        // Cuộc trò chuyện tồn tại, trả về dữ liệu của nó
+        return chatDoc.data();
+      } else {
+        // Cuộc trò chuyện không tồn tại, trả về false
+        return false;
+      }
+    } catch (error) {
+      console.error("Error getting chat:", error);
+      // Xử lý lỗi theo cách phù hợp với ứng dụng của bạn
+      throw error;
+    }
+  };
+  
+  createChat = (id) => 
+    firestoreService.setDoc(firestoreService.doc(this.db, "chats", id), {messages: []});
+
+  getUserChats = async (id) => {
+    try {
+      const userChatsDoc = await firestoreService.getDoc(firestoreService.doc(this.db, "userChats", id));
+      
+      if (userChatsDoc.exists()) {
+        
+        return userChatsDoc.data();
+      } else {
+        
+        return false;
+      }
+    } catch (error) {
+      console.error("Error getting chat:", error);
+      throw error;
+    }
+  };  
+
+  createUserChats = (id) =>
+    firestoreService.setDoc(firestoreService.doc(this.db, "userChats", id), {});
+     
+  updateUserChats = (id, combinedId, userInfo) => {
+    firestoreService.updateDoc(firestoreService.doc(this.db, "userChats", id), {
+      [combinedId+".userInfo"]: userInfo,
+      [combinedId+".date"]: firestoreService.serverTimestamp(),
+    });
+  };
+  updateLastMessage = (id, combinedId, message) => {
+    firestoreService.updateDoc(firestoreService.doc(this.db, "userChats", id), {
+      [combinedId+".lastMessage"]: message,
+      [combinedId+".date"]: firestoreService.serverTimestamp(),
+    });
+  };
+  
+  getChats = (id) => {
+    return new Promise((resolve, reject) => {
+      const docRef = firestoreService.doc(this.db, "userChats", id);
+  
+      const unsubscribe = firestoreService.onSnapshot(docRef, (doc) => {
+        if (doc.exists()) {
+          resolve(doc.data());
+        } else {
+          reject(new Error("Document not found"));
+        }
+      });
+      
+      return unsubscribe;
+    });   
+  };
+
+  getMessages = (id) => {
+    return new Promise((resolve, reject) => {
+      const docRef = firestoreService.doc(this.db, "chats", id);
+  
+      const unsubscribe = firestoreService.onSnapshot(docRef, (doc) => {
+        if (doc.exists()) {
+          resolve(doc.data());
+        } else {
+          reject(new Error("Document not found"));
+        }
+      });
+      
+      return unsubscribe;
+    });   
+  }
+
+  sendMessage = (id, message) => {
+    firestoreService.updateDoc(firestoreService.doc(this.db, "chats", id), {
+      messages: firestoreService.arrayUnion(message),
+    });
+  };
+
+  
+  
+  
+
   //db realtime
   getEvents = async (userId, dayOfWeek) => {
     const snapshot = await databaseService.get(
