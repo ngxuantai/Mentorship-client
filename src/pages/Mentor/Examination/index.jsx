@@ -11,11 +11,13 @@ import firebaseInstance from '../../../services/firebase';
 import examApi from '../../../api/exam';
 import {fileApi, folderApi} from '../../../api/file';
 import {useUserStore} from '../../../store/userStore';
+import ReactLoading from 'react-loading';
 // const nodemailer = require('nodemailer');
 
 const Examination = () => {
   const navigate = useNavigate();
 
+  const [loading, setLoading] = useState(true);
   const [exams, setExams] = useState([]);
   const [folders, setFolders] = useState([]);
   const [files, setFiles] = useState([]);
@@ -43,6 +45,7 @@ const Examination = () => {
 
     fetchExams();
     fecthFolders();
+    setLoading(false);
     // fetchFiles();
   }, []);
 
@@ -51,92 +54,47 @@ const Examination = () => {
     navigate(`/mentor/examination/${exams[0].id}`);
   };
 
-  const editName = (mnetorId, fileName) => {
-    const lastDotIndex = fileName.lastIndexOf('.');
-    let name = '',
-      extension = '';
-
-    // Nếu có dấu chấm, cắt chuỗi để chỉ giữ phần đầu đến trước dấu chấm
-    if (lastDotIndex !== -1) {
-      name = fileName.substring(0, lastDotIndex);
-      extension = fileName.substring(lastDotIndex + 1);
-    } else {
-      // Nếu không có dấu chấm, trả về tên file không thay đổi
-      name = fileName;
-    }
-
-    return name + '-' + mnetorId + '.' + extension;
-  };
-
-  const handleAddFile = async () => {
-    const input = document.createElement('input');
-    input.type = 'file';
-    input.accept = '.pdf, .docx, .doc, .xlsx, .xls, .ppt, .pptx, .txt';
-    input.multiple = true;
-    // storeFile();
-
-    input.addEventListener('change', (event) => {
-      const filesInput = event.target.files;
-
-      filesInput.forEach((file) => {
-        console.log(file);
-        let fileData = {
-          mentorId: '65840127a47c189dd995cdf3',
-          name: file.name,
-          link: '',
-          size: file.size,
-          type: file.type,
-          createdDate: new Date().toISOString(),
-        };
-        firebaseInstance
-          .storeFile('files', file, fileData.mentorId)
-          .then(async (url) => {
-            fileData.link = url;
-            await fileApi.createFile(fileData);
-            setFiles([...files, fileData]);
-          });
-      });
-    });
-
-    // Kích hoạt sự kiện click trên input
-    input.click();
-  };
-
   return (
-    <Container>
-      <ButtonContainer>
-        <Label style={{fontSize: '20px', fontWeight: 'bold'}}>
-          Danh sách đề thi
-        </Label>
-        <Button
-          variant="contained"
-          color="primary"
-          onClick={() => handleAddExam()}
-        >
-          Thêm đề thi
-        </Button>
-      </ButtonContainer>
-      {exams.length > 0 ? (
-        <ExamContainer>
-          {exams.map((exam) => (
-            <CardExam key={exam.id} exam={exam} />
-          ))}
-        </ExamContainer>
-      ) : null}
-      {folders.length > 0 ? (
-        <ListFolder folders={folders} />
+    <>
+      {loading ? (
+        <ReactLoading type="spin" color="#fff" />
       ) : (
-        <>
+        <Container>
           <ButtonContainer>
             <Label style={{fontSize: '20px', fontWeight: 'bold'}}>
-              Danh sách tài liệu
+              Danh sách đề thi
             </Label>
-            <AddFile />
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={() => handleAddExam()}
+            >
+              Thêm đề thi
+            </Button>
           </ButtonContainer>
-          <Label>Chưa có tài liệu</Label>
-        </>
+          {exams.length > 0 ? (
+            <ExamContainer>
+              {exams.map((exam) => (
+                <CardExam key={exam.id} exam={exam} />
+              ))}
+            </ExamContainer>
+          ) : null}
+          {folders.length > 0 ? (
+            <ListFolder folders={folders} />
+          ) : (
+            <>
+              <ButtonContainer>
+                <Label style={{fontSize: '20px', fontWeight: 'bold'}}>
+                  Danh sách tài liệu
+                </Label>
+                <AddFile />
+              </ButtonContainer>
+              <Label>Chưa có tài liệu</Label>
+            </>
+          )}
+        </Container>
       )}
-    </Container>
+    </>
   );
 };
 
