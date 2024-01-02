@@ -49,8 +49,7 @@ const MessagePage = () => {
           }    
         }
         loadMessage();
-    }, [user])
-
+    }, [user, id])
 
   return (
     <ChatContext.Provider value={{data: state, dispatch}}>

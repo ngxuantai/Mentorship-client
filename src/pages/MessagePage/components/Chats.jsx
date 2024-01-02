@@ -6,12 +6,16 @@ import menteeApi from '../../../api/mentee';
 import { ChatContext } from '../index';
 import { useUserStore } from '../../../store/userStore';
 import { set } from 'firebase/database';
+import { useNavigate } from 'react-router-dom';
+import { combine } from 'rrule/dist/esm/dateutil';
 
 
 const Chats = () => {
   const [chats, setChats] = useState([])
-  const {dispatch} = useContext(ChatContext)
+  const {data, dispatch} = useContext(ChatContext)
   const {user, setUser} = useUserStore();
+  const navigate = useNavigate();
+
 
   useEffect(() => {
     const getChats = async () => {
@@ -32,6 +36,8 @@ const Chats = () => {
 
   const handleSelect = (u) => {
       dispatch({type: 'CHANGE_USER', payload: u})
+      const combinedId = user.id > u.id ? user.id + u.id : u.id + user.id;
+      navigate(`/message/${combinedId}`);
   };
 
   return (

@@ -99,6 +99,17 @@ const menteeApplicationApi = {
       return null;
     }
   },
+
+  getMenteeApplicationByMenteeIdAndMentorId: async (menteeId, mentorId) => {
+    try {
+      const url = `/menteeApplication/getMenteeApplicationByMenteeIdAndMentorId`;
+      const res = await axiosClient.post(url, { menteeId, mentorId });
+      return res.data.data;
+    } catch (error) {
+      console.error(error);
+      return null;
+    }
+  },
 };
 
 export default menteeApplicationApi;
