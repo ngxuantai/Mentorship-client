@@ -31,7 +31,7 @@ const ListAppliedMentor = () => {
     if (user) {
       const fetchProgress = async () => {
         const data = await learningProgressApi.getLearningProgressByMenteeId(
-          '65825627600fc966c46f60f8'
+          user.id
         );
         if (data) {
           const list = data.sort((a, b) => {
@@ -77,6 +77,7 @@ const ListAppliedMentor = () => {
 export default ListAppliedMentor;
 
 function ProgressItem({progress, onClick}) {
+  const navigate = useNavigate();
   const theme = useTheme();
   const cardRef = useRef(null);
   const [mentor, setMentor] = useState(null);
@@ -98,9 +99,7 @@ function ProgressItem({progress, onClick}) {
   function handleCallClick() {}
 
   function handleChatClick() {
-    if (chatDisabled) {
-      return;
-    }
+    navigate(`/message/`);
   }
   function computeRemainPercent() {
     const startDate = new Date(progress.startDate).getTime();

@@ -81,7 +81,7 @@ const ApplicationListPage = () => {
   useEffect(() => {
     const fetchAndSetApplications = async () => {
       try {
-        await getMenteeAppliByMentorId('65840127a47c189dd995cdf3');
+        await getMenteeAppliByMentorId(user.id);
       } catch (er) {
         console.error(er);
       }

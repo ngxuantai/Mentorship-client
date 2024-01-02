@@ -4,6 +4,7 @@ import Select from 'react-select';
 import {fileApi, folderApi} from '../../../../api/file';
 import {format} from 'date-fns';
 import firebaseInstance from '../../../../services/firebase';
+import {useUserStore} from '../../../../store/userStore';
 
 export default function AddFile({folderDeatil}) {
   const [listFolder, setListFolder] = useState([]); // [folder1, folder2, ...
@@ -11,11 +12,12 @@ export default function AddFile({folderDeatil}) {
   const [selectedFiles, setSelectedFiles] = useState([]);
   const [isOpen, setOpen] = useState(false);
   const [isShow, setShow] = useState(false);
+  const {user, setUser} = useUserStore();
 
   useEffect(() => {
     const fetchFolders = async () => {
       const res = await folderApi.getFoldersByMentorId(
-        '65840127a47c189dd995cdf3'
+        user.id
       );
       console.log(res);
       setListFolder(res);
@@ -45,7 +47,7 @@ export default function AddFile({folderDeatil}) {
     selectedFiles.forEach((file) => {
       console.log(file);
       let fileData = {
-        mentorId: '65840127a47c189dd995cdf3',
+        mentorId: user.id,
         name: file.name,
         link: '',
         size: file.size,

@@ -6,17 +6,7 @@ import mentorApi from '../../api/mentor';
 import UserCard from './components/UserCard';
 import { ChatBubbleOutline } from '@mui/icons-material';
 import menteeApi from '../../api/mentee';
-
-//const currentUserId = '65840127a47c189dd995cdf3';
-//const currentUser = await mentorApi.getMentorById(currentUserId)
-const currentUserId = '658b162cae49ca742c25fd2a';
-
-var currentUser = await mentorApi.getMentorById(currentUserId);
-if (currentUser === '') {
-  currentUser = await menteeApi.getMentee(currentUserId);
-}
-
-console.log(currentUser);
+import { useUserStore } from '../../store/userStore';
 
 export const ChatContext = createContext();
 
@@ -26,6 +16,7 @@ const MessagePage = () => {
       chatId: 'null',
       user:{}
   }
+  const {user, setUser} = useUserStore();
 
   const chatReducer = (state, action) => {
       switch(action.type){
@@ -33,9 +24,9 @@ const MessagePage = () => {
               return {
                     user: action.payload,
                     chatId:
-                        currentUser.id > action.payload.id
-                            ? currentUser.id + action.payload.id
-                            : action.payload.id + currentUser.id,
+                        user.id > action.payload.id
+                            ? user.id + action.payload.id
+                            : action.payload.id + user.id,
                 }
 
           default:
