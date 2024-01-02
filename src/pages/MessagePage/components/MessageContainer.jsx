@@ -1,12 +1,15 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { useContext} from 'react';
 import Messages from './Messages';
 import Input from './Input';
 import { ChatContext } from '../index';
+import { useUserStore } from '../../../store/userStore';
+import { useParams } from 'react-router';
 
 export const MessageContainer = () => {
-
+  const {user, setUser} = useUserStore();
   const {data} = useContext(ChatContext)
+
  
     return (
     <div className='flex-[2]'>

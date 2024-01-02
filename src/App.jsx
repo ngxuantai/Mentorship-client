@@ -99,7 +99,7 @@ function App() {
         <Route path="/mentee/payment" element={<Payment />} />
 
         <Route path="/videochat" element={<VideoChat />} />
-        <Route path="/message" element={<MessagePage />} />
+        <Route path="/message/:id" element={<MessagePage />} />
         <Route
           path="/mentee/payment/ReturnUrl/*"
           element={<RedirectComponent />}

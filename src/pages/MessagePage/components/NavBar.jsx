@@ -17,7 +17,7 @@ const NavBar = () => {
         ></img>
         <span className='text-white'>{user.firstName} {user.lastName}</span>
       </div>
-      <span className='text-white text-xl font-bold font-sans'>Message</span>
+      <span className='text-white text-xl font-bold font-sans'>Tin nhắn</span>
     </div>
   )
 }

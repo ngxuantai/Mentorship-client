@@ -99,7 +99,7 @@ function ProgressItem({progress, onClick}) {
   function handleCallClick() {}
 
   function handleChatClick() {
-    navigate(`/message/`);
+    navigate(`/message/${mentor.id}`);
   }
   function computeRemainPercent() {
     const startDate = new Date(progress.startDate).getTime();

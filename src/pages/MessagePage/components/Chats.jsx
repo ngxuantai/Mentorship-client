@@ -5,6 +5,7 @@ import mentorApi from '../../../api/mentor';
 import menteeApi from '../../../api/mentee';
 import { ChatContext } from '../index';
 import { useUserStore } from '../../../store/userStore';
+import { set } from 'firebase/database';
 
 
 const Chats = () => {
@@ -30,7 +31,7 @@ const Chats = () => {
   //console.log(Object.entries(chats));
 
   const handleSelect = (u) => {
-    dispatch({type: 'CHANGE_USER', payload: u})
+      dispatch({type: 'CHANGE_USER', payload: u})
   };
 
   return (

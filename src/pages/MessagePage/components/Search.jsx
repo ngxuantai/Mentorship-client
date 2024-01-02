@@ -130,7 +130,7 @@ const Search = () => {
   return (
     <div className='p-2 bg-primary-600'>
         <div>
-            <input type="text" placeholder="Find a user" 
+            <input type="text" placeholder="Tìm theo id" 
                 className='border-none rounded-md outline-none p-2 w-full'
                 onChange={(e) => setUsername(e.target.value)}
                 onKeyDown={handleKey}/>

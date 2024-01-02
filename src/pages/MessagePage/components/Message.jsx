@@ -10,7 +10,6 @@ const Message = ({message}) => {
   const ref = useRef(null);
   const {user, setUser} = useUserStore();
 
-
   useEffect(() => {
     ref.current?.scrollIntoView({ behavior: "smooth" });
   }, [message])
