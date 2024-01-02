@@ -35,6 +35,7 @@ const MessagePage = () => {
               return state
         }
     }
+    const [state, dispatch] = useReducer(chatReducer, INITIAL_STATE)
 
     useEffect(() => {
         const loadMessage = async () => {
@@ -52,7 +53,6 @@ const MessagePage = () => {
         loadMessage();
     }, [])
 
-    const [state, dispatch] = useReducer(chatReducer, INITIAL_STATE)
 
   return (
     <ChatContext.Provider value={{data: state, dispatch}}>
