@@ -26,7 +26,7 @@ const Chats = () => {
     }
 
     user.id && getChats();
-  }, [chats])
+  }, [chats, user])
 
   //console.log(Object.entries(chats));
 

@@ -83,6 +83,7 @@ function ProgressItem({progress, onClick}) {
   const [mentor, setMentor] = useState(null);
   const [remainingPercent, setRemainingPercent] = useState(100);
   const [application, setApplication] = useState(null);
+  const {user, setUser} = useUserStore();
   const fetchApplication = async () => {
     const data = await menteeApplicationApi.getMenteeApplicationById(
       progress.applicationId
@@ -99,7 +100,8 @@ function ProgressItem({progress, onClick}) {
   function handleCallClick() {}
 
   function handleChatClick() {
-    navigate(`/message/${mentor.id}`);
+    const combinedId = user.id > mentor.id ? user.id + mentor.id : mentor.id + user.id;
+    navigate(`/message/${combinedId}`);
   }
   function computeRemainPercent() {
     const startDate = new Date(progress.startDate).getTime();
