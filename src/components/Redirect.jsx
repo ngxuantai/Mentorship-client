@@ -3,6 +3,7 @@ import {PaymentStatus} from '../constants';
 import usePaymentStore from '../store/paymentStore';
 import menteeApplicationApi from '../api/menteeApplication';
 import paymentApi from '../api/payment';
+import learningProgressApi from '../api/learningProgress';
 
 const RedirectComponent = () => {
   const {payment, createPayment} = usePaymentStore();
@@ -33,6 +34,7 @@ const RedirectComponent = () => {
               status: PaymentStatus.SUCCESS,
             });
             await paymentApi.deletePayment(menteeApplication.id);
+            await learningProgressApi.createLearningProgress(menteeApplication);
             window.location.href = 'http://localhost:5173/mentee/payment';
           }
         }

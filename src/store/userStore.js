@@ -28,8 +28,9 @@ export const useUserStore = create((set) => ({
     }
   },
   login: (user) => {
+    console.log('user', user);
     localStorage.setItem(
-      'user',
+      'userData',
       JSON.stringify({
         id: user.id,
         role: user.role,
@@ -37,7 +38,10 @@ export const useUserStore = create((set) => ({
     );
     set({user});
   },
-  logout: () => set({user: {}}),
+  logout: () => {
+    localStorage.removeItem('userData');
+    set({user: {}});
+  },
 }));
 // user: null,
 // isAuthenticated: false,
