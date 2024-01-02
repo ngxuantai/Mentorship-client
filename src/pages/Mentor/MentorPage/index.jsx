@@ -15,40 +15,34 @@ function Mentor() {
       <Row className="intro-wallpaper d-flex justify-content-center">
         <div className="intro-title px-5">
           <h1>
-            <span>Share your expertise, grow,</span>
+            <span>Chia sẻ kinh nghiệm học tập, chuyên môn,</span>
             <br />
             <span style={{ color: `${colors.text.secondary}` }}>
-              make a difference
+              tạo nên sự khác biệt
             </span>
           </h1>
-          <p>
-            Mentoring is a two-way street. Let us take care of the boring parts
-            so you can concentrate on personal and professional growth for both
-            you and your mentees.
+          <p className="text-lg">
+            Bạn muốn chia sẻ trải nghiệm học tập của mình? Bạn muốn trở thành một người hướng dẫn, truyền cảm hứng? Bạn muốn vừa học tập, vừa truyền đạt kiến thức? Hãy đăng ký trở thành một người hướng dẫn ngay! 
           </p>
           <Row xs="auto" className="d-flex justify-content-center">
             <Col className="d-flex justify-content-center">
-              <StyledButton
+              <Button variant="primary"
+                className="px-3 py-3"
                 onClick={handleNavigateToApplyMentor}
-                style={{ backgroundColor: `${colors.button.secondary}` }}
               >
-                Become a mentor
-              </StyledButton>
+                Đăng ký làm mentor
+              </Button>
             </Col>
             <Col className="d-flex justify-content-center">
-              <StyledButton
-                style={{
-                  backgroundColor: `${colors.ui.primary}`,
-                  color: `${colors.text.secondary}`,
-                }}
+              <Button variant="light"
                 onClick={() => {
                   document
                     .getElementById("faq")
                     .scrollIntoView({ behavior: "smooth" });
                 }}
               >
-                Frequently asked questions
-              </StyledButton>
+                Câu hỏi thường gặp
+              </Button>
             </Col>
           </Row>
         </div>
@@ -71,13 +65,11 @@ function Mentor() {
             className="text-center py-5"
             style={{ paddingLeft: "20%", paddingRight: "20%" }}
           >
-            <h2 style={{ color: "white" }}>
-              The amazing things that mentoring can do for you
+            <h2 className="text-white">
+              Những thứ tuyệt vời bạn sẽ nhận được khi trở thành một mentor
             </h2>
-            <span style={{ color: "white" }}>
-              Managers, executives and leaders agree that mentoring is one of
-              the most impactful ways to spend your time. In return, you're
-              building crucial leadership qualities.
+            <span className="text-white">
+              Nhiều nhà quản lý, điều hành và lãnh đạo đều đồng ý rằng mentor là một trong những cách sử dụng thời gian hiệu quả nhất. Hơn nữa, bạn có thể xây dựng những phẩm chất lãnh đạo quan trọng.
             </span>
           </div>
         </div>
@@ -143,7 +135,7 @@ const Container = styled.div`
     );
     .intro-title {
       position: relative;
-      max-width: 50%;
+      max-width: 75%;
       color: ${colors.text.primary};
       padding: 50px;
       text-align: center;
@@ -169,12 +161,5 @@ const Container = styled.div`
   }
 `;
 
-const StyledButton = styled(Button)`
-  border: 1px solid black;
-  border-radius: 12px;
-  border-color: gray;
-  padding: 12px;
-  margin: 12px;
-`;
 
 export default Mentor;
