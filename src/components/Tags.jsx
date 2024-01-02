@@ -1,13 +1,13 @@
 import styled from 'styled-components';
 export const SkillTag = styled.div`
-  border-radius: 12px;
+  border-radius: 9999px;
   margin-bottom: 4px;
-  font-weight: bold;
+  margin-right: 8px;
+  font-weight: 500;
 
   display: inline-block;
-  padding: 3px 8px;
+  padding: 0.375rem 1rem;
   background-color: #f0f0f0;
-  cursor: pointer; // Cho phép con trỏ thành dạng bàn tay khi hover
   transition: background-color 0.3s; // Tạo hiệu ứng thay đổi màu nền mềm mại
 
   &:hover {

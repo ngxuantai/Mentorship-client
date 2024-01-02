@@ -12,6 +12,17 @@ const commentApi = {
       return null;
     }
   },
+  getAllCommentByMentorId: async (mentorId) => {
+    try {
+      const url = `/api/comment/getall/${mentorId}`;
+      const res = await axiosClient.get(url);
+      console.log('all comment data', res.data);
+      return res.data;
+    } catch (error) {
+      console.error(error);
+      return null;
+    }
+  },
 };
 
 export default commentApi;

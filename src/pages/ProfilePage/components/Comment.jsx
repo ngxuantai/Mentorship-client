@@ -1,8 +1,11 @@
 import React, {useState, useEffect} from 'react';
 import styled from 'styled-components';
 import {Row, Col, Button, Container} from 'react-bootstrap';
+import commentApi from '../../../api/comment';
 import menteeApi from '../../../api/mentee';
+import Rating from '@mui/material/Rating';
 import {Star} from '@mui/icons-material';
+import {format, set} from 'date-fns';
 
 const StyledContainer = styled(Container)`
   .mentee-avatar {
@@ -20,31 +23,30 @@ const StyledContainer = styled(Container)`
   }
 `;
 
-function Comment() {
-  const [listComment, setListComment] = useState([
-    {
-      id: 1,
-      content: 'Kristi has been an exceptional mentor.',
-      star: 5,
-      createAt: Date.now(),
-      menteeId: '657feddd696c958dbc0ecd81',
-      mentorId: 2,
-    },
-  ]);
+function Comment({mentorId}) {
+  const [listComment, setListComment] = useState([]);
 
-  const [menteeData, setMenteeData] = useState({});
+  const [menteeData, setMenteeData] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
+    console.log(mentorId);
+    const fetchComment = async () => {
+      const data = await commentApi.getAllCommentByMentorId(mentorId);
+      setListComment(data);
+      data.forEach(async (comment) => {
+        await fetchMenteeData(comment.menteeId);
+      });
+      setIsLoading(false);
+    };
+
     const fetchMenteeData = async (menteeId) => {
       const mentee = await menteeApi.getMentee(menteeId);
       setMenteeData((prevData) => ({...prevData, [menteeId]: mentee}));
     };
 
-    // Fetch mentee data for all comments
-    listComment.forEach((comment) => {
-      fetchMenteeData(comment.menteeId);
-    });
-  }, [listComment]);
+    fetchComment();
+  }, []);
 
   // const [newComment, setNewComment] = useState('');
   // const [rating, setRating] = useState(0);
@@ -64,41 +66,47 @@ function Comment() {
 
   return (
     <StyledContainer>
-      {listComment.map((comment) => {
-        return (
-          <div className="comment py-4" key={comment.id}>
-            <Row>
-              <Col sm={1} className="px-0 py-0 d-flex justify-content-center">
-                <div className="mentee-avatar">
-                  <img src="https://www.artsource.ie/wp-content/uploads/2023/08/Jin-Yong-Art-copy.jpg"></img>
-                </div>
-              </Col>
-              <Col xs="auto">
-                <span style={{fontWeight: 'bold'}}>
-                  {menteeData[comment.menteeId]?.fullName}
-                  <b style={{opacity: '0.5', paddingLeft: '4px'}}>
-                    on{' '}
-                    {new Date(comment.createAt).toLocaleDateString('vi-VN', {
-                      year: 'numeric',
-                      month: 'short',
-                      day: 'numeric',
-                    })}
-                  </b>
-                </span>
-                <br />
-                <Star />
-                <Star />
-                <Star />
-                <Star />
-                <Star />
-              </Col>
-            </Row>
-            <Row>
-              <span style={{padding: 0}}>{comment.content}</span>
-            </Row>
-          </div>
-        );
-      })}
+      {isLoading ? null : (
+        <>
+          {listComment.map((comment) => {
+            return (
+              <div className="comment py-4" key={comment.id}>
+                <Row>
+                  <Col
+                    sm={1}
+                    className="px-0 py-0 d-flex justify-content-center"
+                  >
+                    <div className="mentee-avatar">
+                      <img src={menteeData[comment.menteeId]?.avatar}></img>
+                    </div>
+                  </Col>
+                  <Col xs="auto">
+                    <span style={{fontWeight: 'bold'}}>
+                      {menteeData[comment.menteeId]?.firstName}{' '}
+                      {menteeData[comment.menteeId]?.lastName}
+                      <b style={{opacity: '0.5', paddingLeft: '4px'}}>
+                        on {format(new Date(comment.createdAt), 'dd/MM/yyyy')}
+                      </b>
+                    </span>
+                    <br />
+                    <Rating
+                      value={comment.ratingStar}
+                      precision={0.5}
+                      disabled
+                      emptyIcon={
+                        <Star style={{opacity: 0.55}} fontSize="inherit" />
+                      }
+                    />
+                  </Col>
+                </Row>
+                <Row>
+                  <span style={{padding: 0}}>{comment.content}</span>
+                </Row>
+              </div>
+            );
+          })}
+        </>
+      )}
     </StyledContainer>
   );
 }
