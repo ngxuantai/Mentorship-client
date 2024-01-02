@@ -5,9 +5,11 @@ import UploadFileIcon from '@mui/icons-material/UploadFile';
 import {fileApi} from '../../../../api/file';
 import firebaseInstance from '../../../../services/firebase';
 import {format} from 'date-fns';
+import {useUserStore} from '../../../../store/userStore';
 
 export default function ListFile({folder}) {
   const [files, setFiles] = useState([]);
+  const {user, setUser} = useUserStore();
 
   useEffect(() => {
     const ftechFiles = async () => {
@@ -60,7 +62,7 @@ export default function ListFile({folder}) {
       filesInput.forEach((file) => {
         console.log(file);
         let fileData = {
-          mentorId: '65840127a47c189dd995cdf3',
+          mentorId: user.id,
           name: file.name,
           link: '',
           size: file.size,

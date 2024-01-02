@@ -9,6 +9,7 @@ import ListFile from './ListFile';
 import AddFile from './AddFile';
 import {format, set} from 'date-fns';
 import {folderApi} from '../../../../api/file';
+import {useUserStore} from '../../../../store/userStore';
 
 export default function ListFolder({folders}) {
   const [listFolder, setListFolder] = useState(folders); // [folder1, folder2, ...
@@ -16,10 +17,11 @@ export default function ListFolder({folders}) {
   const [newFolderName, setNewFolderName] = useState('');
   const [folderDetail, setFolderDetail] = useState({}); // {name: 'folder1', files: [file1, file2, ...]
   const [showDetail, setShowDetail] = useState(false);
+  const {user, setUser} = useUserStore();
 
   const handleAddFolder = async () => {
     const newFolder = {
-      mentorId: '65840127a47c189dd995cdf3',
+      mentorId: user.id,
       name: newFolderName,
       createdDate: new Date().toISOString(),
     };

@@ -5,11 +5,13 @@ import StarIcon from '@mui/icons-material/Star';
 import {Button, Label, Textarea} from 'flowbite-react';
 import commentApi from '../../../api/comment';
 import {set} from 'date-fns';
+import { useUserStore } from '../../../store/userStore';
 
 const RatingComment = () => {
   const [star, setStar] = useState(2);
   const [comment, setComment] = useState('');
   const [hover, setHover] = useState(-1);
+  const {user} = useUserStore();
 
   const handleSubmitComment = async () => {
     try {
@@ -17,7 +19,7 @@ const RatingComment = () => {
       // console.log(comment);
       const data = {
         mentorId: '65840127a47c189dd995cdf3',
-        menteeId: '658551f06a7e6920f9112a4a',
+        menteeId: user.id,
         ratingStar: star,
         content: comment,
       };

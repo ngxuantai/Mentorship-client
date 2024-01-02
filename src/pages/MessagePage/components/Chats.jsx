@@ -4,26 +4,19 @@ import firebaseInstance from '../../../services/firebase';
 import mentorApi from '../../../api/mentor';
 import menteeApi from '../../../api/mentee';
 import { ChatContext } from '../index';
+import { useUserStore } from '../../../store/userStore';
+import { set } from 'firebase/database';
 
-//const currentUserId = '65840127a47c189dd995cdf3';
-//const currentUser = await mentorApi.getMentorById(currentUserId);
-
-const currentUserId = '658b162cae49ca742c25fd2a';
-// const currentUser = await menteeApi.getMentee(currentUserId)
-
-var currentUser = await mentorApi.getMentorById(currentUserId);
-if (currentUser === '') {
-  currentUser = await menteeApi.getMentee(currentUserId);
-}
 
 const Chats = () => {
   const [chats, setChats] = useState([])
   const {dispatch} = useContext(ChatContext)
+  const {user, setUser} = useUserStore();
 
   useEffect(() => {
     const getChats = async () => {
       try {
-        const data = await firebaseInstance.getChats(currentUser.id);
+        const data = await firebaseInstance.getChats(user.id);
         setChats(data);
         // Handle the document data here
       } catch (error) {
@@ -32,13 +25,13 @@ const Chats = () => {
       }    
     }
 
-    currentUser.id && getChats();
+    user.id && getChats();
   }, [chats])
 
   //console.log(Object.entries(chats));
 
   const handleSelect = (u) => {
-    dispatch({type: 'CHANGE_USER', payload: u})
+      dispatch({type: 'CHANGE_USER', payload: u})
   };
 
   return (

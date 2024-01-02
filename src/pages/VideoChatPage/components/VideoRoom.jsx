@@ -20,6 +20,7 @@ import {
 import 'quill/dist/quill.snow.css';
 import ReactQuill from 'react-quill';
 import {set} from 'date-fns';
+import { useUserStore } from '../../../store/userStore';
 
 const APP_ID = '5ad93fd0de6d4b74b2b1e150004c3ebe';
 // const TOKEN = '007eJxTYLiS8LPjXZuu7OwShRd3zIJuZKoqKe04IyDOcS3ompgP23UFhlQTC6NUA4O0pLQUYxPDFINEC5MUM2NTMzOLRAvLZKNEqTfNqQ2BjAx3ZzszMEIhiM/JEJaZkprvnJFYwsAAALMxIFs=';
@@ -36,6 +37,7 @@ const clientRTC = AgoraRTC.createClient({
 const clientRTM = AgoraRTM.createInstance(APP_ID);
 
 function VideoRoom(props) {
+  const {user, setUser} = useUserStore();
   const [users, setUsers] = useState([]);
   const [localTracks, setLocalTracks] = useState(null);
   const [localAudioTrack, setLocalAudioTrack] = useState(null);
@@ -85,33 +87,33 @@ function VideoRoom(props) {
   //   }
   // };
 
-  const handleUserJoined = async (user, mediaType) => {
-    await clientRTC.subscribe(user, mediaType);
+  const handleUserJoined = async (userJoined, mediaType) => {
+    await clientRTC.subscribe(userJoined, mediaType);
     if (mediaType === 'video') {
       // Subscribe to the new video track
-      clientRTC.subscribe(user, 'video').then(() => {
+      clientRTC.subscribe(userJoined, 'video').then(() => {
         // Update the state to include the new user
-        setUsers((prevUsers) => [...prevUsers, user]);
+        setUsers((prevUsers) => [...prevUsers, userJoined]);
       });
     }
     if (mediaType === 'audio') {
-      user.audioTrack.play();
+      userJoined.audioTrack.play();
     }
   };
 
-  const handleUserLeft = (user) => {
-    setUsers((prevUsers) => prevUsers.filter((u) => u.uid !== user.uid));
+  const handleUserLeft = (userJoined) => {
+    setUsers((prevUsers) => prevUsers.filter((u) => u.uid !== userJoined.uid));
   };
 
-  const handleUserPublished = async (user, mediaType) => {
-    await clientRTC.subscribe(user, mediaType);
+  const handleUserPublished = async (userJoined, mediaType) => {
+    await clientRTC.subscribe(userJoined, mediaType);
     if (mediaType === 'video') {
-      videoTracks.remoteVideoTrack[user.uid] = [user.videoTrack];
-      setUsers((prevUsers) => [...prevUsers, user]);
+      videoTracks.remoteVideoTrack[userJoined.uid] = [userJoined.videoTrack];
+      setUsers((prevUsers) => [...prevUsers, userJoined]);
     }
     if (mediaType === 'audio') {
-      audioTracks.remoteAudioTrack[user.uid] = [user.audioTrack];
-      user.audioTrack.play();
+      audioTracks.remoteAudioTrack[userJoined.uid] = [userJoined.audioTrack];
+      userJoined.audioTrack.play();
     }
   };
 
@@ -371,15 +373,15 @@ function VideoRoom(props) {
 
       <div className="flex justify-between mt-3">
         <div container className="w-2/3 grid grid-cols-2 gap-2">
-          {sortedUsers.map((user) => (
+          {sortedUsers.map((userJoined) => (
             <div
-              key={user.uid}
+              key={userJoined.uid}
               className={`w-full ${
-                selectedUser === user.uid ? 'col-span-2' : ''
+                selectedUser === userJoined.uid ? 'col-span-2' : ''
               }`}
-              onClick={() => handleUserClick(user.uid)}
+              onClick={() => handleUserClick(userJoined.uid)}
             >
-              <VideoPlayer key={user.uid} user={user} />
+              <VideoPlayer key={userJoined.uid} userJoined={userJoined} />
             </div>
           ))}
         </div>
@@ -404,7 +406,7 @@ function VideoRoom(props) {
                         )}
                         {`${message.uid}` !== RTMUID && (
                           <div className="user-them font-bold text-black">
-                            {message.uid}: &nbsp;
+                            {user.firstName} {user.lastName}: &nbsp;
                           </div>
                         )}
                         <div className="text">{message.text}</div>
