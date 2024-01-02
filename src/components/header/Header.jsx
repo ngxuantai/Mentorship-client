@@ -7,19 +7,66 @@ import skillApi from '../../api/skill';
 import Logo from '../../assets/logo-no-text.png';
 import {UserRole} from '../../constants';
 import {useUserStore} from '../../store/userStore';
+import menteeApi from '../../api/mentee';
+import mentorApi from '../../api/mentor';
 import MenteeHeader from './MenteeHeader';
 import MentorHeader from './MentorHeader';
 
 export default function Header() {
   const {user, setUser} = useUserStore();
   console.log('user', user);
+  const userData = JSON.parse(localStorage.getItem('userData'));
+  const [typeHeader, setTypeHeader] = useState('unauth');
 
-  if (!user || !user.role) return <UnAuthHeader></UnAuthHeader>;
-  if (user.role === UserRole.MENTEE) {
-    return <MenteeHeader></MenteeHeader>;
-  }
-  if (user.role === UserRole.MENTOR) {
-    return <MentorHeader></MentorHeader>;
+  useEffect(() => {
+    const fetchData = async () => {
+      console.log('userData', userData);
+      if (Object.keys(user).length !== 0) {
+        console.log('user', user);
+        if (user.role === UserRole.MENTEE) {
+          setTypeHeader('mentee');
+        } else if (user.role === UserRole.MENTOR) {
+          setTypeHeader('mentor');
+        }
+      } else if (userData) {
+        console.log('userData', userData);
+        let userDataFromApi;
+        if (userData.role === UserRole.MENTEE) {
+          userDataFromApi = await menteeApi.getMentee(userData.id);
+          console.log('userDataFromApi', userDataFromApi);
+          setUser({...userDataFromApi, role: userData.role});
+          setTypeHeader('mentee');
+        } else if (userData.role === UserRole.MENTOR) {
+          userDataFromApi = await mentorApi.getMentorById(userData.id);
+          console.log('userDataFromApi', userDataFromApi);
+          setUser({...userDataFromApi, role: userData.role});
+          setTypeHeader('mentor');
+        }
+      }
+      // if (userData !== null && !user) {
+      //   let userDataFromApi;
+      //   if (userData.role === UserRole.MENTEE) {
+      //     userDataFromApi = await menteeApi.getMentee(userData.id);
+      //   } else {
+      //     userDataFromApi = await mentorApi.getMentorById(userData.id);
+      //   }
+      //   console.log('userDataFromApi', userDataFromApi);
+      //   if (userDataFromApi !== null) {
+      //     setUser({...userDataFromApi, role: userData.role});
+      //   }
+      // }
+    };
+
+    fetchData();
+  }, [user, userData, setUser]);
+
+  switch (typeHeader) {
+    case 'mentee':
+      return <MenteeHeader />;
+    case 'mentor':
+      return <MentorHeader />;
+    case 'unauth':
+      return <UnAuthHeader />;
   }
 }
 function UnAuthHeader() {

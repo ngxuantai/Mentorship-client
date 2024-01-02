@@ -14,7 +14,9 @@ import {
 } from 'react-icons/hi';
 // import {useApplicationStore} from '../../store/application';
 // import {useUserStore} from '../../store/user';
+import {Tabs, Tab} from '@mui/material';
 import ListPayment from './components/ListPayment';
+import HistoryPayment from './components/HistoryPayment';
 import {useMenteeAppliStore} from '../../../store/menteeAppliStore';
 import {applicationToExcelData} from '../../../utils/excelDataHelper';
 import {exportExcel} from '../../../utils/excelHelper';
@@ -60,14 +62,14 @@ const ListMentee = () => {
   return (
     <div>
       <div className="flex flex-col overflow-x-auto">
-        {warningVisible && ( // Add this condition
+        {/* {warningVisible && ( // Add this condition
           <Alert severity="warning">
             <AlertTitle>Nhắc nhở</AlertTitle>
             Bạn cần phải thanh toán trong vòng
             <strong>{` ${Max_Pay_Day} ngày `}</strong>
             nếu không đơn đăng ký sẽ bị huỷ
           </Alert>
-        )}
+        )} */}
         {/* Add this button */}
         <div className="inline-block min-w-full align-middle">
           <div className="overflow-hidden shadow">
