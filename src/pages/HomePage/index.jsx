@@ -1,4 +1,4 @@
-import {useEffect} from 'react';
+import {useState, useEffect} from 'react';
 import {useNavigate} from 'react-router';
 import styled from 'styled-components';
 import Footer from '../../components/Footer';
@@ -10,8 +10,8 @@ import SlideCard from './components/SlideCard';
 function HomePage() {
   const navigate = useNavigate();
   const {user} = useUserStore();
+  const [text, setText] = useState('');
 
-  useEffect(() => {}, []);
   useEffect(() => {
     if (user) {
       if (user.role === UserRole.MENTEE) {
@@ -21,6 +21,11 @@ function HomePage() {
       }
     }
   }, [user]);
+
+  const handleSearch = () => {
+    navigate(`/mentor/search?text=${text}`);
+  };
+
   return (
     <>
       <HomeContainer>
@@ -30,8 +35,13 @@ function HomePage() {
           </p>
           <h1>Mentorship</h1>
           <SearchForm>
-            <input type="text" placeholder="Search for mentors" />
-            <button>Search</button>
+            <input
+              type="text"
+              placeholder="Search for mentors"
+              value={text}
+              onChange={(event) => setText(event.target.value)}
+            />
+            <button onClick={() => handleSearch()}>Search</button>
           </SearchForm>
           <div style={{width: '100%'}}>
             <SlideCard />

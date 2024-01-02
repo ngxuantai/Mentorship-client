@@ -1,8 +1,8 @@
-import { useEffect, useRef, useState } from "react";
-import { BsChevronDown } from "react-icons/bs";
-import FilterOptionList from "./FilterOptionList";
-export default function FilterButton({ filters, onFilterChange }) {
-  const [searchInput, setSearchInput] = useState("");
+import {useEffect, useRef, useState} from 'react';
+import {BsChevronDown} from 'react-icons/bs';
+import FilterOptionList from './FilterOptionList';
+export default function FilterButton({filters, onFilterChange}) {
+  const [searchInput, setSearchInput] = useState('');
   const [showOptions, setShowOptions] = useState(false);
   const [isOptionListHovered, setOptionListHovered] = useState(false);
   const filterOptionListRef = useRef(null);
@@ -13,12 +13,12 @@ export default function FilterButton({ filters, onFilterChange }) {
       clearTimeout(timeoutRef);
     }
 
-    if (searchInput.trim() === "") {
+    if (searchInput.trim() === '') {
       // resetList();
     } else {
       const newTimeout = setTimeout(() => {
         // search(searchInput);
-        console.log("SEARCH");
+        console.log('SEARCH');
       }, 500);
       timeoutRef.current = newTimeout;
     }
@@ -42,9 +42,9 @@ export default function FilterButton({ filters, onFilterChange }) {
     }
   };
   useEffect(() => {
-    document.addEventListener("mousedown", closeOptionsOnClickOutside);
+    document.addEventListener('mousedown', closeOptionsOnClickOutside);
     return () => {
-      document.removeEventListener("mousedown", closeOptionsOnClickOutside);
+      document.removeEventListener('mousedown', closeOptionsOnClickOutside);
     };
   }, []);
   return (
@@ -52,31 +52,31 @@ export default function FilterButton({ filters, onFilterChange }) {
       style={{
         minWidth: 150,
         marginRight: 24,
-        display: "inline-flex",
-        flexDirection: "row",
-        alignItems: "center",
+        display: 'inline-flex',
+        flexDirection: 'row',
+        alignItems: 'center',
         padding: 10,
         paddingRight: 18,
         paddingLeft: 18,
-        backgroundColor: "white",
-        position: "relative",
+        backgroundColor: 'white',
+        position: 'relative',
         borderRadius: 24,
         zIndex: 1,
-        justifyContent: "space-between",
-        border: "1px solid gray",
-        width: "auto",
+        justifyContent: 'space-between',
+        border: '1px solid gray',
+        width: 'auto',
       }}
-      className={`${!isOptionListHovered ? "button-effect" : ""}`}
+      className={`${!isOptionListHovered ? 'button-effect' : ''}`}
       onClick={showMenuOption}
     >
-      <p style={{ margin: 0, marginRight: 8, fontWeight: "bold" }}>
-        {filters.skill?.name || "Kĩ năng"}
+      <p style={{margin: 0, marginRight: 8, fontWeight: 'bold'}}>
+        {filters.skill?.name || 'Kĩ năng'}
       </p>
       <BsChevronDown fontSize={16}></BsChevronDown>
       {showOptions && (
         <FilterOptionList
           onSelected={(item) => {
-            onFilterChange("skill", item);
+            onFilterChange('skill', item);
           }}
           setShowOptions={setShowOptions}
           setOptionListHovered={setOptionListHovered}

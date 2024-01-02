@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import {useEffect, useState} from 'react';
 import {
   Col,
   Container,
@@ -6,23 +6,40 @@ import {
   FormControl,
   InputGroup,
   Row,
-} from "react-bootstrap";
-import { AiFillCloseCircle } from "react-icons/ai";
-import { isEmptyObject } from "../../../utils/dataHelper";
-import "../css/SearchBar.css";
-import FilterBar from "./FilterBar";
+} from 'react-bootstrap';
+import {AiFillCloseCircle} from 'react-icons/ai';
+import {isEmptyObject} from '../../../utils/dataHelper';
+import '../css/SearchBar.css';
+import FilterBar from './FilterBar';
+import {useNavigate} from 'react-router-dom';
 
-export default function SearchBar({ onSearch, resetSearch }) {
-  const [searchInput, setSearchInput] = useState("");
+export default function SearchBar({text, onSearch, resetSearch}) {
+  const navigate = useNavigate();
+  const [searchInput, setSearchInput] = useState(text || '');
   const [filters, setFilters] = useState({});
   const [isShow, setIsShow] = useState(false);
 
   useEffect(() => {
     const ref = setTimeout(() => {
-      if (searchInput.trim() !== "" || !isEmptyObject(filters)) {
+      if (searchInput.trim() !== '' || !isEmptyObject(filters)) {
         onSearch(searchInput, filters);
+        const queryParams = new URLSearchParams();
+        if (searchInput.trim() !== '') {
+          queryParams.append('text', searchInput);
+        }
+        if (filters.skill !== null) {
+          queryParams.append('skill', filters.skill.name);
+        }
+        if (filters.minValue) {
+          queryParams.append('minValue', filters.minValue);
+        }
+        if (filters.maxValue) {
+          queryParams.append('maxValue', filters.maxValue);
+        }
+        navigate(`/mentor/search?${queryParams.toString()}`);
       } else {
         resetSearch();
+        navigate('/mentor/search');
       }
     }, 500);
     return () => {
@@ -34,13 +51,13 @@ export default function SearchBar({ onSearch, resetSearch }) {
     setSearchInput(e.target.value);
   };
   const handleFilterChange = (type, value) => {
-    console.log("TYPE", type, value);
+    console.log('TYPE', type, value);
     switch (type) {
-      case "skill": {
-        setFilters(() => ({ ...filters, skill: value }));
+      case 'skill': {
+        setFilters(() => ({...filters, skill: value}));
         break;
       }
-      case "price": {
+      case 'price': {
         setFilters(() => ({
           ...filters,
           minValue: value.min,
@@ -50,7 +67,7 @@ export default function SearchBar({ onSearch, resetSearch }) {
       }
 
       default:
-        console.log("value is invalid");
+        console.log('value is invalid');
     }
   };
 
@@ -63,24 +80,34 @@ export default function SearchBar({ onSearch, resetSearch }) {
   }, [filters]);
   const clearAllFilters = () => {
     setFilters(() => ({}));
+    setSearchInput('');
+    navigate('/mentor/search');
   };
   return (
-    <Container style={{ marginTop: 12 }}>
-      <Row>
-        <Col sm={6}>
-          <Form className="d-flex">
+    <Container
+      style={{
+        marginTop: '24px',
+        width: '70%',
+        display: 'flex',
+        flexDirection: 'column',
+        gap: '12px',
+      }}
+    >
+      <div>
+        <Col sm={7}>
+          <Form className="d-flex" style={{height: '45px'}}>
             <InputGroup>
               <FormControl
                 onChange={handleSearchInputChange}
                 type="search"
                 value={searchInput}
                 placeholder="Search"
-                className="me-2 search-input"
+                className=" search-input"
               />
             </InputGroup>
           </Form>
         </Col>
-      </Row>
+      </div>
 
       <FilterBar
         filters={filters}
@@ -88,22 +115,21 @@ export default function SearchBar({ onSearch, resetSearch }) {
       ></FilterBar>
       <div
         style={{
-          marginTop: 8,
           height: 30,
-          marginLeft: 50,
-          display: "inline-flex",
-          flexDirection: "row",
-          alignItems: "center",
-          justifyContent: "start",
-          width: "auto",
+          display: 'inline-flex',
+          flexDirection: 'row',
+          alignItems: 'center',
+          justifyContent: 'start',
+          width: 'auto',
+          marginBottom: 12,
         }}
-        className="button-effect"
+        // className="button-effect"
         onClick={clearAllFilters}
       >
         {isShow && (
           <>
             <AiFillCloseCircle fontSize={24}></AiFillCloseCircle>
-            <p style={{ fontWeight: "500", margin: 0, marginLeft: 8 }}>
+            <p style={{fontWeight: '500', margin: 0, marginLeft: 8}}>
               Xoá tất cả bộ lọc
             </p>
           </>
