@@ -4,7 +4,6 @@ import { useUserStore } from '../../../store/userStore';
 
 export const VideoPlayer = ({ userJoined }) => {
     const ref = useRef(null);
-    const {user, setUser} = useUserStore();
 
     useEffect(() => {
       userJoined.videoTrack.play(ref.current);
@@ -16,7 +15,7 @@ export const VideoPlayer = ({ userJoined }) => {
           ref={ref} 
           style={{height: '530px', width: '100%'}}>           
         </div>
-        <div className="absolute right-2 bottom-2 bg-[rgba(0,0,0,0.5)] px-3 py-2 rounded text-base text-white font-semibold">{user.firstName} {user.lastName}</div>
+        <div className="absolute right-2 bottom-2 bg-[rgba(0,0,0,0.5)] px-3 py-2 rounded text-base text-white font-semibold">{userJoined.firstName} {userJoined.lastName}</div>
     </div>
   )
 }

@@ -22,6 +22,7 @@ const pages = [
   {name: 'Kho bài tập', link: '/mentor/examination'},
   {name: 'Đơn xin học', link: '/mentor/mentee-application'},
   {name: 'Cài đặt', link: '/mentor/settings'},
+  {name: 'Nhắn tin', link: ''},
 ];
 
 const LOGGOUT = 'Đăng xuất';
@@ -151,7 +152,7 @@ function MentorHeader() {
             {pages.map((page) => (
               <Button
                 key={page.name}
-                onClick={() => handleNavigate(page.link)}
+                onClick={() => handleNavigate(page.name=== 'Nhắn tin' ? `/message/${user.id}` : page.link)}
                 sx={{
                   fontWeight: 'bold',
                   my: 2,

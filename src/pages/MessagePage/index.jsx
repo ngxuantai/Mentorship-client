@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react'
 import { MessageContainer } from './components/MessageContainer'
 import SideBar from './components/SideBar'
-import { createContext, useReducer, useState } from 'react';
+import { createContext, useReducer, useState, useContext } from 'react';
 import { useParams } from 'react-router';
 import mentorApi from '../../api/mentor';
 import UserCard from './components/UserCard';
@@ -40,19 +40,16 @@ const MessagePage = () => {
     useEffect(() => {
         const loadMessage = async () => {
           try {
-            const combinedId = user.id > id ? user.id + id : id + user.id;
             const doc = await firebaseInstance.getChats(user.id);
-            console.log(doc[combinedId].userInfo);
-            dispatch ({type: 'CHANGE_USER', payload: doc[combinedId].userInfo})
-            
+            //console.log(doc[id].userInfo);
+            dispatch ({type: 'CHANGE_USER', payload: doc[id].userInfo})         
           } catch (error) {
             console.error("Error:", error.message);
             // Handle the error (e.g., document not found)
           }    
         }
         loadMessage();
-    }, [])
-
+    }, [user, id])
 
   return (
     <ChatContext.Provider value={{data: state, dispatch}}>

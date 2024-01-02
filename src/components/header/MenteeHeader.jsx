@@ -22,6 +22,7 @@ const pages = [
   {name: 'Thanh toán', link: '/mentee/payment'},
   {name: 'Danh sách yêu cầu', link: '/mentee/applications'},
   {name: 'Cài đặt', link: '/mentee/settings'},
+  {name: 'Nhắn tin', link: ''},
   // thêm các trang khác tại đây
 ];
 
@@ -152,7 +153,7 @@ function MenteeHeader() {
             {pages.map((page) => (
               <Button
                 key={page.name}
-                onClick={() => handleNavigate(page.link)}
+                onClick={() => handleNavigate(page.name=== 'Nhắn tin' ? `/message/${user.id}` : page.link)}
                 sx={{
                   fontWeight: 'bold',
                   my: 2,

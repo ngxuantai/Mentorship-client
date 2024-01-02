@@ -21,6 +21,8 @@ import 'quill/dist/quill.snow.css';
 import ReactQuill from 'react-quill';
 import {set} from 'date-fns';
 import { useUserStore } from '../../../store/userStore';
+import menteeApi from '../../../api/mentee';
+import mentorApi from '../../../api/mentor';
 
 const APP_ID = '5ad93fd0de6d4b74b2b1e150004c3ebe';
 // const TOKEN = '007eJxTYLiS8LPjXZuu7OwShRd3zIJuZKoqKe04IyDOcS3ompgP23UFhlQTC6NUA4O0pLQUYxPDFINEC5MUM2NTMzOLRAvLZKNEqTfNqQ2BjAx3ZzszMEIhiM/JEJaZkprvnJFYwsAAALMxIFs=';
@@ -66,6 +68,9 @@ function VideoRoom(props) {
 
   const navigate = useNavigate();
 
+  const currenUserId = user.id;
+  const otherUserId = roomName.replace(currenUserId, '');
+
   const toggleCreateNote = (e) => {
     e.preventDefault();
     setShowNoteForm(!showNoteForm);
@@ -88,12 +93,20 @@ function VideoRoom(props) {
   // };
 
   const handleUserJoined = async (userJoined, mediaType) => {
+    let otherUserInfo = await mentorApi.getMentorById(otherUserId);
+    if (otherUserInfo === '') {
+      otherUserInfo = await menteeApi.getMentee(otherUserId);
+    }
+    console.log('Other user info:', otherUserInfo);
     await clientRTC.subscribe(userJoined, mediaType);
     if (mediaType === 'video') {
       // Subscribe to the new video track
       clientRTC.subscribe(userJoined, 'video').then(() => {
         // Update the state to include the new user
+        userJoined.firstName = otherUserInfo.firstName;
+        userJoined.lastName = otherUserInfo.lastName;
         setUsers((prevUsers) => [...prevUsers, userJoined]);
+        console.log('User joined: ', userJoined);
       });
     }
     if (mediaType === 'audio') {
@@ -151,6 +164,8 @@ function VideoRoom(props) {
           ...prevUsers,
           {
             uid,
+            firstName: user.firstName,
+            lastName: user.lastName,
             videoTrack,
             audioTrack,
           },
@@ -245,6 +260,12 @@ function VideoRoom(props) {
       localAudioTrack.setEnabled(false);
       localVideoTrack.setEnabled(false);
     }
+  };
+
+  const handleEndCall = (e) => {
+    e.preventDefault();
+    navigate(`/message/${roomName}`);
+    navigate(0);
   };
 
   const sendMessage = () => {
@@ -489,7 +510,7 @@ function VideoRoom(props) {
 
               <button
                 id="leave"
-                onClick={() => navigate(`/videochat`)}
+                onClick={handleEndCall}
                 className=" bg-red-600 text-white rounded-full py-2 px-4 transition duration-150 ease-in-out hover:transition-all hover:scale-110 hover:bg-red-700 mx-4"
               >
                 <CallEnd />
