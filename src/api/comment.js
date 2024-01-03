@@ -12,7 +12,7 @@ const commentApi = {
       return null;
     }
   },
-  getAllCommentByMentorId : async (mentorId) => {
+  getAllCommentByMentorId: async (mentorId) => {
     try {
       const url = `/api/comment/getall/${mentorId}`;
       const res = await axiosClient.get(url);

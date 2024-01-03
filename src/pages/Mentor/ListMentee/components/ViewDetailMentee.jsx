@@ -53,7 +53,7 @@ export default function ViewApplicationDetail({application}) {
           >
             <img
               style={{marginRight: 20}}
-              src={menteeProfile.avatar}
+              src={menteeProfile.avatar || ''}
               width={200}
               height={160}
             ></img>
