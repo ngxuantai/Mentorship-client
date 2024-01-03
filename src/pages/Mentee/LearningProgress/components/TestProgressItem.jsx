@@ -15,10 +15,12 @@ import {Button, Progress} from 'flowbite-react';
 import CancelTestProgress from './CancelTestProgress';
 import moment from 'moment';
 import {useEffect, useRef, useState} from 'react';
+import {useNavigate} from 'react-router';
 import menteeApplicationApi from '../../../../api/menteeApplication';
 import mentorApi from '../../../../api/mentor';
 import {mappingPlanName} from '../../../../utils/dataHelper';
 import {convertTimestampRange} from '../../../../utils/dateConverter';
+import {useUserStore} from '../../../../store/userStore';
 
 export default function TestProgressItem({progress, cancelProgress}) {
   const cardRef = useRef(null);
@@ -26,6 +28,8 @@ export default function TestProgressItem({progress, cancelProgress}) {
   const [application, setApplication] = useState(null);
   const [endTry, setEndTry] = useState(false);
   const [remainingPercent, setRemainingPercent] = useState(0);
+  const {user, setUser} = useUserStore();
+  const navigate = useNavigate();
 
   const fetchApplication = async () => {
     const data = await menteeApplicationApi.getMenteeApplicationById(
@@ -56,6 +60,17 @@ export default function TestProgressItem({progress, cancelProgress}) {
       return;
     }
   };
+
+  const handleButton = () => {
+    if (endTry) {
+      // xử lý thanh toán
+    } else {
+      // xử lý nhắn tin
+      const combinedId = user.id > mentor.id ? user.id + mentor.id : mentor.id + user.id;
+      navigate(`/message/${combinedId}`)
+      console.log(combinedId);
+    }
+  }
 
   const computeRemainPercent = () => {
     const startDate = new Date(progress.startDate).getTime();
@@ -151,7 +166,9 @@ export default function TestProgressItem({progress, cancelProgress}) {
             cancelProgress={cancelProgress}
           />
           <Tooltip title={endTry ? 'Thanh toán và tiếp tục học' : 'Nhắn tin'}>
-            <Button size="sm">{endTry ? 'Thanh toán' : 'Nhắn tin'}</Button>
+            <Button size="sm" onClick={() => handleButton()}>
+              {endTry ? 'Thanh toán' : 'Nhắn tin'}
+            </Button>
           </Tooltip>
         </Box>
       </Box>

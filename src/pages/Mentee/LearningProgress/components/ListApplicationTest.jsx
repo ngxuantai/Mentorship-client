@@ -24,7 +24,7 @@ export default function ListApplicationTest() {
     if (user) {
       const fetchProgress = async () => {
         const data = await learningTestProgressApi.getByMenteeId(
-          '65825627600fc966c46f60f8'
+          user.id
         );
         if (data) {
           const list = data.sort((a, b) => {

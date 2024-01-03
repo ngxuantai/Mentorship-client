@@ -7,11 +7,15 @@ import {format} from 'date-fns';
 import {FaCopy} from 'react-icons/fa';
 import {handleCopyClick, shortenId} from '../../../../utils/dataHelper';
 import {ApprovalStatus} from '../../../../constants';
+import {useNavigate} from 'react-router-dom';
+import { useUserStore } from '../../../../store/userStore';
 
 export default function Mentees({applications}) {
   const [checkedItems, setCheckedItems] = useState({});
   const [selectAll, setSelectAll] = useState(false);
   const [changedDaysCompensation, setChangedDaysCompensation] = useState({});
+  const {user} = useUserStore();
+  const navigate = useNavigate();
 
   const handleDaysCompensationChange = (e, index) => {
     const {name, value} = e.target;
@@ -73,6 +77,11 @@ export default function Mentees({applications}) {
     }
   };
 
+  const handleMessageClick = (id) => {
+    const combinedId = user.id > id ? user.id + id : id + user.id;
+    navigate(`/message/${combinedId}`)
+  };
+
   return (
     <Table className="min-w-full divide-y divide-gray-200 dark:divide-gray-600">
       <Table.Head className="bg-gray-100 dark:bg-gray-700">
@@ -128,7 +137,7 @@ export default function Mentees({applications}) {
             <Table.Cell className="mr-12 flex items-center space-x-6 whitespace-nowrap p-4 lg:mr-0">
               <img
                 className="h-10 w-10 rounded-full"
-                src={application.avatar}
+                src={application.menteeProfile.avatar}
                 alt={`${application.name} avatar`}
               />
               <div className="text-sm font-normal text-gray-500 dark:text-gray-400">
@@ -167,7 +176,7 @@ export default function Mentees({applications}) {
                 </Button>
                 <ViewDetailMentee application={application} />
                 <AddExam application={application} />
-                <Button>Nhắn tin</Button>
+                <Button onClick={() => handleMessageClick(application.menteeProfile.id)}>Nhắn tin</Button>
               </div>
             </Table.Cell>
           </Table.Row>

@@ -9,6 +9,7 @@ import { ChatBubbleOutline } from '@mui/icons-material';
 import menteeApi from '../../api/mentee';
 import { useUserStore } from '../../store/userStore';
 import firebaseInstance from '../../services/firebase';
+import { doc } from 'firebase/firestore';
 
 export const ChatContext = createContext();
 
@@ -37,16 +38,80 @@ const MessagePage = () => {
     }
     const [state, dispatch] = useReducer(chatReducer, INITIAL_STATE)
 
-    useEffect(() => {
-        const loadMessage = async () => {
+    useEffect(() =>  {
+      // Check if the chats already exists, if not create
+      const combinedId = id;
+      const currentUserId = user.id;
+      const otherUserId = id.replace(user.id, '');
+
+      console.log(currentUserId);
+      console.log(otherUserId);
+      
+      const loadMessage = async () => {
+          const currentUserChats = await firebaseInstance.getUserChats(currentUserId);
+          const otherUserChats = await firebaseInstance.getUserChats(otherUserId);
+
+          let otherUser = await mentorApi.getMentorById(otherUserId);
+          if (otherUser === '') {
+            otherUser = await menteeApi.getMentee(otherUserId);           
+          }
+          console.log(otherUser);
+
+          if (currentUserChats === false) {
+              await firebaseInstance.createUserChats(currentUserId);
+
+              firebaseInstance.updateUserChats(currentUserId, combinedId, {
+                id: otherUserId,
+                firstName: otherUser.firstName,
+                lastName: otherUser.lastName,
+                avatar: otherUser.avatar,
+              })
+          }
+          else {
+              firebaseInstance.updateUserChats(currentUserId, combinedId, {
+                id: otherUserId,
+                firstName: otherUser.firstName,
+                lastName: otherUser.lastName,
+                avatar: otherUser.avatar,
+              })
+          }
+          if (otherUserChats === false) {
+              await firebaseInstance.createUserChats(otherUserId);
+
+              firebaseInstance.updateUserChats(otherUserId, combinedId, {
+                id: currentUserId,
+                firstName: user.firstName,
+                lastName: user.lastName,
+                avatar: user.avatar,
+              })
+          }
+          else {
+              firebaseInstance.updateUserChats(otherUserId, combinedId, {
+                id: currentUserId,
+                firstName: user.firstName,
+                lastName: user.lastName,
+                avatar: user.avatar,
+              })
+          }
+
           try {
-            const doc = await firebaseInstance.getChats(user.id);
-            //console.log(doc[id].userInfo);
-            dispatch ({type: 'CHANGE_USER', payload: doc[id].userInfo})         
+            const res = await firebaseInstance.getChat(combinedId);
+            if (res === false) {
+              await firebaseInstance.createChat(combinedId, {
+                messages: [],
+              });
+            }
+            else {
+              try {
+                const doc = await firebaseInstance.getChats(user.id);
+                dispatch ({type: 'CHANGE_USER', payload: doc[id].userInfo})
+              } catch (error) {
+                console.error("Error:", error.message);
+              }
+            }
           } catch (error) {
             console.error("Error:", error.message);
-            // Handle the error (e.g., document not found)
-          }    
+          }      
         }
         loadMessage();
     }, [user, id])

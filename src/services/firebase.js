@@ -236,10 +236,35 @@ class Firebase {
     });
   };
 
-  
-  
-  
+  //notes
+  createNotes = (id) =>{
+    firestoreService.setDoc(firestoreService.doc(this.db, "notes", id), {});
+  }
+  updateNotes = (id, combinedId, notes) => {
+    firestoreService.updateDoc(firestoreService.doc(this.db, "notes", id), {
+      [combinedId+".notes"]: notes,
+      [combinedId+".date"]: firestoreService.serverTimestamp(),
+    });
+  }
 
+  getNotes = async (id) => {
+    try {
+      const notesDoc = await firestoreService.getDoc(firestoreService.doc(this.db, "notes", id));
+      
+      if (notesDoc.exists()) {
+        
+        return notesDoc.data();
+      } else {
+        
+        return false;
+      }
+    } catch (error) {
+      console.error("Error getting chat:", error);
+      throw error;
+    }
+  }
+  
+  
   //db realtime
   getEvents = async (userId, dayOfWeek) => {
     const snapshot = await databaseService.get(
