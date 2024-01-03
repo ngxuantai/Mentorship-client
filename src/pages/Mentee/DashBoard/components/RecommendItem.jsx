@@ -12,6 +12,7 @@ const StyledContainer = styled(Container)`
   overflow: hidden;
   margin: 24px 12px;
   width: 50%;
+  background-color: white;
 `;
 
 function RecommendItem() {

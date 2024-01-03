@@ -49,7 +49,7 @@ const Input = () => {
             className='flex items-center justify-between p-3 h-[10%] bg-primary-800'>
             <input className='border-none rounded-lg outline-none p-2 mr-3 w-full'
                 type="text" 
-                placeholder="Type a message" 
+                placeholder="Nhập tin nhắn..." 
                 value={text}
                 onChange={(e) => setText(e.target.value)}/>
             <button type='submit'>

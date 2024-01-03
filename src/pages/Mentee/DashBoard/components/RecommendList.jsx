@@ -17,7 +17,7 @@ const Container = styled.div`
 function RecommendList() {
   return (
     <Container>
-      <h3>Recommended for you</h3>
+      <h3>Đề xuất cho bạn</h3>
       <Carousel
         style={{
           width: "100%",

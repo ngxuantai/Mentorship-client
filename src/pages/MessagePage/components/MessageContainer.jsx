@@ -17,7 +17,7 @@ export const MessageContainer = () => {
 
     return (
     <div className='flex-[2]'>
-        <div className='h-[10%] flex p-2 bg-primary-600 items-center justify-between'>
+        <div className='h-[10%] flex p-2 bg-primary-700 items-center justify-between'>
           <div className='flex items-center'> 
             <img className='w-[40px] h-[40px] object-cover rounded-full mx-2'
                 src={data.user?.avatar}
