@@ -1,7 +1,8 @@
 // import {useEffect, useRef, useState} from 'react';
+// import {Label, Select} from 'flowbite-react';
 // import {BsChevronDown} from 'react-icons/bs';
 // import FilterOptionList from './FilterOptionList';
-// export default function FilterButton({filters, onFilterChange}) {
+// export default function SortButton({filters, onFilterChange}) {
 //   const [searchInput, setSearchInput] = useState('');
 //   const [showOptions, setShowOptions] = useState(false);
 //   const [isOptionListHovered, setOptionListHovered] = useState(false);
@@ -55,9 +56,9 @@
 //         display: 'inline-flex',
 //         flexDirection: 'row',
 //         alignItems: 'center',
-//         padding: 10,
-//         paddingRight: 18,
-//         paddingLeft: 18,
+//         // padding: 10,
+//         // paddingRight: 18,
+//         // paddingLeft: 18,
 //         backgroundColor: 'white',
 //         position: 'relative',
 //         borderRadius: 24,
@@ -66,28 +67,24 @@
 //         border: '1px solid gray',
 //         width: 'auto',
 //       }}
-//       className={`${!isOptionListHovered ? 'button-effect' : ''}`}
-//       onClick={showMenuOption}
 //     >
-//       <p style={{margin: 0, marginRight: 8, fontWeight: 'bold'}}>
-//         {filters.skill?.name || 'Kĩ năng'}
-//       </p>
-//       <BsChevronDown fontSize={16}></BsChevronDown>
-//       {showOptions && (
-//         <FilterOptionList
-//           onSelected={(item) => {
-//             onFilterChange('skill', item);
-//           }}
-//           setShowOptions={setShowOptions}
-//           setOptionListHovered={setOptionListHovered}
-//           forwardRef={filterOptionListRef}
-//         ></FilterOptionList>
-//       )}
+//       <Select
+//         id="sort"
+//         style={{
+//           border: 'none',
+//         }}
+//       >
+//         <option>Sắp xếp</option>
+//         <option>Học phí cao nhất</option>
+//         <option>Học phí thấp nhất</option>
+//         <option>Đánh giá cao nhất</option>
+//         <option>Đánh giá thấp nhất</option>
+//       </Select>
 //     </div>
 //   );
 // }
 
-import React, {useEffect, useState} from 'react';
+import * as React from 'react';
 import OutlinedInput from '@mui/material/OutlinedInput';
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
@@ -95,7 +92,6 @@ import FormControl from '@mui/material/FormControl';
 import ListItemText from '@mui/material/ListItemText';
 import Select from '@mui/material/Select';
 import Checkbox from '@mui/material/Checkbox';
-import skillApi from '../../../api/skill';
 
 const ITEM_HEIGHT = 44;
 const ITEM_PADDING_TOP = 6;
@@ -108,34 +104,21 @@ const MenuProps = {
   },
 };
 
-export default function FilterButton({filters, onFilterChange}) {
-  const [personName, setPersonName] = useState([]);
-  const [skills, setSkills] = useState([]);
+const names = [
+  'Học phí cao nhất',
+  'Học phí thấp nhất',
+  'Đánh giá cao nhất',
+  'Đánh giá thấp nhất',
+];
 
-  useEffect(() => {
-    const fetchSkills = async () => {
-      const allSkills = await skillApi.getAllSkills();
-      const sortedSkills = allSkills.sort((a, b) =>
-        a.name.localeCompare(b.name)
-      );
-      setSkills(sortedSkills);
-    };
-
-    fetchSkills();
-  }, []);
+export default function SortButton() {
+  const [personName, setPersonName] = React.useState([]);
 
   const handleChange = (event) => {
     const {
-      target: {value, key},
+      target: {value},
     } = event;
     setPersonName(typeof value === 'string' ? value.split(',') : value);
-    console.log('VALUE', value);
-    console.log('KEY', key);
-    console.log('PERSON NAME', personName);
-  };
-
-  const handleSkillToggle = (skill) => {
-    console.log('SKILL', skill);
   };
 
   return (
@@ -147,29 +130,25 @@ export default function FilterButton({filters, onFilterChange}) {
       }}
     >
       <FormControl
-        sx={{m: 1, width: '100%', height: 45, borderRadius: 24, margin: 0}}
+        sx={{m: 1, width: '100%', height: 45, borderRadius: 24}}
         size="small"
       >
-        <InputLabel id="demo-multiple-checkbox-label">Kĩ năng</InputLabel>
+        <InputLabel id="demo-multiple-checkbox-label">Sắp xếp</InputLabel>
         <Select
           labelId="demo-multiple-checkbox-label"
           multiple
           value={personName}
           onChange={handleChange}
-          input={<OutlinedInput label="Kĩ năng" />}
+          input={<OutlinedInput label="Sắp xếp" />}
           renderValue={(selected) => selected.join(', ')}
           MenuProps={MenuProps}
           size="small"
           sx={{borderRadius: 24, height: 45}}
         >
-          {skills.map((skill) => (
-            <MenuItem
-              key={skill.id}
-              value={skill.name}
-              onClick={() => handleSkillToggle(skill)}
-            >
-              <Checkbox checked={personName.indexOf(skill.name) > -1} />
-              <ListItemText primary={skill.name} />
+          {names.map((name) => (
+            <MenuItem key={name} value={name}>
+              <Checkbox checked={personName.indexOf(name) > -1} />
+              <ListItemText primary={name} />
             </MenuItem>
           ))}
         </Select>

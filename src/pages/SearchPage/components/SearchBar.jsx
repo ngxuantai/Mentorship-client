@@ -27,8 +27,12 @@ export default function SearchBar({text, onSearch, resetSearch}) {
         if (searchInput.trim() !== '') {
           queryParams.append('text', searchInput);
         }
-        if (filters.skill !== null) {
-          queryParams.append('skill', filters.skill.name);
+        console.log('skill', filters.skill);
+        if (filters.skill.length !== 0) {
+          const skillString = filters.skill
+            .map((skill) => skill.name)
+            .join('%');
+          queryParams.append('skill', skillString);
         }
         if (filters.minValue) {
           queryParams.append('minValue', filters.minValue);
@@ -54,7 +58,24 @@ export default function SearchBar({text, onSearch, resetSearch}) {
     console.log('TYPE', type, value);
     switch (type) {
       case 'skill': {
-        setFilters(() => ({...filters, skill: value}));
+        // kiểm tra skill đã có trong mảng hay chưa
+        const isSkillExist = filters.skill?.some(
+          (skill) => skill.id === value.id
+        );
+        // Nếu skill đã có trong mảng, hãy xoá nó
+        if (isSkillExist) {
+          const skillArray = filters.skill.filter(
+            (skill) => skill.id !== value.id
+          );
+          setFilters(() => ({...filters, skill: skillArray}));
+          return;
+        }
+
+        // Nếu giá trị skill không phải là mảng, hãy chuyển nó thành mảng
+        const skillArray = Array.isArray(filters.skill)
+          ? [...filters.skill, value]
+          : [value];
+        setFilters(() => ({...filters, skill: skillArray}));
         break;
       }
       case 'price': {
