@@ -69,7 +69,7 @@ export default function SkillFilterButton({filters, onFilterChange}) {
       }}
     >
       <FormControl
-        sx={{m: 1, width: '100%', height: 45, borderRadius: 24, margin: 0}}
+        sx={{width: '100%', height: 45, borderRadius: 24}}
         size="small"
       >
         <InputLabel id="demo-multiple-checkbox-label">Kĩ năng</InputLabel>

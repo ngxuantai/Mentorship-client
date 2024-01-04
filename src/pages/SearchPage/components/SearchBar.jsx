@@ -22,7 +22,13 @@ import {
 import SearchIcon from '@mui/icons-material/Search';
 import {TextInput} from 'flowbite-react';
 
-export default function SearchBar({text, skill, onSearch, resetSearch}) {
+export default function SearchBar({
+  text,
+  skill,
+  onSearch,
+  resetSearch,
+  setSortBy,
+}) {
   const navigate = useNavigate();
   const [searchInput, setSearchInput] = useState(text || '');
   const [filters, setFilters] = useState({});
@@ -38,14 +44,14 @@ export default function SearchBar({text, skill, onSearch, resetSearch}) {
         const skillString = filters.skill.map((skill) => skill.name).join('%');
         queryParams.append('skill', skillString);
       }
-      if (filters.minValue) {
-        queryParams.append('minValue', filters.minValue);
+      if (filters.minPrice) {
+        queryParams.append('minPrice', filters.minPrice);
       }
-      if (filters.maxValue) {
-        queryParams.append('maxValue', filters.maxValue);
+      if (filters.maxPrice) {
+        queryParams.append('maxPrice', filters.maxPrice);
       }
       navigate(`/mentor/search?${queryParams.toString()}`);
-      // onSearch(searchInput, filters);
+      onSearch(searchInput, filters);
     } else {
       resetSearch();
       navigate('/mentor/search');
@@ -79,8 +85,8 @@ export default function SearchBar({text, skill, onSearch, resetSearch}) {
       case 'price': {
         setFilters(() => ({
           ...filters,
-          minValue: value.min,
-          maxValue: value.max,
+          minPrice: value.min,
+          maxPrice: value.max,
         }));
         break;
       }
@@ -141,6 +147,7 @@ export default function SearchBar({text, skill, onSearch, resetSearch}) {
       <FilterBar
         filters={filters}
         onFilterChange={handleFilterChange}
+        setSortBy={setSortBy}
       ></FilterBar>
       <div
         style={{

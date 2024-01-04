@@ -7,6 +7,7 @@ import skillApi from '../../api/skill';
 import MentorItem from './components/MentorItem';
 import SearchBar from './components/SearchBar';
 import {useNavigate} from 'react-router-dom';
+import commentApi from '../../api/comment';
 // import { CenteredRow, CenteredCol } from "@src/components/sharedComponents";
 const StyledContainer = styled.div`
   width: 100%;
@@ -19,6 +20,7 @@ const Text = styled.p`
 function Search() {
   const [searchResult, setSearchResult] = useState([]);
   const [skills, setSkills] = useState([]);
+  const [sortBy, setSortBy] = useState('1');
   const location = useLocation();
   const navigate = useNavigate();
   const queryParams = new URLSearchParams(location.search);
@@ -60,6 +62,32 @@ function Search() {
     fetchData();
   }, [skill, name]);
 
+  useEffect(() => {
+    const sortedResults = [...searchResult];
+    switch (sortBy) {
+      case 1: {
+        sortedResults.sort((a, b) => b.price - a.price);
+        break;
+      }
+      case 2: {
+        sortedResults.sort((a, b) => a.price - b.price);
+        break;
+      }
+      case 3: {
+        sortedResults.sort((a, b) => b.ratingStar - a.ratingStar);
+        break;
+      }
+      case 4: {
+        sortedResults.sort((a, b) => a.ratingStar - b.ratingStar);
+        break;
+      }
+      default:
+        break;
+    }
+
+    setSearchResult(sortedResults);
+  }, [sortBy, searchResult]);
+
   return (
     <>
       <StyledContainer>
@@ -78,7 +106,7 @@ function Search() {
             skill={skill}
             resetSearch={resetSearch}
             onSearch={handleSearch}
-            // navigation={navigation}
+            setSortBy={setSortBy}
           ></SearchBar>
           <div
             style={{
@@ -108,7 +136,6 @@ function Search() {
                 const mentorSkills = skills.filter((skill) =>
                   mentor.skillIds.includes(skill.id)
                 );
-                console.log('skills', skills, mentorSkills);
 
                 return (
                   <MentorItem
