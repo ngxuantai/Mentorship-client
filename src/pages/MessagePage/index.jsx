@@ -43,9 +43,6 @@ const MessagePage = () => {
       const combinedId = id;
       const currentUserId = user.id;
       const otherUserId = id.replace(user.id, '');
-
-      console.log(currentUserId);
-      console.log(otherUserId);
       
       const loadMessage = async () => {
           const currentUserChats = await firebaseInstance.getUserChats(currentUserId);
@@ -55,19 +52,10 @@ const MessagePage = () => {
           if (otherUser === '') {
             otherUser = await menteeApi.getMentee(otherUserId);           
           }
-          console.log(otherUser);
 
           if (currentUserChats === false) {
               await firebaseInstance.createUserChats(currentUserId);
 
-              firebaseInstance.updateUserChats(currentUserId, combinedId, {
-                id: otherUserId,
-                firstName: otherUser.firstName,
-                lastName: otherUser.lastName,
-                avatar: otherUser.avatar,
-              })
-          }
-          else {
               firebaseInstance.updateUserChats(currentUserId, combinedId, {
                 id: otherUserId,
                 firstName: otherUser.firstName,
@@ -85,15 +73,6 @@ const MessagePage = () => {
                 avatar: user.avatar,
               })
           }
-          else {
-              firebaseInstance.updateUserChats(otherUserId, combinedId, {
-                id: currentUserId,
-                firstName: user.firstName,
-                lastName: user.lastName,
-                avatar: user.avatar,
-              })
-          }
-
           try {
             const res = await firebaseInstance.getChat(combinedId);
             if (res === false) {
@@ -113,7 +92,8 @@ const MessagePage = () => {
             console.error("Error:", error.message);
           }      
         }
-        loadMessage();
+        
+        user.id && loadMessage();
     }, [user, id])
 
   return (

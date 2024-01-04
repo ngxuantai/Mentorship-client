@@ -5,7 +5,7 @@ import Search from './Search'
 
 const SideBar = () => {
   return (
-    <div className='flex-[1] bg-primary-600'>
+    <div className='flex-[1] max-w-sm bg-primary-600'>
         <NavBar />
         <Search />
         <Chats />
