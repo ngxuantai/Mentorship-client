@@ -62,7 +62,7 @@ const mentorApi = {
       let url = '/api/mentor/search';
       let firstParamAdded = false;
       if (name) {
-        url += `?name=${name}`;
+        url += `${firstParamAdded ? '&' : '?'}name=${name}`;
         firstParamAdded = true;
       }
       if (minPrice !== null) {

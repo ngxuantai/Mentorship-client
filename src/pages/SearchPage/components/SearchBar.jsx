@@ -12,57 +12,63 @@ import {isEmptyObject} from '../../../utils/dataHelper';
 import '../css/SearchBar.css';
 import FilterBar from './FilterBar';
 import {useNavigate} from 'react-router-dom';
+import {
+  Paper,
+  IconButton,
+  InputBase,
+  TextField,
+  InputAdornment,
+} from '@mui/material';
+import SearchIcon from '@mui/icons-material/Search';
+import {TextInput} from 'flowbite-react';
 
-export default function SearchBar({text, onSearch, resetSearch}) {
+export default function SearchBar({
+  text,
+  skill,
+  onSearch,
+  resetSearch,
+  setSortBy,
+}) {
   const navigate = useNavigate();
   const [searchInput, setSearchInput] = useState(text || '');
   const [filters, setFilters] = useState({});
   const [isShow, setIsShow] = useState(false);
 
   useEffect(() => {
-    const ref = setTimeout(() => {
-      if (searchInput.trim() !== '' || !isEmptyObject(filters)) {
-        onSearch(searchInput, filters);
-        const queryParams = new URLSearchParams();
-        if (searchInput.trim() !== '') {
-          queryParams.append('text', searchInput);
-        }
-        console.log('skill', filters.skill);
-        if (filters.skill.length !== 0) {
-          const skillString = filters.skill
-            .map((skill) => skill.name)
-            .join('%');
-          queryParams.append('skill', skillString);
-        }
-        if (filters.minValue) {
-          queryParams.append('minValue', filters.minValue);
-        }
-        if (filters.maxValue) {
-          queryParams.append('maxValue', filters.maxValue);
-        }
-        navigate(`/mentor/search?${queryParams.toString()}`);
-      } else {
-        resetSearch();
-        navigate('/mentor/search');
+    if (searchInput.trim() !== '' || !isEmptyObject(filters)) {
+      const queryParams = new URLSearchParams();
+      if (searchInput.trim() !== '') {
+        queryParams.append('name', searchInput);
       }
-    }, 500);
-    return () => {
-      clearTimeout(ref);
-    };
+      if (filters.skill && filters.skill.length !== 0) {
+        const skillString = filters.skill.map((skill) => skill.name).join('%');
+        queryParams.append('skill', skillString);
+      }
+      if (filters.minPrice) {
+        queryParams.append('minPrice', filters.minPrice);
+      }
+      if (filters.maxPrice) {
+        queryParams.append('maxPrice', filters.maxPrice);
+      }
+      navigate(`/mentor/search?${queryParams.toString()}`);
+      onSearch(searchInput, filters);
+    } else {
+      resetSearch();
+      navigate('/mentor/search');
+    }
   }, [searchInput, filters]);
 
   const handleSearchInputChange = (e) => {
     setSearchInput(e.target.value);
   };
+
   const handleFilterChange = (type, value) => {
     console.log('TYPE', type, value);
     switch (type) {
       case 'skill': {
-        // kiểm tra skill đã có trong mảng hay chưa
         const isSkillExist = filters.skill?.some(
           (skill) => skill.id === value.id
         );
-        // Nếu skill đã có trong mảng, hãy xoá nó
         if (isSkillExist) {
           const skillArray = filters.skill.filter(
             (skill) => skill.id !== value.id
@@ -70,8 +76,6 @@ export default function SearchBar({text, onSearch, resetSearch}) {
           setFilters(() => ({...filters, skill: skillArray}));
           return;
         }
-
-        // Nếu giá trị skill không phải là mảng, hãy chuyển nó thành mảng
         const skillArray = Array.isArray(filters.skill)
           ? [...filters.skill, value]
           : [value];
@@ -81,8 +85,8 @@ export default function SearchBar({text, onSearch, resetSearch}) {
       case 'price': {
         setFilters(() => ({
           ...filters,
-          minValue: value.min,
-          maxValue: value.max,
+          minPrice: value.min,
+          maxPrice: value.max,
         }));
         break;
       }
@@ -114,25 +118,36 @@ export default function SearchBar({text, onSearch, resetSearch}) {
         gap: '12px',
       }}
     >
-      <div>
-        <Col sm={7}>
-          <Form className="d-flex" style={{height: '45px'}}>
-            <InputGroup>
-              <FormControl
-                onChange={handleSearchInputChange}
-                type="search"
-                value={searchInput}
-                placeholder="Search"
-                className=" search-input"
-              />
-            </InputGroup>
-          </Form>
-        </Col>
-      </div>
+      <Col sm={7}>
+        <Form
+          className="d-flex"
+          style={{width: '100%', height: '45px', borderRadius: '24px'}}
+        >
+          <InputGroup>
+            <FormControl
+              onChange={handleSearchInputChange}
+              type="search"
+              value={searchInput}
+              placeholder="Search"
+              className=" search-input"
+              onSubmit={() => handleSearchInputChange}
+              bsPrefix="custom-form-control" // Set a custom prefix
+              style={{
+                width: '100%',
+                borderRadius: '24px',
+                '&:focus': {
+                  boxShadow: 'none',
+                },
+              }}
+            />
+          </InputGroup>
+        </Form>
+      </Col>
 
       <FilterBar
         filters={filters}
         onFilterChange={handleFilterChange}
+        setSortBy={setSortBy}
       ></FilterBar>
       <div
         style={{

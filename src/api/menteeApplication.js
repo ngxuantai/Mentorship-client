@@ -102,7 +102,6 @@ const menteeApplicationApi = {
 
   getMenteeApplicationByMenteeIdAndMentorId: async (menteeId, mentorId) => {
     try {
-      console.log('menteeId', menteeId);
       const url = `/menteeApplication/getMenteeApplicationByMenteeIdAndMentorId/${menteeId}/${mentorId}`;
       const res = await axiosClient.get(url);
       return res.data.data;

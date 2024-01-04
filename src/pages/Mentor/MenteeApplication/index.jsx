@@ -267,7 +267,7 @@ const ApplicationListPage = () => {
               {value === 0 && (
                 <ListApplications
                   checkedItems={selectedApplications}
-                  applications={applicationList}
+                  applications={menteeApplications}
                   resetSelectedItems={resetSelectedItems}
                   onSelectedItems={handleSetSelectedItem}
                 />
