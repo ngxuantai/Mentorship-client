@@ -53,18 +53,13 @@ function DashBoard() {
       ) : (
         <StyledContainer fluid>
           <Content>
-            <h2 className="flex ">Chào<h2 className="text-primary-900 font-bold ml-2">{user.firstName} {user.lastName} !</h2> </h2>
-            <p>
+            <h1 className="flex ">Chào<h1 className="text-primary-900 font-bold ml-2">{user.firstName} {user.lastName} !</h1> </h1>
+            <p className="text-lg">
               Bắt đầu kết nối với mentors và chuẩn bị cho sự nghiệp của bạn!
             </p>
-            <Button
+            <Button className="px-4 py-2 rounded-md text-white font-bold"
               onClick={handleNavigateToSearchScreen}
               variant="secondary"
-              style={{
-                fontWeight: "bold",
-                borderRadius: "4px",
-                textAlign: "center",
-              }}
             >
               Tìm mentor
             </Button>
