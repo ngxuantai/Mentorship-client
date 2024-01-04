@@ -254,12 +254,12 @@ const ApplicationListPage = () => {
             <div className="overflow-hidden shadow">
               <Tabs value={value} onChange={handleChangeValue}>
                 <Tab
-                  label="Thanh toán"
+                  label="Đơn đăng ký"
                   value={0}
                   style={{fontWeight: 'bold'}}
                 />
                 <Tab
-                  label="Lịch sử thanh toán"
+                  label="Lịch sử duyệt"
                   value={1}
                   style={{fontWeight: 'bold'}}
                 />
