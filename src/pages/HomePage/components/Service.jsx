@@ -56,10 +56,10 @@ export default function Service() {
             navigate('/mentor/search');
           }}
         >
-          Find a Mentor
+          Tìm mentor
         </button>
         <span>
-          <Link to="/mentor">Become a Mentor</Link>
+          <Link to="/mentor">Trở thành mentor</Link>
         </span>
       </div>
     </ServiceContainer>

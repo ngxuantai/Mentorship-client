@@ -52,14 +52,14 @@ function Applications() {
         style={{ backgroundColor: "#04b4ba" }}
       >
         <h5 style={{ color: "white" }}>
-          Want to double the chance of success for your applications?{" "}
-          <a href="mentee/settings" style={{ color: "white" }}>
-            Complete your profile
+          Muốn tăng tỉ lệ kiếm được mentor? {" "}
+          <a href="/mentee/settings" style={{ color: 'purple' }}>
+            Hoàn thiện hồ sơ của bạn
           </a>{" "}
         </h5>
       </div>
       <div className="px-3 py-3">
-        <h3>Applications</h3>
+        <h3>Danh sách yêu cầu</h3>
       </div>
       {applicationList.length > 0 ? (
         <AllApplications applications={applicationList} />

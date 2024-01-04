@@ -16,6 +16,9 @@ import {
   Create,
   Chat,
   Save,
+  PlayArrow,
+  Pause,
+  AccessTime,
 } from '@mui/icons-material';
 import 'quill/dist/quill.snow.css';
 import ReactQuill from 'react-quill';
@@ -23,6 +26,8 @@ import {set} from 'date-fns';
 import { useUserStore } from '../../../store/userStore';
 import menteeApi from '../../../api/mentee';
 import mentorApi from '../../../api/mentor';
+import { UserRole } from '../../../constants';
+import firebaseInstance from '../../../services/firebase';
 
 const APP_ID = '5ad93fd0de6d4b74b2b1e150004c3ebe';
 // const TOKEN = '007eJxTYLiS8LPjXZuu7OwShRd3zIJuZKoqKe04IyDOcS3ompgP23UFhlQTC6NUA4O0pLQUYxPDFINEC5MUM2NTMzOLRAvLZKNEqTfNqQ2BjAx3ZzszMEIhiM/JEJaZkprvnJFYwsAAALMxIFs=';
@@ -41,6 +46,7 @@ const clientRTM = AgoraRTM.createInstance(APP_ID);
 function VideoRoom(props) {
   const {user, setUser} = useUserStore();
   const [users, setUsers] = useState([]);
+  const [otherUser, setOtherUser] = useState(null);
   const [localTracks, setLocalTracks] = useState(null);
   const [localAudioTrack, setLocalAudioTrack] = useState(null);
   const [localVideoTrack, setLocalVideoTrack] = useState(null);
@@ -62,6 +68,9 @@ function VideoRoom(props) {
 
   const [isHighlighting, setIsHighlighting] = useState(false);
   const [selectedText, setSelectedText] = useState('');
+
+  const [timer, setTimer] = useState(0);
+  const [isTimerRunning, setIsTimerRunning] = useState(false);
 
   const messageRef = useRef();
   const textAreaRef = useRef();
@@ -97,6 +106,7 @@ function VideoRoom(props) {
     if (otherUserInfo === '') {
       otherUserInfo = await menteeApi.getMentee(otherUserId);
     }
+    setOtherUser(otherUserInfo);
     console.log('Other user info:', otherUserInfo);
     await clientRTC.subscribe(userJoined, mediaType);
     if (mediaType === 'video') {
@@ -264,8 +274,17 @@ function VideoRoom(props) {
 
   const handleEndCall = (e) => {
     e.preventDefault();
-    navigate(`/message/${roomName}`);
-    navigate(0);
+    if (timer < 3600 && user.role === UserRole.MENTOR){
+      if (confirm('Thời gian học chưa đủ 1h, bạn có muốn kết thúc học không?') === true)
+      {
+        navigate(`/message/${roomName}`);
+        navigate(0);
+      }      
+    }
+    else {
+      navigate(`/message/${roomName}`);
+      navigate(0);
+    }
   };
 
   const sendMessage = () => {
@@ -299,7 +318,29 @@ function VideoRoom(props) {
   const sortedUsers = users.sort((a, b) => (a.uid === selectedUser ? -1 : 1));
 
   // Create note
-  const createNote = () => {
+
+  const createNote = async () => {
+    try {
+      const res = await firebaseInstance.getNotes(user.id);
+      if (res === false) {
+        await firebaseInstance.createNotes(user.id);
+
+        firebaseInstance.updateNotes(user.id, roomName,{
+            title: noteTitle,
+            text: noteText,
+          })       
+      }
+      else{
+        firebaseInstance.updateNotes(user.id, roomName,{
+            title: noteTitle,
+            text: noteText,
+          })
+      }
+
+    } catch (error) {
+      console.log(error);
+    }
+
     console.log('Saved note:', noteText);
 
     // Add note to list
@@ -383,6 +424,40 @@ function VideoRoom(props) {
     'size',
   ];
 
+  useEffect(() => {
+    let interval;
+  
+    if (isTimerRunning) {
+      interval = setInterval(() => {
+        setTimer((prevTimer) => prevTimer + 1);
+      }, 1000);
+    }
+    return () => {
+      clearInterval(interval);
+
+    };
+  }, [isTimerRunning]);
+
+  const startTimer = () => {
+    setIsTimerRunning(true);
+  };
+  const stopTimer = () => {
+    setIsTimerRunning(false);
+  };
+  const resetTimer = () => {
+    setTimer(0);
+  };
+
+
+  const formatTime = (timeInSeconds) => {
+    const hours = Math.floor(timeInSeconds / 3600);
+    const minutes = Math.floor((timeInSeconds % 3600) / 60);
+    const seconds = timeInSeconds % 60;
+
+    return `${hours}:${minutes < 10 ? '0' : ''}${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+  };
+
+
   return (
     <div className="video-room-container bg-gradient-to-r from-primary-900 to-blue-300 w-screen p-2 h-screen overflow-auto">
       <div className="flex justify-center items-center">
@@ -390,6 +465,32 @@ function VideoRoom(props) {
           <VideoChat className="scale-[2.0]" />
         </div>
         <div className="text-white font-bold text-3xl">{roomName}</div>
+      </div>
+      <div className='flex justify-center items-center'>
+        {user.role === UserRole.MENTOR && (
+          <div className='flex justify-center items-center'>
+          <button className='bg-white text-primary-700 rounded-full py-2 px-4 transition duration-150 ease-in-out hover:transition-all hover:scale-110 hover:bg-slate-300'>
+            {isTimerRunning 
+              ? (
+                <div onClick={stopTimer}>
+                  <Pause />  
+                  <span className='font-bold'>Tạm dừng</span>           
+                </div>               
+              )  
+              : (
+                <div onClick={startTimer}>
+                  <PlayArrow />
+                  <span className='font-bold'>Bắt đầu học</span>
+                </div>
+              )
+            }
+          </button>
+                  <div className='font-bold text-white text-lg mx-3'> 
+                  {formatTime(timer)}
+                </div>
+          </div>
+        )}
+
       </div>
 
       <div className="flex justify-between mt-3">
@@ -427,7 +528,7 @@ function VideoRoom(props) {
                         )}
                         {`${message.uid}` !== RTMUID && (
                           <div className="user-them font-bold text-black">
-                            {user.firstName} {user.lastName}: &nbsp;
+                            {otherUser.firstName} {otherUser.lastName}: &nbsp;
                           </div>
                         )}
                         <div className="text">{message.text}</div>

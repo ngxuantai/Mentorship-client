@@ -53,10 +53,9 @@ function DashBoard() {
       ) : (
         <StyledContainer fluid>
           <Content>
-            <h2>Welcome, Khánh! Browse</h2>
+            <h2 className="flex ">Chào<h2 className="text-primary-900 font-bold ml-2">{user.firstName} {user.lastName} !</h2> </h2>
             <p>
-              Start connecting with mentors and get ready to take your career to
-              the next level!
+              Bắt đầu kết nối với mentors và chuẩn bị cho sự nghiệp của bạn!
             </p>
             <Button
               onClick={handleNavigateToSearchScreen}
@@ -67,7 +66,7 @@ function DashBoard() {
                 textAlign: "center",
               }}
             >
-              Find Mentor
+              Tìm mentor
             </Button>
           </Content>
 
