@@ -151,7 +151,9 @@ export default function TestProgressItem({progress, cancelProgress}) {
             cancelProgress={cancelProgress}
           />
           <Tooltip title={endTry ? 'Thanh toán và tiếp tục học' : 'Nhắn tin'}>
-            <Button size="sm">{endTry ? 'Thanh toán' : 'Nhắn tin'}</Button>
+            <Button size="sm" onClick={() => handleButton()}>
+              {endTry ? 'Thanh toán' : 'Nhắn tin'}
+            </Button>
           </Tooltip>
         </Box>
       </Box>

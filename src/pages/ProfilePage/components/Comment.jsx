@@ -48,63 +48,60 @@ function Comment({mentorId}) {
     fetchComment();
   }, []);
 
-  // const [newComment, setNewComment] = useState('');
-  // const [rating, setRating] = useState(0);
-
-  // const handleCommentSubmit = () => {
-  //   // Handle the logic to submit the comment and rating
-  //   console.log('Submitted Comment:', newComment);
-  //   console.log('Rating:', rating);
-
-  //   // You can call an API here to submit the comment and rating to the server
-  //   // For simplicity, I'm just logging the values for demonstration purposes
-
-  //   // Clear the form after submission
-  //   setNewComment('');
-  //   setRating(0);
-  // };
-
   return (
     <StyledContainer>
       {isLoading ? null : (
         <>
-          {listComment.map((comment) => {
-            return (
-              <div className="comment py-4" key={comment.id}>
-                <Row>
-                  <Col
-                    sm={1}
-                    className="px-0 py-0 d-flex justify-content-center"
-                  >
-                    <div className="mentee-avatar">
-                      <img src={menteeData[comment.menteeId]?.avatar}></img>
-                    </div>
-                  </Col>
-                  <Col xs="auto">
-                    <span style={{fontWeight: 'bold'}}>
-                      {menteeData[comment.menteeId]?.firstName}{' '}
-                      {menteeData[comment.menteeId]?.lastName}
-                      <b style={{opacity: '0.5', paddingLeft: '4px'}}>
-                        on {format(new Date(comment.createdAt), 'dd/MM/yyyy')}
-                      </b>
-                    </span>
-                    <br />
-                    <Rating
-                      value={comment.ratingStar}
-                      precision={0.5}
-                      disabled
-                      emptyIcon={
-                        <Star style={{opacity: 0.55}} fontSize="inherit" />
-                      }
-                    />
-                  </Col>
-                </Row>
-                <Row>
-                  <span style={{padding: 0}}>{comment.content}</span>
-                </Row>
-              </div>
-            );
-          })}
+          {listComment.length === 0 ? (
+            <div className="comment py-4">
+              <Row>
+                <Col xs="auto">
+                  <span>Chưa có đánh giá</span>
+                </Col>
+              </Row>
+            </div>
+          ) : (
+            <>
+              {listComment.map((comment) => {
+                return (
+                  <div className="comment py-4" key={comment.id}>
+                    <Row>
+                      <Col
+                        sm={1}
+                        className="px-0 py-0 d-flex justify-content-center"
+                      >
+                        <div className="mentee-avatar">
+                          <img src={menteeData[comment.menteeId]?.avatar}></img>
+                        </div>
+                      </Col>
+                      <Col xs="auto">
+                        <span style={{fontWeight: 'bold'}}>
+                          {menteeData[comment.menteeId]?.firstName}{' '}
+                          {menteeData[comment.menteeId]?.lastName}
+                          <b style={{opacity: '0.5', paddingLeft: '4px'}}>
+                            on{' '}
+                            {format(new Date(comment.createdAt), 'dd/MM/yyyy')}
+                          </b>
+                        </span>
+                        <br />
+                        <Rating
+                          value={comment.ratingStar}
+                          precision={0.5}
+                          disabled
+                          emptyIcon={
+                            <Star style={{opacity: 0.55}} fontSize="inherit" />
+                          }
+                        />
+                      </Col>
+                    </Row>
+                    <Row>
+                      <span style={{padding: 0}}>{comment.content}</span>
+                    </Row>
+                  </div>
+                );
+              })}
+            </>
+          )}
         </>
       )}
     </StyledContainer>

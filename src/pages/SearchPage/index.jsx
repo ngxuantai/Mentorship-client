@@ -48,14 +48,15 @@ function Search() {
 
   useEffect(() => {
     const fetchData = async () => {
-      if (skillId) {
-        await handleSearch('', {skillId});
-      }
-      if (text) {
-        console.log('text', text);
-        await handleSearch(text, {});
-        // location.search = '';
-      }
+      // if (skillId) {
+      //   await handleSearch('', {skillId});
+      // } else if (text) {
+      //   console.log('text', text);
+      //   await handleSearch(text, {});
+      //   // location.search = '';
+      // } else {
+      //   await resetSearch();
+      // }
     };
 
     fetchData();
