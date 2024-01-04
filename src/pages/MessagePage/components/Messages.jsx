@@ -29,9 +29,9 @@ const Messages = () => {
   useEffect(() => {
     const getMessages = async () => {
       try {
-        const combinedId = user.id > id ? user.id + id : id + user.id;
         const doc = await firebaseInstance.getChats(user.id);
-        dispatch ({type: 'CHANGE_USER', payload: doc[combinedId].userInfo})
+        console.log(doc);
+        dispatch ({type: 'CHANGE_USER', payload: doc[id].userInfo})
         // Handle the document data here
       } catch (error) {
         console.error("Error:", error.message);

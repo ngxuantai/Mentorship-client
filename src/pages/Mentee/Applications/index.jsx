@@ -66,16 +66,16 @@ function Applications() {
       ) : (
         <div className="p-2 border rounded d-flex flex-column justify-content-center align-items-center text-center">
           <Article style={{ fontSize: "50px" }} />
-          <p style={{ fontWeight: "500" }}>No active applications</p>
+          <p style={{ fontWeight: "500" }}>Không có yêu cầu nào</p>
           <p className="text-body-tertiary">
-            Once you have applied to a mentor, they will show up here
+            Khi bạn đăng ký học mentor nào, thông tin của họ sẽ xuất hiện tại đây
           </p>
           <Button
             onClick={handleNavigateToSearchScreen}
             style={{ fontWeight: "500" }}
             variant="primary"
           >
-            Find mentors
+            Tìm mentor
           </Button>
         </div>
       )}

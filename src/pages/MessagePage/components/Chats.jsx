@@ -30,7 +30,7 @@ const Chats = () => {
     }
 
     user.id && getChats();
-  }, [chats, user])
+  }, [chats, user.id])
 
   //console.log(Object.entries(chats));
 
@@ -40,6 +40,7 @@ const Chats = () => {
       navigate(`/message/${combinedId}`);
   };
 
+
   return (
     <div className='flex flex-col items-center gap-2 text-white cursor-pointer'>
       {Object.entries(chats).sort((a,b) => b[1].date - a[1].date).map((chat) => {
@@ -48,7 +49,7 @@ const Chats = () => {
               onClick={() => handleSelect(chat[1].userInfo)}>
             <img className='bg-white h-[60px] w-[60px] rounded-full object-cover'
               src={chat[1].userInfo.avatar}></img>
-            <div className='px-2'>
+            <div className='px-2 overflow-hidden'>
               <span className='text-lg '>{chat[1].userInfo.firstName} {chat[1].userInfo.lastName}</span>
               <p className='text-primary-300'>{chat[1].lastMessage?.text}</p>
             </div>

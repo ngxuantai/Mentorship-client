@@ -1,35 +1,49 @@
 import React, {useEffect, useState} from 'react';
 import OutlinedInput from '@mui/material/OutlinedInput';
 import InputLabel from '@mui/material/InputLabel';
-import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
-import ListItemText from '@mui/material/ListItemText';
 import Select from '@mui/material/Select';
-import Checkbox from '@mui/material/Checkbox';
-import skillApi from '../../../api/skill';
+import Slider from '@mui/material/Slider';
+import Box from '@mui/material/Box';
+import { set } from 'date-fns';
+
+const minDistance = 1;
 
 export default function FilterButton({filters, onFilterChange}) {
   const [personName, setPersonName] = useState([]);
   const [skills, setSkills] = useState([]);
+  const [value, setValue] = useState([1, 4]);
+  const [price, setPrice] = useState([]);
 
   useEffect(() => {}, []);
+
+  function valuetext(value) {
+    return `${value*100000}`;
+  }
 
   const handleChange = (event) => {
     const {
       target: {value, key},
     } = event;
     setPersonName(typeof value === 'string' ? value.split(',') : value);
-    console.log('VALUE', value);
-    console.log('KEY', key);
-    console.log('PERSON NAME', personName);
+    
   };
+
+  const handlePriceChange = (event, newValue) => {
+    setValue(newValue);
+    setPrice([newValue[0]*100000, newValue[1]*100000]);
+  };
+
+  useEffect(() => {
+    console.log(price);
+  }, [price]);
 
   return (
     <div
       style={{
         minWidth: 150,
-        width: 150,
-        maxWidth: 300,
+        width: 180,
+        maxWidth: 400,
       }}
     >
       <FormControl
@@ -40,14 +54,29 @@ export default function FilterButton({filters, onFilterChange}) {
         <Select
           labelId="demo-multiple-checkbox-label"
           multiple
-          value={personName}
-          onChange={handleChange}
+          value={price}
+          //onChange={handleChange}
           input={<OutlinedInput label="Học phí" />}
-          renderValue={(selected) => selected.join(', ')}
+          renderValue={(price) => price.join(' - ')}
           size="small"
           sx={{borderRadius: 24, height: 45}}
-        >
-          // slider
+       >
+        <Box className='w-[400px] h-[100px] flex justify-center items-center py-2 px-3'>
+          <span className='mx-3'>100.000</span>
+          <Slider
+            getAriaLabel={() => 'Minimum distance'}
+            valueLabelFormat={valuetext}
+            valueLabelDisplay="auto"
+            disableSwap
+            value={value}
+            onChange={handlePriceChange}
+            step={1}
+            min={1}
+            max={5}
+            marks
+          />
+          <span className='mx-3'>500.000</span>
+        </Box>          
         </Select>
       </FormControl>
     </div>
