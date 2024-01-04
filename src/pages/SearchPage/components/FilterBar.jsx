@@ -4,33 +4,32 @@ import {useEffect, useRef, useState} from 'react';
 import {BsChevronDown} from 'react-icons/bs';
 import {MAX_PRICE, MIN_PRICE} from '../../../constants';
 import '../css/Slider.css';
-import FilterButton from './FilterButton';
+import FilterButton from './SkillFilterButton';
 import SortButton from './SortButton';
 import PriceFilterButton from './PriceFilterButton';
 
 export default function FilterBar({filters, onFilterChange}) {
   return (
-    <Container style={{}}>
-      <div
-        style={{
-          marginTop: 8,
-          display: 'inline-flex',
-          flexDirection: 'row',
-          alignItems: 'center',
-          justifyContent: 'start',
-          width: 'auto',
-        }}
-      >
-        <FilterButton
-          filters={filters}
-          onFilterChange={onFilterChange}
-        ></FilterButton>
+    <div
+      style={{
+        marginTop: 8,
+        display: 'inline-flex',
+        flexDirection: 'row',
+        alignItems: 'center',
+        gap: '10px',
+        justifyContent: 'start',
+        width: 'auto',
+      }}
+    >
+      <FilterButton
+        filters={filters}
+        onFilterChange={onFilterChange}
+      ></FilterButton>
 
-        <PriceFilterButton />
+      <PriceFilterButton />
 
-        <SortButton />
-      </div>
-    </Container>
+      <SortButton />
+    </div>
   );
 }
 

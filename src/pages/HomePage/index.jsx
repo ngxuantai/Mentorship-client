@@ -23,7 +23,7 @@ function HomePage() {
   }, [user]);
 
   const handleSearch = () => {
-    navigate(`/mentor/search?text=${text}`);
+    navigate(`/mentor/search?name=${text}`);
   };
 
   return (

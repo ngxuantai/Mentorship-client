@@ -20,10 +20,10 @@ function Search() {
   const [searchResult, setSearchResult] = useState([]);
   const [skills, setSkills] = useState([]);
   const location = useLocation();
-  const navigation = useNavigate();
+  const navigate = useNavigate();
   const queryParams = new URLSearchParams(location.search);
-  const text = queryParams.get('text');
-  const skillId = queryParams.get('skillId');
+  const name = queryParams.get('name');
+  const skill = queryParams.get('skill');
 
   // const handleSearch = useCallback(async (searchInput, filters) => {
   const handleSearch = async (searchInput, filters) => {
@@ -48,19 +48,17 @@ function Search() {
 
   useEffect(() => {
     const fetchData = async () => {
-      // if (skillId) {
-      //   await handleSearch('', {skillId});
-      // } else if (text) {
-      //   console.log('text', text);
-      //   await handleSearch(text, {});
-      //   // location.search = '';
-      // } else {
-      //   await resetSearch();
-      // }
+      if (skill) {
+        await handleSearch('', {skill});
+      } else if (name) {
+        console.log('text', name);
+        await handleSearch(name, {});
+        // location.search = '';
+      }
     };
 
     fetchData();
-  }, []);
+  }, [skill, name]);
 
   return (
     <>
@@ -76,7 +74,8 @@ function Search() {
             Tìm kiếm Mentor
           </h1>
           <SearchBar
-            text={text}
+            text={name}
+            skill={skill}
             resetSearch={resetSearch}
             onSearch={handleSearch}
             // navigation={navigation}
