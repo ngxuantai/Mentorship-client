@@ -39,7 +39,7 @@ const UserCard = () => {
     };
 
     fetchApplication();
-  }, [application]);
+  }, []);
 
   const handleNavigateProfile = () => {
     navigate(`/mentor/profile/${data.user.id}`);

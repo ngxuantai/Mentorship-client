@@ -10,7 +10,7 @@ export default function Service() {
   return (
     <ServiceContainer>
       <h2>Trong tầm tay: một người cố vấn tận tâm</h2>
-      <p>
+      <p className='text-white'>
         Bạn muốn tỏa sáng trong cuộc phỏng vấn việc làm kế tiếp hoặc xây dựng
         một công ty khởi nghiệp của riêng bạn? Bạn muốn học các kỹ năng làm việc
         mới? Hãy đến với MentorShip để có thể học tập với người cố vấn đầy kinh
@@ -23,7 +23,7 @@ export default function Service() {
           <div className="service-card-icon">
             <img src={findMentor} />
           </div>
-          <p>
+          <p className='text-white'>
             Kết nối với người cố vấn, từ đó giúp bạn xây dựng kĩ năng và hoàn
             thiện mục tiêu của mình.
           </p>
@@ -33,7 +33,7 @@ export default function Service() {
           <div className="service-card-icon">
             <img src={applyMentorship} />
           </div>
-          <p>
+          <p className='text-white'>
             Điền đơn đăng ký và nếu bạn thấy mình phù hợp với người cố vấn mà
             bạn chọn, bạn sẽ có được 7 ngày trải nghiệm miễn phí.
           </p>
@@ -43,7 +43,7 @@ export default function Service() {
           <div className="service-card-icon">
             <img src={levelupSkill} />
           </div>
-          <p>
+          <p className='text-white'>
             Từ trò chuyện cá nhân đến hỗ trợ thực tế, mỗi người cố vấn cung cấp
             các dịch vụ khác nhau để giúp bạn thăng tiến nhanh chóng trong sự
             nghiệp của mình.
@@ -86,22 +86,22 @@ const ServiceContainer = styled.div`
     text-align: center;
   }
   .service-card-container {
-    width: 90%;
     display: flex;
     flex-direction: row;
-    justify-content: space-between;
+    justify-content: center;
     padding: 0 5rem;
     gap: 2rem;
     .service-card {
+      width: 400px;
       display: flex;
       flex-direction: column;
       align-items: center;
-      justify-content: center;
+      //justify-content: center;
       padding: 1rem;
       p {
         text-align: center;
         font-size: 1rem;
-        width: 80%;
+        
       }
     }
   }

@@ -105,8 +105,8 @@ export default function ListApplications({applications}) {
             <Table.Cell className="mr-12 flex items-center space-x-6 whitespace-nowrap p-4 lg:mr-0">
               <img
                 className="h-10 w-10 rounded-full"
-                src={application.avatar}
-                alt={`${application.name} avatar`}
+                src={application.menteeProfile.avatar}
+                alt={`${application.menteeProfile.firstName} avatar`}
               />
               <div className="text-sm font-normal text-gray-500 dark:text-gray-400">
                 <div className="text-base font-semibold text-gray-900 dark:text-white">
