@@ -2,6 +2,8 @@ import InfoIcon from "@mui/icons-material/Info";
 import { Avatar, TextField } from "@mui/material";
 import { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
+import { TextInput, Spinner, FloatingLabel } from "flowbite-react";
+import { PermIdentity, MailOutline, LocalPhone, Work } from "@mui/icons-material";
 
 export default function AboutYou({ values, onInputChange, onButtonClick }) {
   const [selectedImage, setSelectedImage] = useState();
@@ -65,18 +67,13 @@ export default function AboutYou({ values, onInputChange, onButtonClick }) {
             style={{ paddingTop: "2px", color: "#224F9C", fontSize: "16px" }}
           >
             <span style={{ margin: 0, padding: 0, fontWeight: "bold" }}>
-              Lovely to see you!
+              Xin chào! Rất vui được gặp bạn.
             </span>
             <p>
-              Filling out the form only takes a couple minutes. We'd love to
-              learn more about your background and the ins-and-outs of why you'd
-              like to become a mentor. Keep things personal and talk directly to
-              us and your mentees. We don't need jargon and polished cover
-              letters here!
+              Việc điền form dưới đây chỉ mất một vài phút của bạn. Chúng tôi muốn biết thêm một vài thông tin cá nhân của bạn cũng như lý do vì sao bạn muốn trở thành một mentor. Hãy trả lời một cách tự nhiên nhất nhé!
               <br />
               <br />
-              You agree to our code of conduct and the mentor agreement by
-              sending the form, so be sure to have a look at those.
+              Qua việc gửi đi form này, bạn đã đồng ý với chúng tôi về quy tắc ứng xử và điều khoản sử dụng của Mentorship. Vì vậy hãy chắc chắn rằng mình đã xem qua những biểu mẫu đó nhé!
             </p>
           </div>
         </TipsContainer>
@@ -97,93 +94,64 @@ export default function AboutYou({ values, onInputChange, onButtonClick }) {
           </div>
         </AvatarContainer>
         <InforContainer onSubmit={handleSubmit}>
-          <div className="content">
-            <TextField
+          <div className="content grid grid-cols-2 space-x-4">
+            <FloatingLabel className="w-full"
+              label="Họ"
+              variant="outlined"
               name="firstName"
               value={values.firstName}
               onChange={onInputChange}
               autoComplete="off"
-              placeholder="Tên"
-              variant="outlined"
-              size="small"
-              sx={{
-                width: "100%",
-                fontSize: "1rem",
-              }}
               required
+
             />
-            <TextField
+            <FloatingLabel className="w-full"
+              label="Tên"
+              variant="outlined"
               value={values.lastName}
               name="lastName"
               onChange={onInputChange}
               autoComplete="off"
-              placeholder="Họ"
-              variant="outlined"
-              size="small"
-              sx={{
-                width: "100%",
-                fontSize: "1rem",
-              }}
               required
             />
           </div>
-          <div className="content">
-            <TextField
+          <div className="content grid grid-cols-2 space-x-4">
+            <FloatingLabel className="w-full"
+              label="Email"
+              variant="outlined"
               value={values.email}
               name="email"
               onChange={onInputChange}
               autoComplete="off"
-              placeholder="Email"
-              variant="outlined"
-              size="small"
-              sx={{
-                width: "100%",
-                fontSize: "1rem",
-              }}
               required
             />
-            <TextField
+            <FloatingLabel className="w-full"
+              label="Số điện thoại"
+              variant="outlined"
               name="phoneNumber"
               value={values.phoneNumber}
               onChange={onInputChange}
               autoComplete="off"
-              placeholder="Số điện thoại"
-              variant="outlined"
-              size="small"
-              sx={{
-                width: "100%",
-                fontSize: "1rem",
-              }}
               required
             />
           </div>
-          <div className="content">
-            <TextField
+          <div className="content grid grid-cols-2 space-x-4">
+            <FloatingLabel className="w-full"
+              variant="outlined"
+              label="Nghề nghiệp"
               name="jobTitle"
               value={values.jobTitle}
               onChange={onInputChange}
               autoComplete="off"
-              placeholder="Nghề nghiệp"
-              variant="outlined"
-              size="small"
-              sx={{
-                width: "100%",
-                fontSize: "1rem",
-              }}
               required
             />
-            <TextField
+            <FloatingLabel className="w-full"
+              variant="outlined"
               name="dateOfBirth"
               type="date"
               placeholder="Ngày sinh"
               onChange={onInputChange}
               value={values.dateOfBirth || new Date()}
-              variant="outlined"
-              size="small"
-              sx={{
-                width: "100%",
-                fontSize: "1rem",
-              }}
             />
           </div>
 
@@ -259,11 +227,6 @@ const InforContainer = styled.form`
   display: flex;
   flex-direction: column;
   gap: 2rem;
-  .content {
-    display: flex;
-    flex-direction: row;
-    gap: 1rem;
-  }
   button {
     width: 140px;
     font-size: 1rem;
