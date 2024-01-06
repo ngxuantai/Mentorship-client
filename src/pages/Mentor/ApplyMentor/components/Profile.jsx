@@ -149,7 +149,7 @@ export default function Profile({ values, onInputChange, onButtonClick }) {
           />
           </div>
           <div className="content grid grid-cols-2 justify-stretch space-x-4">
-            <FloatingLabel className="w-full"
+            <FloatingLabel 
               variant="outlined"
               name="linkedin"
               onChange={onInputChange}
@@ -158,7 +158,7 @@ export default function Profile({ values, onInputChange, onButtonClick }) {
               value={values.linkedin}
               required
             />
-            <FloatingLabel className="w-full"
+            <FloatingLabel 
               name="twitter"
               value={values.twitter}
               onChange={onInputChange}
@@ -169,7 +169,7 @@ export default function Profile({ values, onInputChange, onButtonClick }) {
           </div>
           <div
           >
-            <FloatingLabel className="w-[50%]"
+            <FloatingLabel
               variant="outlined"
               name="personalWebsite"
               autoComplete="off"

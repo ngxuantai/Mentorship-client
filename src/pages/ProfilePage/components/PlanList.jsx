@@ -147,13 +147,13 @@ function PlanItem({ plan, mentor }) {
               <ListItemIcon>
                 <WatchLater />
               </ListItemIcon>
-              <ListItemText primary="Expect responses in 2 days" />
+              <ListItemText primary="Trả lời trong 2 ngày" />
             </ListItem>
             <ListItem className="py-0 px-0">
               <ListItemIcon>
                 <Work />
               </ListItemIcon>
-              <ListItemText primary="Hands-on support" />
+              <ListItemText primary="Luyện tập kỹ năng thực hành" />
             </ListItem>
           </List>
         </Row>
@@ -175,19 +175,19 @@ function PlanItem({ plan, mentor }) {
               <ListItemIcon>
                 <Check />
               </ListItemIcon>
-              <ListItemText primary="Flat fee, no hidden costs" />
+              <ListItemText primary="Không có giá phát sinh" />
             </ListItem>
             <ListItem className="py-0 px-0">
               <ListItemIcon>
                 <Check />
               </ListItemIcon>
-              <ListItemText primary="7 day free trial! Cancel anytime." />
+              <ListItemText primary="Thử nghiệm học 7 ngày. Có thể hủy bất cứ lúc nào" />
             </ListItem>
             <ListItem className="py-0 px-0">
               <ListItemIcon>
                 <Whatshot />
               </ListItemIcon>
-              <ListItemText primary="Only 5 spots left" />
+              <ListItemText primary="Chỉ còn 5 lượt đăng ký" />
             </ListItem>
           </List>
         </Row>
