@@ -24,13 +24,11 @@ export default function MentorSettings() {
         >
           <Tab label="Thông tin cá nhân" value={0} />
           <Tab label="Gói học" value={1} />
-          <Tab label="Thanh toán" value={2} />
-          <Tab label="Thống kê" value={3} />
+          <Tab label="Thống kê" value={2} />
         </Tabs>
         {value === 0 && <Profiles />}
         {value === 1 && <Plan />}
-        {value === 2 && <Payment />}
-        {value === 3 && <Statistic />}
+        {value === 2 && <Statistic />}
       </Container>
     </div>
   );

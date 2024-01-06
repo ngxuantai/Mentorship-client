@@ -65,7 +65,7 @@ export default function MentorSkills() {
       if (mentorSkillsData) {
         setMentorSkills(mentorSkillsData);
       }
-      setSelectedSkillsId(mentorSkillsData.map((skill) => skill.id));
+      await setSelectedSkillsId(mentorSkillsData.map((skill) => skill.id));
     };
    
     fetchSkills();

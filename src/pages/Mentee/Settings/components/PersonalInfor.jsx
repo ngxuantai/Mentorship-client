@@ -1,5 +1,6 @@
 import PrivacyTipIcon from "@mui/icons-material/PrivacyTip";
 import { Avatar, TextField } from "@mui/material";
+import { FloatingLabel } from "flowbite-react";
 import React, { useRef } from "react";
 import styled from "styled-components";
 import firebaseInstance from "../../../../services/firebase";
@@ -77,13 +78,13 @@ export default function PersonalInfor() {
             </li>
           </ul>
         </TipsContainer>
+        <div className="flex space-x-10">
         <AvatarContainer>
-          <p>Ảnh</p>
-          <div className="avatar-change">
+          <div className="avatar-change flex">
             <Avatar
               //render selected image here
               src={selectedImage}
-              sx={{ width: "100px", height: "100px" }}
+              sx={{ width: "150px", height: "150px" }}
             />
             <input
               type="file"
@@ -95,52 +96,40 @@ export default function PersonalInfor() {
           </div>
         </AvatarContainer>
         <InforContainer onSubmit={handleSaveChange}>
-          <div className="content">
-            <TextField
+          <div className="grid grid-cols-2 space-x-4">
+            <FloatingLabel
               name="firstName"
-              onChange={(event) => handleChange(event)}
-              autoComplete="off"
-              label="Tên"
-              variant="outlined"
-              size="small"
-              sx={{
-                width: "100%",
-                fontSize: "1rem",
-              }}
-              required
-            />
-            <TextField
-              name="lastName"
+              value={values.firstName}
               onChange={(event) => handleChange(event)}
               autoComplete="off"
               label="Họ"
               variant="outlined"
-              size="small"
-              sx={{
-                width: "100%",
-                fontSize: "1rem",
-              }}
+              required
+            />
+            <FloatingLabel
+              name="lastName"
+              value={values.lastName}
+              onChange={(event) => handleChange(event)}
+              autoComplete="off"
+              label="Tên"
+              variant="outlined"
               required
             />
           </div>
           <div
-            className="content"
-            style={{ width: "50%", paddingRight: "0.5rem" }}
+            className="grid grid-cols-2 space-x-4"
           >
-            <TextField
+            <FloatingLabel
               name="phoneNumber"
+              value={values.phoneNumber}
               onChange={(event) => handleChange(event)}
               autoComplete="off"
               label="Số điện thoại"
               variant="outlined"
-              size="small"
-              sx={{
-                width: "100%",
-                fontSize: "1rem",
-              }}
               required
             />
-            <TextField
+            <FloatingLabel
+              label="Sinh nhật"
               name="dateOfBirth"
               type="date"
               onChange={(event) => handleChange(event)}
@@ -150,11 +139,6 @@ export default function PersonalInfor() {
                   : ""
               }
               variant="outlined"
-              size="small"
-              sx={{
-                width: "100%",
-                fontSize: "1rem",
-              }}
             />
           </div>
           {/*       
@@ -177,6 +161,7 @@ export default function PersonalInfor() {
           /> */}
           <button>Lưu thay đổi</button>
         </InforContainer>
+        </div>
       </ContentContainer>
     </Container>
   );
@@ -220,15 +205,14 @@ const AvatarContainer = styled.div`
     padding-left: 1rem;
   }
   .avatar-change {
-    margin-top: 1rem;
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     align-items: center;
     button {
       border-radius: 0.25rem;
       border: 1px solid #000000;
       padding: 0.25rem 1rem;
-      margin-left: 1rem;
+      margin-top: 0.5rem;
     }
   }
 `;

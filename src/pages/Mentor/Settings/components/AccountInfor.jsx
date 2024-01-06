@@ -1,4 +1,5 @@
 import { TextField } from "@mui/material";
+import { FloatingLabel } from "flowbite-react";
 import React from "react";
 import styled from "styled-components";
 import firebaseInstance from "../../../../services/firebase";
@@ -42,7 +43,7 @@ export default function AccountInfor() {
       </Tittle>
       <ContentContainer>
         <InforContainer onSubmit={handleSaveChange}>
-          <TextField
+          <FloatingLabel className="w-full"
             name="password"
             value={values.password}
             onChange={handleChange}
@@ -50,15 +51,10 @@ export default function AccountInfor() {
             label="Mật khẩu cũ"
             type="password"
             variant="outlined"
-            size="small"
-            sx={{
-              width: "100%",
-              fontSize: "1rem",
-            }}
             required
           />
-          <div className="content">
-            <TextField
+
+            <FloatingLabel className="w-full"
               type="password"
               value={values.confirmPassword}
               name="confirmPassword"
@@ -66,14 +62,9 @@ export default function AccountInfor() {
               autoComplete="off"
               label="Mật khẩu mới"
               variant="outlined"
-              size="small"
-              sx={{
-                width: "100%",
-                fontSize: "1rem",
-              }}
               required
             />
-          </div>
+
           <button>Lưu thay đổi</button>
         </InforContainer>
       </ContentContainer>

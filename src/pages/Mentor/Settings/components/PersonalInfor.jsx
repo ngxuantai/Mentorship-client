@@ -1,4 +1,5 @@
 import { Avatar, FormControlLabel, Switch, TextField } from "@mui/material";
+import { FloatingLabel } from "flowbite-react";
 import React, { useRef } from "react";
 import styled from "styled-components";
 import firebaseInstance from "../../../../services/firebase";
@@ -80,100 +81,73 @@ export default function PersonalInfor() {
             />
           </AvatarContainer>
           <InforContainer onSubmit={handleSaveChange}>
-            <div className="content">
-              <TextField
+            <div className="grid grid-cols-2 space-x-4">
+              <FloatingLabel className="w-full"
+                label="Tên"
                 name="firstName"
                 value={values.firstName}
                 onChange={(event) => handleChange(event)}
                 autoComplete="off"
                 placeholder="Tên"
                 variant="outlined"
-                size="small"
-                sx={{
-                  width: "100%",
-                  fontSize: "1rem",
-                }}
                 required
               />
-              <TextField
+              <FloatingLabel className="w-full"
+                label="Họ"
                 value={values.lastName}
                 name="lastName"
                 onChange={(event) => handleChange(event)}
                 autoComplete="off"
                 placeholder="Họ"
                 variant="outlined"
-                size="small"
-                sx={{
-                  width: "100%",
-                  fontSize: "1rem",
-                }}
                 required
               />
             </div>
-            <div className="content">
-              <TextField
+            <div className="grid grid-cols-2 space-x-4">
+              <FloatingLabel className="w-full"
+                label="Số điện thoại"
                 value={values.phoneNumber}
                 name="phoneNumber"
                 onChange={(event) => handleChange(event)}
                 autoComplete="off"
                 placeholder="Số điện thoại"
                 variant="outlined"
-                size="small"
-                sx={{
-                  width: "100%",
-                  fontSize: "1rem",
-                }}
                 required
               />
-              <TextField
+              <FloatingLabel className="w-full"
+                label="Email"
                 value={values.email}
                 name="email"
                 onChange={(event) => handleChange(event)}
                 autoComplete="off"
                 placeholder="Email"
                 variant="outlined"
-                size="small"
-                sx={{
-                  width: "100%",
-                  fontSize: "1rem",
-                }}
                 required
               />
             </div>
-            <div className="content">
-              <TextField
+            <div className="grid grid-cols-3 space-x-2">
+              <FloatingLabel className="w-full"
+                label="Nghề nghiệp"
                 name="jobTitle"
                 value={values.jobTitle}
                 onChange={(event) => handleChange(event)}
                 autoComplete="off"
                 placeholder="Nghề nghiệp"
                 variant="outlined"
-                size="small"
-                sx={{
-                  width: "50%",
-                  fontSize: "1rem",
-                }}
                 required
               />
-              <div
-                className="content"
-                style={{ width: "50%", paddingRight: "0.5rem" }}
-              >
-                <TextField
+                <FloatingLabel className="w-full"
+                  label="LinkedIn"
                   name="linkedin"
                   value={values.linkedin}
                   onChange={(event) => handleChange(event)}
                   autoComplete="off"
                   placeholder="Linked url"
                   variant="outlined"
-                  size="small"
-                  sx={{
-                    width: "100%",
-                    fontSize: "1rem",
-                  }}
                   required
                 />
-                <TextField
+                <FloatingLabel className="w-full"
+                  label="Sinh nhật"
                   name="dateOfBirth"
                   type="date"
                   value={values.dateOfBirth}
@@ -184,13 +158,7 @@ export default function PersonalInfor() {
                       : ""
                   }
                   variant="outlined"
-                  size="small"
-                  sx={{
-                    width: "100%",
-                    fontSize: "1rem",
-                  }}
                 />
-              </div>
             </div>
             {/* <Typography variant="body1" color="error">
               Unavailable

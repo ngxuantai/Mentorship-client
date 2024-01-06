@@ -1,5 +1,6 @@
 import PrivacyTipIcon from "@mui/icons-material/PrivacyTip";
 import { TextField } from "@mui/material";
+import { Textarea } from "flowbite-react";
 import React from "react";
 import styled from "styled-components";
 import { useUserStore } from "../../../../store/userStore";
@@ -45,36 +46,24 @@ export default function OtherInfor() {
           </ul>
         </TipsContainer>
         <InforContainer onSubmit={handleSaveChange}>
-          <TextField
-            multiline
+          <label className="font-semibold ml-3">Thông tin ngắn về bạn</label>
+          <Textarea className="bg-white"
+            rows={7}
             name="bio"
             value={values.bio}
             onChange={(event) => handleChange(event)}
             autoComplete="off"
-            minRows={5}
-            label="Thông tin ngắn về bạn"
             placeholder="Hãy chia sẻ thông tin ngắn về bản thân, kinh nghiệm hoặc sở thích của bạn. Điều này giúp mentee hiểu rõ hơn về bạn."
-            size="small"
-            sx={{
-              width: "100%",
-              fontSize: "1rem",
-            }}
             required
           />
-          <TextField
-            multiline
+          <label className="font-semibold ml-3">Lời giới thiệu</label>
+          <Textarea className="bg-white"
+            rows={7}
             name="introduction"
             value={values.introduction}
             onChange={(event) => handleChange(event)}
             autoComplete="off"
-            minRows={5}
             placeholder="Viết một lời giới thiệu chi tiết về bản thân, bao gồm kinh nghiệm, kỹ năng, hoặc bất cứ điều gì bạn muốn chia sẻ với mentee"
-            label="Lời giới thiệu về bạn"
-            size="small"
-            sx={{
-              width: "100%",
-              fontSize: "1rem",
-            }}
             required
           />
 

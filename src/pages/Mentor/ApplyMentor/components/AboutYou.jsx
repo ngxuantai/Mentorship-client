@@ -94,7 +94,7 @@ export default function AboutYou({ values, onInputChange, onButtonClick }) {
           </div>
         </AvatarContainer>
         <InforContainer onSubmit={handleSubmit}>
-          <div className="content grid grid-cols-2 space-x-4">
+          <div className="grid grid-cols-2 space-x-4">
             <FloatingLabel className="w-full"
               label="Họ"
               variant="outlined"

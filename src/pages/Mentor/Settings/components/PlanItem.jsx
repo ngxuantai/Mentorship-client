@@ -8,6 +8,7 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
+import { FloatingLabel } from "flowbite-react";
 import { useEffect, useState } from "react";
 import { PlanType } from "../../../../constants/index";
 import currencyFormatter from "../../../../utils/moneyConverter";
@@ -86,50 +87,53 @@ const PlanItem = ({ plan, onUpdatePlan }) => {
         <Typography variant="h5" component="div" style={{ fontWeight: "bold" }}>
           {getPlanName(plan)}
         </Typography>
-        <TextField
+        <FloatingLabel
           label="Số lần gọi mỗi tuần"
+          variant="outlined"
           value={editedPlan.callTimes}
           onChange={handleCallTimesChange}
-          style={{ marginTop: "10px" }}
+
         />
-        <TextField
+        <FloatingLabel
           label="Số tuần học"
+          variant="outlined"
           name="weeks"
           value={editedPlan.weeks}
           onChange={onInputChange}
-          style={{ marginTop: "10px" }}
+
         />
-        <TextField
+        <FloatingLabel
           label="Học phí"
+          variant="outlined"
           value={currencyFormatter(editedPlan.price)}
           onChange={(event) => {
             // Chuyển đổi giá trị nhập vào thành số và cập nhật trạng thái
             const value = Number(event.target.value.replace(/\D/g, ""));
             handlePriceChange(value);
           }}
-          style={{ marginTop: "10px" }}
+
         />
-        <TextField
+        <FloatingLabel
           label="Mô tả"
+          variant="outlined"
           value={editedPlan.description}
-          placeholder="Trống"
           onChange={handleDescriptionChange}
-          multiline
-          rows={3}
-          style={{ marginTop: "10px" }}
+
         />
       </CardContent>
-      <PlanSwitch plan={plan} onTogglePlan={handleTogglePlan}></PlanSwitch>
-      <CardActions style={{ justifyContent: "flex-end" }}>
-        <Button
-          variant="contained"
-          color="primary"
-          onClick={handleSaveClick}
-          disabled={!isPlanModified}
-        >
-          Lưu
-        </Button>
-      </CardActions>
+      <div className="flex justify-between px-4">
+        <PlanSwitch plan={plan} onTogglePlan={handleTogglePlan}></PlanSwitch>
+        <CardActions>
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={handleSaveClick}
+            disabled={!isPlanModified}
+          >
+            Lưu
+          </Button>
+        </CardActions>
+      </div>
     </Card>
   );
 };
