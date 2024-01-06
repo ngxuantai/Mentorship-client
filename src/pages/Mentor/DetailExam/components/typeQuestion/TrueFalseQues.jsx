@@ -5,6 +5,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import RemoveCircleIcon from '@mui/icons-material/RemoveCircle';
 import examApi from '../../../../../api/exam';
 import styled from 'styled-components';
+import {TextInput} from 'flowbite-react';
 
 export default function TrueFalseQues({examId, addQuestion, cancelAddQues}) {
   const [question, setQuestion] = useState('');
@@ -72,7 +73,7 @@ export default function TrueFalseQues({examId, addQuestion, cancelAddQues}) {
   return (
     <Container>
       <label>Nội dung câu hỏi:</label>
-      <TextField
+      <TextInput
         hiddenLabel
         type="text"
         value={question}

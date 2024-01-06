@@ -42,6 +42,8 @@ export default function Header() {
           setUser({...userDataFromApi, role: userData.role});
           setTypeHeader('mentor');
         }
+      } else {
+        setTypeHeader('unauth');
       }
       // if (userData !== null && !user) {
       //   let userDataFromApi;

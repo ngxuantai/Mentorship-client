@@ -9,6 +9,7 @@ import {useUserStore} from '../../../store/userStore';
 import {useMenteeAppliStore} from '../../../store/menteeAppliStore';
 import {applicationToExcelData} from '../../../utils/excelDataHelper';
 import {exportExcel} from '../../../utils/excelHelper';
+import menteeApplicationApi from '../../../api/menteeApplication';
 
 const dropdownOption = [
   {value: 'id', label: 'Id'},
@@ -45,7 +46,8 @@ const ListMentee = () => {
     };
 
     fetchAndSetApplications();
-  }, []);
+    setMenteeList(menteeAppliApproved);
+  }, [menteeAppliApproved]);
 
   useEffect(() => {
     // const applicationsWithUser = applications.map((application) => {

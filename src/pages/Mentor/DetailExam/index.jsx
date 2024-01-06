@@ -10,13 +10,15 @@ import examApi from '../../../api/exam';
 const DetailExam = () => {
   const {id} = useParams();
 
+  const [exam, setExam] = useState({});
   const [questions, setQuestions] = useState([]);
 
   useEffect(() => {
     const fetchQuestions = async () => {
-      const res = await examApi.getQuestionByExamId(id);
-      console.log(res);
-      setQuestions(res);
+      const exam = await examApi.getExamByExamId(id);
+      setExam(exam);
+      const questions = await examApi.getQuestionByExamId(id);
+      setQuestions(questions);
     };
     fetchQuestions();
   }, []);
@@ -65,7 +67,9 @@ const DetailExam = () => {
   return (
     <Container>
       <QuestionContainer>
-        <label style={{fontSize: '28px', fontWeight: 'bold'}}>Bài tập 1</label>
+        <label style={{fontSize: '28px', fontWeight: 'bold'}}>
+          {exam.name}
+        </label>
         {/* <label style={{fontSize: '20px', fontWeight: 'bold'}}>
           Danh sách câu hỏi
         </label> */}

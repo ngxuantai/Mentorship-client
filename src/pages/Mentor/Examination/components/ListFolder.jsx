@@ -1,13 +1,14 @@
 import React, {useState, useEffect} from 'react';
 import styled from 'styled-components';
-import {Table, TextInput, Button, Label} from 'flowbite-react';
+import {Table, TextInput, Label} from 'flowbite-react';
+import {Button} from '@mui/material';
 import CheckIcon from '@mui/icons-material/Check';
 import CloseIcon from '@mui/icons-material/Close';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import CreateNewFolderIcon from '@mui/icons-material/CreateNewFolder';
 import ListFile from './ListFile';
 import AddFile from './AddFile';
-import {format, set} from 'date-fns';
+import {format} from 'date-fns';
 import {folderApi} from '../../../../api/file';
 import {useUserStore} from '../../../../store/userStore';
 
@@ -61,7 +62,13 @@ export default function ListFolder({folders}) {
       {showDetail ? (
         <ListFile folder={folderDetail} />
       ) : (
-        <Table className="min-w-full divide-y divide-gray-200 dark:divide-gray-600">
+        <Table
+          className="min-w-full divide-y divide-gray-200 dark:divide-gray-600 border-black"
+          style={{
+            border: '1px solid black',
+            borderRadius: '10px',
+          }}
+        >
           <Table.Head
             className="bg-gray-100 dark:bg-gray-700"
             style={{
@@ -77,9 +84,14 @@ export default function ListFolder({folders}) {
                 onClick={() => {
                   setAddingFolder(true);
                 }}
-                size="xs"
+                variant="outlined"
               >
-                <CreateNewFolderIcon /> Thêm
+                <div>
+                  <CreateNewFolderIcon
+                    style={{marginRight: '4px', marginBottom: '2px'}}
+                  />
+                </div>{' '}
+                Thêm
               </Button>
             </Table.HeadCell>
           </Table.Head>
@@ -125,20 +137,22 @@ export default function ListFolder({folders}) {
                 <Table.Cell>
                   <div style={{display: 'flex', gap: '10px'}}>
                     <Button
-                      // style={{width: '50px'}}
-                      color="blue"
+                      color="success"
+                      variant="contained"
                       onClick={() => handleAddFolder()}
-                      size="xs"
+                      size="small"
                     >
                       <CheckIcon />
                     </Button>
                     <Button
-                      size="xs"
-                      color="failure"
+                      // size="xs"
+                      variant="contained"
+                      color="error"
                       onClick={() => {
                         setAddingFolder(false);
                         setNewFolderName('');
                       }}
+                      size="small"
                     >
                       <CloseIcon />
                     </Button>

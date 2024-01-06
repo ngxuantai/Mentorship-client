@@ -17,12 +17,13 @@ import {useUserStore} from '../../store/userStore';
 
 const pages = [
   {name: 'Trang chủ', link: '/'},
-  {name: 'Danh sách mentor', link: '/mentee/learning-progress'},
+  {name: 'Khóa học', link: '/mentee/learning-progress'},
   // { name: "Yêu cầu", link: "/mentee/inquires" },
-  {name: 'Thanh toán', link: '/mentee/payment'},
   {name: 'Danh sách yêu cầu', link: '/mentee/applications'},
-  {name: 'Cài đặt', link: '/mentee/settings'},
   {name: 'Nhắn tin', link: ''},
+  {name: 'Thanh toán', link: '/mentee/payment'},
+  {name: 'Cài đặt', link: '/mentee/settings'},
+
   // thêm các trang khác tại đây
 ];
 
@@ -153,7 +154,11 @@ function MenteeHeader() {
             {pages.map((page) => (
               <Button
                 key={page.name}
-                onClick={() => handleNavigate(page.name=== 'Nhắn tin' ? `/message/${user.id}` : page.link)}
+                onClick={() =>
+                  handleNavigate(
+                    page.name === 'Nhắn tin' ? `/message/${user.id}` : page.link
+                  )
+                }
                 sx={{
                   fontWeight: 'bold',
                   my: 2,
