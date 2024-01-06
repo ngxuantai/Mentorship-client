@@ -6,7 +6,7 @@ import {
   InputLabel,
   OutlinedInput,
 } from '@mui/material';
-import {FloatingLabel} from 'flowbite-react';
+import {FloatingLabel, TextInput, Label} from 'flowbite-react';
 import {useEffect, useState} from 'react';
 import {Link, useNavigate} from 'react-router-dom';
 import styled from 'styled-components';
@@ -94,22 +94,6 @@ function LoginPage() {
             onSubmit={(event) => handleSubmit(event)}
           >
             <h1>Đăng nhập</h1>
-            {/* <Tabs>
-              <a
-                className="tab"
-                onClick={() => handleTabChange('mentee')}
-                isActive={tab === 'mentee'}
-              >
-                I'm a mentee
-              </a>
-              <a
-                className="tab"
-                onClick={() => handleTabChange('mentor')}
-                isActive={tab === 'mentor'}
-              >
-                I'm a mentor
-              </a>
-            </Tabs> */}
             <FloatingLabel
               name="email"
               onChange={(event) => handleChange(event)}
@@ -118,7 +102,17 @@ function LoginPage() {
               variant="outlined"
               sx={{width: '100%', fontSize: '1rem'}}
             />
-            <FormControl variant="outlined">
+            <FloatingLabel
+              name="password"
+              onChange={(event) => handleChange(event)}
+              autoComplete="off"
+              label="Mật khẩu"
+              variant="outlined"
+              sx={{width: '100%', fontSize: '1rem'}}
+              type={showPassword ? 'text' : 'password'}
+            />
+
+            {/* <FormControl variant="outlined">
               <InputLabel htmlFor="outlined-adornment-password">
                 Mật khẩu
               </InputLabel>
@@ -140,7 +134,7 @@ function LoginPage() {
                 }
                 label="Mật khẩu"
               />
-            </FormControl>
+            </FormControl> */}
             <button className="login-btn" type="submit">
               Đăng nhập
             </button>

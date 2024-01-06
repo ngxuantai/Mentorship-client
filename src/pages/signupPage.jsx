@@ -6,7 +6,7 @@ import {
   InputLabel,
   OutlinedInput,
 } from '@mui/material';
-import { FloatingLabel } from "flowbite-react";
+import {FloatingLabel} from 'flowbite-react';
 import {useState} from 'react';
 import {Link, useNavigate} from 'react-router-dom';
 import styled from 'styled-components';
@@ -74,14 +74,21 @@ function SignupPage() {
             onSubmit={(event) => handleSubmit(event)}
           >
             <h1>Đăng ký làm mentee</h1>
-            <div style={{ display: "flex", flexDirection: "row" }}>
+            <div
+              style={{
+                display: 'flex',
+                flexDirection: 'row',
+                justifyContent: 'space-between',
+                gap: '1rem',
+              }}
+            >
               <FloatingLabel
                 name="firstName"
                 onChange={(event) => handleChange(event)}
                 autoComplete="off"
                 label="Tên"
                 variant="outlined"
-                sx={{width: '100%', marginRight: 2, fontSize: '1rem'}}
+                style={{fontSize: '1rem'}}
               />
               <FloatingLabel
                 name="lastName"
@@ -89,7 +96,7 @@ function SignupPage() {
                 autoComplete="off"
                 label="Họ"
                 variant="outlined"
-                sx={{width: '100%', fontSize: '1rem'}}
+                style={{fontSize: '1rem'}}
               />
             </div>
             <FloatingLabel
@@ -98,9 +105,18 @@ function SignupPage() {
               autoComplete="off"
               label="Email"
               variant="outlined"
-              sx={{width: '100%', fontSize: '1rem'}}
+              style={{width: '100%', fontSize: '1rem'}}
             />
-            <FormControl variant="outlined">
+            <FloatingLabel
+              name="password"
+              onChange={(event) => handleChange(event)}
+              autoComplete="off"
+              label="Mật khẩu"
+              variant="outlined"
+              style={{width: '100%', fontSize: '1rem'}}
+              type={showPassword ? 'text' : 'password'}
+            />
+            {/* <FormControl variant="outlined">
               <InputLabel htmlFor="outlined-adornment-password">
                 Mật khẩu
               </InputLabel>
@@ -122,8 +138,17 @@ function SignupPage() {
                 }
                 label="Mật khẩu"
               />
-            </FormControl>
-            <FormControl variant="outlined">
+            </FormControl> */}
+            <FloatingLabel
+              name="confirmPassword"
+              onChange={(event) => handleChange(event)}
+              autoComplete="off"
+              label="Nhập lại mật khẩu"
+              variant="outlined"
+              style={{width: '100%', fontSize: '1rem'}}
+              type={showPassword ? 'text' : 'password'}
+            />
+            {/* <FormControl variant="outlined">
               <InputLabel htmlFor="outlined-adornment-password">
                 Nhập lại mật khẩu
               </InputLabel>
@@ -145,7 +170,7 @@ function SignupPage() {
                 }
                 label="Nhập lại mật khẩu"
               />
-            </FormControl>
+            </FormControl> */}
             <button className="signup-btn" type="submit">
               Đăng ký
             </button>
@@ -179,7 +204,7 @@ const Container = styled.div`
         margin: auto;
         display: flex;
         flex-direction: column;
-        gap: 1.2rem;
+        gap: 0.8rem;
         .signup-btn {
           background-color: ${colors.button.primary};
           color: white;

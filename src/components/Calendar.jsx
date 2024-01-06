@@ -1,21 +1,22 @@
-import { Typography } from "@mui/material";
-import Button from "@mui/material/Button";
-import { Box } from "@mui/system";
-import moment from "moment";
-import { useEffect, useState } from "react";
-import { Calendar, momentLocalizer, Navigate } from "react-big-calendar";
-import "react-big-calendar/lib/css/react-big-calendar.css";
-import { rrulestr } from "rrule";
+import {Typography} from '@mui/material';
+// import Button from "@mui/material/Button";
+import {Button} from 'flowbite-react';
+import {Box} from '@mui/system';
+import moment from 'moment';
+import {useEffect, useState} from 'react';
+import {Calendar, momentLocalizer, Navigate} from 'react-big-calendar';
+import 'react-big-calendar/lib/css/react-big-calendar.css';
+import {rrulestr} from 'rrule';
 
 const localizer = momentLocalizer(moment);
-const daysOfWeek = ["SU", "MO", "TU", "WE", "TH", "FR", "SA"];
+const daysOfWeek = ['SU', 'MO', 'TU', 'WE', 'TH', 'FR', 'SA'];
 
 export default function TeachingCalendar({
   events,
   selectedEvent: parentSelectedEvent,
   handleSelectEvent: parentHandleSelectEvent,
 }) {
-  const startOfWeek = moment().startOf("week").toDate();
+  const startOfWeek = moment().startOf('week').toDate();
   startOfWeek.setHours(7, 0, 0);
   const [recuringEvents, setRecuringEvents] = useState(events);
 
@@ -31,7 +32,7 @@ export default function TeachingCalendar({
     // Nếu event có trường weeks, sử dụng nó. Ngược lại, sự kiện sẽ kéo dài đến cuối năm hiện tại
     const until = event.weeks
       ? `COUNT=${event.weeks}`
-      : `UNTIL=${moment().add(3, "months").format("YYYYMMDDTHHmmss")}Z`;
+      : `UNTIL=${moment().add(3, 'months').format('YYYYMMDDTHHmmss')}Z`;
 
     // Tạo chuỗi RRULE
     const rrule = `RRULE:FREQ=WEEKLY;${until};BYDAY=${daysOfWeek[day]}`;
@@ -64,13 +65,13 @@ export default function TeachingCalendar({
     return recurringEvents;
   };
   const handleNavigate = (newDate, view, action) => {
-    if (action === "PREV" && newDate < startOfWeek) {
+    if (action === 'PREV' && newDate < startOfWeek) {
       return;
     }
   };
 
   return (
-    <div style={{ width: 1000, margin: "auto" }}>
+    <div style={{width: 1000, margin: 'auto'}}>
       <Calendar
         selected={parentSelectedEvent}
         localizer={localizer}
@@ -88,23 +89,23 @@ export default function TeachingCalendar({
         eventPropGetter={(event) => ({
           style: {
             opacity: event.isBusy ? 0.5 : 1,
-            backgroundColor: event.isBusy ? "gray" : event.color,
-            borderColor: event.isBusy ? "gray" : event.color,
+            backgroundColor: event.isBusy ? 'gray' : event.color,
+            borderColor: event.isBusy ? 'gray' : event.color,
           },
         })}
-        style={{ height: 500 }}
+        style={{height: 500}}
       />
     </div>
   );
 }
 
 const CustomToolbar = (props) => {
-  const now = moment().startOf("week");
+  const now = moment().startOf('week');
 
   const navigate = (action) => {
     props.onNavigate(action);
   };
-  const viewNames = ["week", "day", "agenda"];
+  const viewNames = ['week', 'day', 'agenda'];
   const view = (view) => {
     props.onView(view);
   };
@@ -112,44 +113,34 @@ const CustomToolbar = (props) => {
   return (
     <Box
       sx={{
-        display: "flex",
-        justifyContent: "space-between",
-        alignItems: "center",
+        display: 'flex',
+        justifyContent: 'space-between',
+        alignItems: 'center',
         p: 2,
-        backgroundColor: "#f5f5f5",
+        backgroundColor: '#f5f5f5',
       }}
     >
-      <Box sx={{ display: "flex", gap: 2 }}>
+      <Box sx={{display: 'flex', gap: 2}}>
         {/* <Button variant="contained" color="primary" onClick={() => navigate(Navigate.TODAY)}>
           Today
         </Button> */}
         <Button
-          variant="contained"
-          color="primary"
+          color="blue"
           onClick={() => navigate(Navigate.PREVIOUS)}
           disabled={props.date < now}
         >
           Back
         </Button>
-        <Button
-          variant="contained"
-          color="primary"
-          onClick={() => navigate(Navigate.NEXT)}
-        >
+        <Button color="blue" onClick={() => navigate(Navigate.NEXT)}>
           Next
         </Button>
       </Box>
-      <Typography style={{ marginRight: 12, marginLeft: 12 }} variant="h6">
+      <Typography style={{marginRight: 12, marginLeft: 12}} variant="h6">
         {props.label}
       </Typography>
-      <Box sx={{ display: "flex", gap: 2 }}>
+      <Box sx={{display: 'flex', gap: 2}}>
         {viewNames.map((name) => (
-          <Button
-            variant="outlined"
-            color="primary"
-            key={name}
-            onClick={() => view(name)}
-          >
+          <Button color="gray" key={name} onClick={() => view(name)}>
             {name.charAt(0).toUpperCase() + name.slice(1)}
           </Button>
         ))}

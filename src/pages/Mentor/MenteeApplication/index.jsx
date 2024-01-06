@@ -9,8 +9,11 @@ import {
 } from 'flowbite-react';
 import Tab from '@mui/material/Tab';
 import Tabs from '@mui/material/Tabs';
+import InputLabel from '@mui/material/InputLabel';
+import MenuItem from '@mui/material/MenuItem';
+import FormControl from '@mui/material/FormControl';
+import Select from '@mui/material/Select';
 import Datepicker from 'tailwind-datepicker-react';
-import Select from 'react-select';
 import {useState, useEffect} from 'react';
 import {
   HiChevronLeft,
@@ -184,101 +187,85 @@ const ApplicationListPage = () => {
   }, [selectedApplications]);
   return (
     <Container>
-      <div className="block items-center justify-between border-b border-gray-200 bg-white p-4 dark:border-gray-700 dark:bg-gray-800 sm:flex">
-        <div className="mb-1 w-full">
-          <div className="mb-4">
-            <h1 className="text-xl font-semibold text-gray-900 dark:text-white sm:text-2xl">
-              Danh sách học viên đăng kí
-            </h1>
-          </div>
-          <div className="sm:flex">
-            <div className="flex hidden items-center dark:divide-gray-700 sm:mb-0 sm:flex sm:divide-x sm:divide-gray-100">
-              <form className="lg:pr-3">
-                <Label htmlFor="users-search" className="sr-only">
-                  Tìm kiếm
-                </Label>
-                <div className="relative mt-1 lg:w-64 xl:w-96">
-                  <TextInput
-                    id="users-search"
-                    name="users-search"
-                    placeholder="Tìm đơn đăng kí"
-                    value={searchTerm}
-                    onChange={(e) => setSearchTerm(e.target.value)}
-                  />
-                </div>
-              </form>
-              <div style={{marginRight: 8, minWidth: 200}}>
-                <Select
-                  styles={{
-                    control: (baseStyles, state) => ({
-                      ...baseStyles,
-                      color: 'black',
-                      // backgroundColor: '#374151',
-                    }),
-                    singleValue: (baseStyles, state) => ({
-                      ...baseStyles,
-                      color: 'black',
-                      // backgroundColor: '#374151',
-                    }),
-                    option: (baseStyles, state) => ({
-                      ...baseStyles,
-                      // color: '#374151',
-                    }),
-                  }}
-                  defaultValue={selectedOption}
-                  onChange={setSelectedOption}
-                  options={dropdownOption}
-                />
-              </div>
-              <div className="flex space-x-1 pl-0 sm:mt-0 sm:pl-2">
-                <Datepicker
-                  options={options}
-                  show={show}
-                  setShow={handleClose}
-                />
-              </div>
-            </div>
-            <div className="ml-auto flex items-center space-x-2 sm:space-x-3">
-              <Button onClick={handleExportFileExcel} color="gray">
-                <div className="flex items-center gap-x-3">
-                  <HiDocumentDownload className="text-xl" />
-                  <span>Xuất file</span>
-                </div>
-              </Button>
+      <ButtonContainer
+        style={{
+          paddingTop: '1rem',
+        }}
+      >
+        <Label style={{fontSize: '20px', fontWeight: 'bold'}}>
+          Danh sách đơn đăng kí
+        </Label>
+      </ButtonContainer>
+      <ButtonContainer
+        style={{
+          paddingTop: '1rem',
+          paddingBottom: '1rem',
+        }}
+      >
+        <div className="flex items-center sm:mb-0 sm:flex ">
+          <div style={{display: 'flex'}}>
+            <div>
+              <TextInput
+                id="users-search"
+                name="users-search"
+                placeholder="Tìm học viên"
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+              />
             </div>
           </div>
+          <div className="mx-3 " style={{minWidth: 200}}>
+            <FormControl fullWidth>
+              <InputLabel id="demo-simple-select-label">Từ khóa</InputLabel>
+              <Select
+                labelId="demo-simple-select-label"
+                id="demo-simple-select"
+                value={selectedOption}
+                label="Từ khóa"
+                size="small"
+                onChange={(e) => setSelectedOption(e.target.value)}
+                defaultValue={selectedOption}
+              >
+                <MenuItem value={'nameMentee'}>Tên</MenuItem>
+                <MenuItem value={'idMentee'}>ID</MenuItem>
+              </Select>
+            </FormControl>
+          </div>
+          {/* <div className="flex space-x-1 pl-0 sm:mt-0 sm:pl-2">
+            <Datepicker
+              options={options}
+              show={show}
+              setShow={handleClose}
+              value={selectedDate}
+              onChange={(date) => setSelectedDate(date)}
+            />
+          </div> */}
         </div>
-      </div>
-      <div className="flex flex-col">
-        <div className="overflow-x-auto">
-          <div className="inline-block min-w-full align-middle">
-            <div className="overflow-hidden shadow">
-              <Tabs value={value} onChange={handleChangeValue}>
-                <Tab
-                  label="Đơn đăng ký"
-                  value={0}
-                  style={{fontWeight: 'bold'}}
-                />
-                <Tab
-                  label="Lịch sử duyệt"
-                  value={1}
-                  style={{fontWeight: 'bold'}}
-                />
-              </Tabs>
-              {value === 0 && (
-                <ListApplications
-                  checkedItems={selectedApplications}
-                  applications={menteeApplications}
-                  resetSelectedItems={resetSelectedItems}
-                  onSelectedItems={handleSetSelectedItem}
-                />
-              )}
-              {value === 1 && (
-                <HistoryApplication applications={menteeAppliApproved} />
-              )}
+        <div className="ml-auto flex items-center space-x-2 sm:space-x-3">
+          <Button onClick={handleExportFileExcel} color="gray">
+            <div className="flex items-center gap-x-3">
+              <HiDocumentDownload className="text-xl" />
+              <span>Xuất file</span>
             </div>
-          </div>
+          </Button>
         </div>
+      </ButtonContainer>
+      <div style={{width: '90%'}}>
+        <Tabs value={value} onChange={handleChangeValue}>
+          <Tab label="Đơn đăng ký" value={0} style={{fontWeight: 'bold'}} />
+          <Tab label="Lịch sử duyệt" value={1} style={{fontWeight: 'bold'}} />
+        </Tabs>
+        {value === 0 && (
+          <ListApplications
+            checkedItems={selectedApplications}
+            applications={menteeApplications}
+            resetSelectedItems={resetSelectedItems}
+            onSelectedItems={handleSetSelectedItem}
+          />
+        )}
+        {value === 1 && (
+          <HistoryApplication applications={menteeAppliApproved} />
+        )}
       </div>
       {/* <Pagination /> */}
       <TeachingCalendar

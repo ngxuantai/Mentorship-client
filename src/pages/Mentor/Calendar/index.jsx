@@ -17,7 +17,7 @@ import {useUserStore} from '../../../store/userStore';
 import {convertTimestamp, getDateAndTime} from '../../../utils/dateConverter';
 import {CardEvent} from './components/CardEvent';
 import styled from 'styled-components';
-import {Label, TextInput, Button} from 'flowbite-react';
+import {Label, TextInput, Button, FloatingLabel} from 'flowbite-react';
 
 const Container = styled.div`
   padding: 2rem;
@@ -482,14 +482,18 @@ function TimeUpdateBar({event, handleSelectEvent}) {
             Lưu
           </Button>
         </div>
-        <TextField
-          id="event-title"
-          style={{width: 500, marginTop: 12}}
-          value={title}
-          onChange={(e) => setTitle(e.target.value)}
-          placeholder="Tiêu đề sự kiện"
-        />
 
+        <div>
+          <div className=" block">
+            <Label htmlFor="email1" value="Tiêu đề" />
+          </div>
+          <TextInput
+            style={{width: 500, marginTop: 12}}
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+            placeholder="Tiêu đề sự kiện"
+          />
+        </div>
         {/* <MenteesAvatar></MenteesAvatar>  */}
       </div>
     </div>
