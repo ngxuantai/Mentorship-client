@@ -1,12 +1,13 @@
 import InfoIcon from "@mui/icons-material/Info";
-import { MenuItem, Select, TextField } from "@mui/material";
+import { MenuItem, Select } from "@mui/material";
+import { Textarea } from "flowbite-react";
 import styled from "styled-components";
 
 const contactTimes = [
-  "I do not have any expectations",
-  "I am expecting an instance reply",
-  "I'd like to receive response within a day",
-  "I am okay with receiving a reply after a few days ",
+  "Tôi không có bất kỳ mong đợi nào",
+  "Tôi muốn nhận được ngay lập tức",
+  "Tôi muốn nhận được phản hồi trong vòng một ngày",
+  "Tôi ổn với việc nhận phản hồi trong vòng 3 ngày",
 ];
 export default function Expectation({ values, handleInputChange }) {
   const handleChange = (event) => {
@@ -25,16 +26,14 @@ export default function Expectation({ values, handleInputChange }) {
             style={{ paddingTop: "2px", color: "#224F9C", fontSize: "16px" }}
           >
             <span style={{ margin: 0, padding: 0, fontWeight: "bold" }}>
-              Your personal information would be sent along with the application
+              Thông tin cá nhân của bạn sẽ được đính kèm với đơn xin này
             </span>
           </div>
         </TipsContainer>
+        <label className="font-semibold">Bạn kỳ vọng mentor phản hồi bạn trong bao lâu?</label>
         <Select
           name="contactTimes"
-          label="How much would you like to talk to your mentor on a regular daily basis"
           onChange={(event) => handleChange(event)}
-          size="small"
-          defaultValue=""
         >
           {contactTimes.map((contactTime) => (
             <MenuItem key={contactTime} value={contactTime}>
@@ -42,19 +41,13 @@ export default function Expectation({ values, handleInputChange }) {
             </MenuItem>
           ))}
         </Select>
-        <TextField
-          multiline
+        <Textarea className="w-full bg-white"
           name="expectation"
           onChange={(event) => handleChange(event)}
           autoComplete="off"
-          minRows={5}
-          label="What is your expectation from the mentor?"
-          size="small"
-          sx={{
-            minHeight: 200,
-            width: "100%",
-            fontSize: "1rem",
-          }}
+          rows={5}
+          placeholder="Bạn mong đợi gì từ mentor này?"
+          helperText='Xác định kỳ vọng của bạn với mentor giúp 2 bên hiểu nhau tốt hơn'
           required
         />
       </ContentContainer>

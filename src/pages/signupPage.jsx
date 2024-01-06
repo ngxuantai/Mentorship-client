@@ -5,8 +5,8 @@ import {
   InputAdornment,
   InputLabel,
   OutlinedInput,
-  TextField,
 } from "@mui/material";
+import { FloatingLabel } from "flowbite-react";
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import styled from "styled-components";
@@ -74,7 +74,7 @@ function SignupPage() {
           >
             <h1>Đăng ký làm mentee</h1>
             <div style={{ display: "flex", flexDirection: "row" }}>
-              <TextField
+              <FloatingLabel
                 name="firstName"
                 onChange={(event) => handleChange(event)}
                 autoComplete="off"
@@ -82,7 +82,7 @@ function SignupPage() {
                 variant="outlined"
                 sx={{ width: "100%", marginRight: 2, fontSize: "1rem" }}
               />
-              <TextField
+              <FloatingLabel
                 name="lastName"
                 onChange={(event) => handleChange(event)}
                 autoComplete="off"
@@ -91,7 +91,7 @@ function SignupPage() {
                 sx={{ width: "100%", fontSize: "1rem" }}
               />
             </div>
-            <TextField
+            <FloatingLabel
               name="email"
               onChange={(event) => handleChange(event)}
               autoComplete="off"
@@ -166,7 +166,7 @@ const Container = styled.div`
   width: 100vw;
   .brand-logo {
     width: 33%;
-    background-color: ${colors.ui.secondary};
+    background-color: ${colors.ui.primary};
   }
   .signup-container {
     background-color: ${colors.ui.primary};

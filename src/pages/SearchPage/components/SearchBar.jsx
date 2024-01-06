@@ -16,7 +16,6 @@ import {
   Paper,
   IconButton,
   InputBase,
-  TextField,
   InputAdornment,
 } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';

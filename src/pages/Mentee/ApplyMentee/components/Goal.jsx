@@ -1,4 +1,4 @@
-import { TextField } from "@mui/material";
+import { Textarea } from "flowbite-react";
 import styled from "styled-components";
 
 export default function Goal({ values, handleInputChange }) {
@@ -10,19 +10,14 @@ export default function Goal({ values, handleInputChange }) {
   return (
     <Container>
       <ContentContainer>
-        <TextField
-          multiline
+        <Textarea className="w-full bg-white"
           name="goal"
           onChange={(event) => handleChange(event)}
           autoComplete="off"
-          minRows={5}
-          label="What goal would you like to reach?"
+          rows={5}
+          placeholder="Mục tiêu của bạn là gì?"
+          helperText='Xác định mục tiêu của bạn giúp mentor có thể tư vấn và hỗ trợ bạn tốt hơn.'
           size="small"
-          sx={{
-            minHeight: 200,
-            width: "100%",
-            fontSize: "1rem",
-          }}
           required
         />
       </ContentContainer>

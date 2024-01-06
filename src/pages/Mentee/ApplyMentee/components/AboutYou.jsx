@@ -1,5 +1,5 @@
 import InfoIcon from "@mui/icons-material/Info";
-import { TextField } from "@mui/material";
+import { Textarea } from "flowbite-react";
 import styled from "styled-components";
 
 export default function AboutYou({ values, handleInputChange }) {
@@ -19,34 +19,24 @@ export default function AboutYou({ values, handleInputChange }) {
             style={{ paddingTop: "2px", color: "#224F9C", fontSize: "16px" }}
           >
             <span style={{ margin: 0, padding: 0, fontWeight: "bold" }}>
-              Lovely to see you!
+              Rất vui được gặp bạn!
             </span>
             <p>
-              Filling out the form only takes a couple minutes. We'd love to
-              learn more about your background and the ins-and-outs of why you'd
-              like to become a mentor. Keep things personal and talk directly to
-              us and your mentees. We don't need jargon and polished cover
-              letters here!
+            Việc điền form dưới đây chỉ mất một vài phút của bạn. Chúng tôi muốn biết thêm một vài thông tin cá nhân của bạn. Hãy trả lời một cách tự nhiên và chính xác nhất nhé!
               <br />
               <br />
-              You agree to our code of conduct and the mentor agreement by
-              sending the form, so be sure to have a look at those.
+              Qua việc gửi đi form này, bạn đã đồng ý với chúng tôi về quy tắc ứng xử và điều khoản sử dụng của Mentorship. Vì vậy hãy chắc chắn rằng mình đã xem qua những biểu mẫu đó nhé!
             </p>
           </div>
         </TipsContainer>
-        <TextField
-          multiline
+        <Textarea className="w-full bg-white"
           name="personalDescription"
           onChange={(event) => handleChange(event)}
           autoComplete="off"
-          minRows={5}
-          label="Tell your mentor about yourself"
+          rows={10}
+          placeholder="Hãy cho mentor biết thêm một số điều về bạn"
           size="small"
-          sx={{
-            minHeight: 200,
-            width: "100%",
-            fontSize: "1rem",
-          }}
+
           required
         />
       </ContentContainer>

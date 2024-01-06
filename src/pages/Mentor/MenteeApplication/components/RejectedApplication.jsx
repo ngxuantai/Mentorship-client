@@ -2,7 +2,7 @@ import {useState} from 'react';
 // import {format} from 'date-fns';
 // import {FaCopy} from 'react-icons/fa';
 // import {shortenId} from '../../../../utils/shortenId';
-import {TextField} from '@mui/material';
+import { Textarea } from 'flowbite-react';
 import {Button, Modal} from 'flowbite-react';
 import {HiX} from 'react-icons/hi';
 import {ApprovalStatus} from '../../../../constants';
@@ -61,12 +61,11 @@ export default function RejectedApplication({application}) {
             <p className="text-xl text-gray-500">
               Bạn có muốn huỷ đơn đăng ký này?
             </p>
-            <TextField // Add the TextField component
-              label="Lý do từ chối (tuỳ chọn) "
+            <Textarea 
+              placeholder="Lý do từ chối (tuỳ chọn) "
               variant="outlined"
               value={reason}
               style={{width: '100%'}}
-              multiline
               rows={4}
               onChange={handleInputChange}
             />

@@ -5,8 +5,8 @@ import {
   InputAdornment,
   InputLabel,
   OutlinedInput,
-  TextField,
 } from '@mui/material';
+import {FloatingLabel} from 'flowbite-react';
 import {useEffect, useState} from 'react';
 import {Link, useNavigate} from 'react-router-dom';
 import styled from 'styled-components';
@@ -109,7 +109,7 @@ function LoginPage() {
                 I'm a mentor
               </a>
             </Tabs> */}
-            <TextField
+            <FloatingLabel
               name="email"
               onChange={(event) => handleChange(event)}
               autoComplete="off"

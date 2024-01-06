@@ -1,5 +1,5 @@
 import PrivacyTipIcon from "@mui/icons-material/PrivacyTip";
-import { Avatar, TextField } from "@mui/material";
+import { Avatar } from "@mui/material";
 import { FloatingLabel } from "flowbite-react";
 import React, { useRef } from "react";
 import styled from "styled-components";
@@ -141,24 +141,7 @@ export default function PersonalInfor() {
               variant="outlined"
             />
           </div>
-          {/*       
-          <TextField
-            name="goal"
-            multiline
-            onChange={(event) => handleChange(event)}
-            autoComplete="off"
-            label="Mục tiêu"
-            variant="outlined"
-            size="small"
-            sx={{
-              width: "100%",
-              fontSize: "1rem",
-              "& textarea": {
-                minHeight: "8rem",
-                resize: "vertical",
-              },
-            }}
-          /> */}
+                 
           <button>Lưu thay đổi</button>
         </InforContainer>
         </div>
