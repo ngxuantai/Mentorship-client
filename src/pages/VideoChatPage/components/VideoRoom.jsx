@@ -28,6 +28,7 @@ import menteeApi from '../../../api/mentee';
 import mentorApi from '../../../api/mentor';
 import { UserRole } from '../../../constants';
 import firebaseInstance from '../../../services/firebase';
+import { shortenId } from '../../../utils/dataHelper';
 
 const APP_ID = '5ad93fd0de6d4b74b2b1e150004c3ebe';
 // const TOKEN = '007eJxTYLiS8LPjXZuu7OwShRd3zIJuZKoqKe04IyDOcS3ompgP23UFhlQTC6NUA4O0pLQUYxPDFINEC5MUM2NTMzOLRAvLZKNEqTfNqQ2BjAx3ZzszMEIhiM/JEJaZkprvnJFYwsAAALMxIFs=';
@@ -84,6 +85,8 @@ function VideoRoom(props) {
     e.preventDefault();
     setShowNoteForm(!showNoteForm);
   };
+
+  const shortenRoomName = shortenId(roomName);
 
   const appendMessage = (message) => {
     setMessages((messages) => [...messages, message]);
@@ -462,13 +465,13 @@ function VideoRoom(props) {
     <div className="video-room-container bg-gradient-to-r from-primary-900 to-blue-300 w-screen p-2 h-screen overflow-auto">
       <div className="flex justify-center items-center">
         <div className="text-primary-700 bg-white rounded p-4 mr-4">
-          <VideoChat className="scale-[2.0]" />
+          <VideoChat className="scale-[1.5]" />
         </div>
-        <div className="text-white font-bold text-3xl">{roomName}</div>
+        <div className="text-white font-bold text-3xl">{shortenRoomName}</div>
       </div>
       <div className='flex justify-center items-center'>
         {user.role === UserRole.MENTOR && (
-          <div className='flex justify-center items-center'>
+          <div className='flex justify-center items-center mt-4'>
           <button className='bg-white text-primary-700 rounded-full py-2 px-4 transition duration-150 ease-in-out hover:transition-all hover:scale-110 hover:bg-slate-300'>
             {isTimerRunning 
               ? (

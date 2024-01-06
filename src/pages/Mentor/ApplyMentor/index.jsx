@@ -26,7 +26,7 @@ export default function ApplyPage() {
     dateOfBirth: null,
     bio: "",
     linkedin: "",
-    skillIds: ["657eeb8c6d4e50c8c5649cbf", "657eeb8d6d4e50c8c5649cc0"],
+    skillIds: [],
     imageUrls: [],
     createdAt: new Date(),
   });

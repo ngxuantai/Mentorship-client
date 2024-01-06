@@ -1,6 +1,7 @@
 import InfoIcon from "@mui/icons-material/Info";
 import { TextField } from "@mui/material";
 import styled from "styled-components";
+import { Textarea } from "flowbite-react";
 
 export default function Experience({ values, onInputChange, onButtonClick }) {
   const handleSubmit = async (event) => {
@@ -19,59 +20,45 @@ export default function Experience({ values, onInputChange, onButtonClick }) {
             style={{ paddingTop: "2px", color: "#224F9C", fontSize: "16px" }}
           >
             <span style={{ margin: 0, padding: 0, fontWeight: "bold" }}>
-              Almost there!
+              Sắp xong rồi!
             </span>
             <p>
-              You're just one last step away from being a mentor and connecting
-              with mentees all over the world! In this step, shows off your
-              accomplishments and how you can help others.
+              Bạn chỉ còn cách 1 bước nữa là có thể trở thành một mentor và kết nối với các mentees từ mọi nơi. Ở bước này, hãy bày tỏ khát vọng của bạn, thành tựu và cách mà bạn có thể giúp người khác.
               <br />
               <br />
-              Many of these fields are optional, but will help us get better
-              insights into your work – and therefore exponentially increases
-              your chances. They also give you a jumpstart once you're a mentor.
+              Chúng tôi sẽ xem xét kỹ lưỡng đơn đăng ký của bạn và một khi có kết quả, chúng tôi sẽ thông báo ngay lập tức qua email được đăng ký
             </p>
           </div>
         </TipsContainer>
         <InforContainer onSubmit={handleSubmit}>
-          <TextField
-            name="reason"
-            multiline
-            values={values.reason}
-            onChange={onInputChange}
-            autoComplete="off"
-            label="Why do you want to become a mentor? (Not publicly visible)"
-            variant="outlined"
-            size="small"
-            sx={{
-              width: "100%",
-              fontSize: "1rem",
-              "& textarea": {
-                minHeight: "8rem",
-                resize: "vertical",
-              },
-            }}
-            required
-          />
-          <TextField
+          <div>
+            <p className="font-bold ml-2">
+              Tại sao bạn muốn trở thành mentor?
+            </p>
+            <Textarea className="w-full bg-white" 
+              rows={7}
+              name="reason"
+              values={values.reason}
+              onChange={onInputChange}
+              autoComplete="off"
+              variant="outlined"
+              required
+            />
+          </div>
+          <div>
+            <p className="font-bold ml-2">
+              Một số thành tựu của bạn
+            </p>
+          <Textarea className="w-full bg-white"
+            rows={7}
             name="achievement"
             values={values.achievement}
-            multiline
             onChange={onInputChange}
             autoComplete="off"
-            label="What, in your opinion, has been your greatest achievement so far? (Not publicly visible)"
             variant="outlined"
-            size="small"
-            sx={{
-              width: "100%",
-              fontSize: "1rem",
-              "& textarea": {
-                minHeight: "8rem",
-                resize: "vertical",
-              },
-            }}
             required
           />
+          </div>
           <div
             style={{
               width: "100%",

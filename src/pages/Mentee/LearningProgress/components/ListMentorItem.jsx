@@ -148,7 +148,7 @@ function ProgressItem({progress, onClick}) {
       <Box sx={{width: '100%'}}>
         <CardHeader
           avatar={
-            <Avatar sx={{width: '70px', height: '70px'}} aria-label="recipe">
+            <Avatar sx={{width: '70px', height: '70px'}} aria-label="recipe" src={mentor?.avatar}>
               R
             </Avatar>
           }

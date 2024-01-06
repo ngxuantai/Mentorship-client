@@ -11,8 +11,9 @@ const Message = ({message}) => {
   const {user, setUser} = useUserStore();
 
   useEffect(() => {
-    ref.current?.scrollIntoView({ behavior: "smooth" });
-  }, [message])
+    ref.current?.scrollIntoView({ behavior: 'smooth' });
+  }, []);
+  
 
   return (
     <div className={`flex gap-[10px] mb-2 ${message.sender === user.id ? 'flex-row-reverse' : ''}`} 
@@ -23,7 +24,7 @@ const Message = ({message}) => {
             ></img>
             {/* <span className='text-sm'>just now</span> */}
         </div>
-        <div className='max-w-[80%] flex flex-col gap-[5px] overflow-clip'>
+        <div className='max-w-[80%] flex flex-col gap-[5px] '>
             <p className={`border px-3 py-2 break-words
                           ${message.sender === user.id 
                           ? 'bg-primary-600 text-white rounded-tl-lg rounded-br-lg rounded-bl-lg'

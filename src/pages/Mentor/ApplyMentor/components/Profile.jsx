@@ -4,24 +4,47 @@ import {
   MenuItem,
   Select,
   TextField,
+  Checkbox,
+  ListItemText,
+  OutlinedInput,
 } from "@mui/material";
+import { TextInput, Textarea, Spinner, FloatingLabel } from "flowbite-react";
 import { useEffect, useState } from "react";
 import styled from "styled-components";
 import fieldApi from "../../../../api/field";
 import skillApi from "../../../../api/skill";
+import { set } from "date-fns";
+
+const ITEM_HEIGHT = 44;
+const ITEM_PADDING_TOP = 6;
+const MenuProps = {
+  PaperProps: {
+    style: {
+      maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
+      width: 250,
+    },
+  },
+};
 
 export default function Profile({ values, onInputChange, onButtonClick }) {
   const [selectedField, setSelectedField] = useState([]);
   const [fields, setFields] = useState([]);
   const [skills, setSkills] = useState([]);
-  console.log("profile: field", fields);
+  const [selectedSkills, setSelectedSkills] = useState([]);
+
   useEffect(() => {
     const getField = async () => {
       const fieldsData = await fieldApi.getAllFields();
       setFields(fieldsData);
     };
 
+    const getSkills = async () => {
+      const skillsData = await skillApi.getAllSkills();
+      setSkills(skillsData);
+    };
+
     getField();
+    getSkills();
   }, []);
   const onFieldChange = async (event) => {
     const { name, value } = event.target;
@@ -30,6 +53,13 @@ export default function Profile({ values, onInputChange, onButtonClick }) {
       await fetchFieldSkills(value);
     }
   };
+
+  const handleSkillChange = (event) => {
+    const {
+      target: { value, key },
+    } = event;
+    setSelectedSkills(typeof value === 'string' ? value.split(',') : value);
+  }
   const fetchFieldSkills = async (fieldId) => {
     const data = await skillApi.getSkillsByFieldId(fieldId);
     if (data) {
@@ -42,14 +72,15 @@ export default function Profile({ values, onInputChange, onButtonClick }) {
   };
 
   useEffect(() => {
-    if (selectedField) {
-    }
-  }, [selectedField]);
+    values.skillIds = selectedSkills;
+  }, [selectedSkills]);
+  
+
   return (
     <Container>
       <ContentContainer>
         <InforContainer onSubmit={handleSubmit}>
-          <FormControl style={{ width: "50%" }}>
+          {/* <FormControl style={{ width: "50%" }}>
             <InputLabel size="small">Field</InputLabel>
             <Select
               name="field"
@@ -66,106 +97,85 @@ export default function Profile({ values, onInputChange, onButtonClick }) {
                 );
               })}
             </Select>
-          </FormControl>
-          <FormControl style={{ width: "50%" }}>
-            <InputLabel size="small">Field</InputLabel>
-            <Select
+          </FormControl> */}
+          <FormControl className="w-[50%]">
+            <InputLabel>Kỹ năng</InputLabel>
+            <Select className=""
+              required
+              value={selectedSkills}
+              onChange={handleSkillChange}
+              multiple
               name="skill"
               label="Skill"
-              onChange={(e) => {}}
-              size="small"
-              defaultValue=""
+              input={<OutlinedInput label="Kỹ năng" />}
+              MenuProps={MenuProps}
+              renderValue={(selected) => {
+                return `Đã chọn ${selected.length} kỹ năng`;
+              }}
             >
-              {skills.map((s) => {
-                return (
-                  <MenuItem key={s.id} value={s.id}>
-                    {s.name}
-                  </MenuItem>
-                );
-              })}
+              {skills.map((skill) => (
+                <MenuItem key={skill.id} value={skill.id}>
+                  <Checkbox checked={selectedSkills.indexOf(skill.id) > -1} />
+                  <ListItemText primary={skill.name} />
+                </MenuItem>
+
+              ))}
+              
             </Select>
           </FormControl>
-          <div className="content">
-            <TextField
+          {/* <div className="content">
+            <TextInput className="w-full "
+              placeholder="Điền kỹ năng của bạn"
               name="skill"
               autoComplete="off"
               label="Skill"
-              variant="outlined"
-              size="small"
-              sx={{
-                width: "100%",
-                fontSize: "1rem",
-              }}
               required
-              helperText="Comma-separated list of your skills (keep it below 10). Mentees will use this to find you."
+              helperText="Dùng dấu phẩy để ngăn cách các kỹ năng của bạn (dưới 10 kỹ năng). Mentees sẽ dùng chúng để tìm đến bạn"             
             />
-          </div>
-          <TextField
+          </div> */}
+
+          <div>
+          <Textarea className="w-full bg-white"
+            
+            rows={5}
             name="bio"
             multiline
             value={values.bio}
             onChange={onInputChange}
+            placeholder="Bio của bạn"
             autoComplete="off"
             label="Bio"
-            variant="outlined"
-            size="small"
-            sx={{
-              width: "100%",
-              fontSize: "1rem",
-              "& textarea": {
-                minHeight: "8rem",
-                resize: "vertical",
-              },
-            }}
             required
-            helperText="Tell us (and your mentees) a little bit about yourself. Talk about yourself in the first person, as if you'd directly talk to a mentee. This will be public."
+            helperText='Hãy cho chúng tôi và các mentees biết về bạn, những gì bạn muốn chia sẻ với họ.'
           />
-          <div className="content">
-            <TextField
+          </div>
+          <div className="content grid grid-cols-2 justify-stretch space-x-4">
+            <FloatingLabel className="w-full"
+              variant="outlined"
               name="linkedin"
               onChange={onInputChange}
               autoComplete="off"
               label="LinkedIn"
               value={values.linkedin}
-              placeholder="https://www.linkedin.com/"
-              variant="outlined"
-              size="small"
-              sx={{
-                width: "100%",
-                fontSize: "1rem",
-              }}
               required
             />
-            <TextField
+            <FloatingLabel className="w-full"
               name="twitter"
               value={values.twitter}
               onChange={onInputChange}
               autoComplete="off"
               label="Twitter"
-              placeholder="https://twitter.com/"
               variant="outlined"
-              size="small"
-              sx={{
-                width: "100%",
-                fontSize: "1rem",
-              }}
             />
           </div>
           <div
-            className="content"
-            style={{ width: "50%", paddingRight: "0.5rem" }}
           >
-            <TextField
+            <FloatingLabel className="w-[50%]"
+              variant="outlined"
               name="personalWebsite"
               autoComplete="off"
-              label="Personal Website"
-              variant="outlined"
-              size="small"
-              sx={{
-                width: "100%",
-                fontSize: "1rem",
-              }}
-              helperText="You can add your blog, GitHub profile or similar here"
+              label="Website cá nhân"
+              helperText="Bạn có thể thêm link blog cá nhân, github, facebook,... ở đây"
             />
           </div>
           <div
@@ -207,11 +217,7 @@ const InforContainer = styled.form`
   display: flex;
   flex-direction: column;
   gap: 2rem;
-  .content {
-    display: flex;
-    flex-direction: row;
-    gap: 1rem;
-  }
+
   button {
     width: 140px;
     font-size: 1rem;
