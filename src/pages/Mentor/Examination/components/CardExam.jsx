@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import {useNavigate} from 'react-router-dom';
-import {Button} from 'flowbite-react';
+import {Button} from '@mui/material';
 
 export default function CardExam({exam}) {
   const navigate = useNavigate();
@@ -32,9 +32,8 @@ export default function CardExam({exam}) {
         style={{display: 'flex', justifyContent: 'center', marginTop: '20px'}}
       >
         <Button
-          color="gray"
-          pill
-          style={{width: '70%', boxShadow: '0 0 5px rgba(0, 0, 0, 0.3)'}}
+          variant="outlined"
+          sx={{width: '70%'}}
           onClick={() => handleDetailExam()}
         >
           Chi tiết
@@ -51,5 +50,5 @@ const Container = styled.div`
   flex-direction: column;
   gap: 10px;
   border: 1px solid #ccc;
-  border-radius: 4px;
+  border-radius: 10px;
 `;

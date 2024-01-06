@@ -1,6 +1,7 @@
 import React, {useState, useEffect} from 'react';
 import styled from 'styled-components';
-import {Table, TextInput, Button, Label} from 'flowbite-react';
+import {Table, TextInput, Label} from 'flowbite-react';
+import {Button} from '@mui/material';
 import UploadFileIcon from '@mui/icons-material/UploadFile';
 import {fileApi} from '../../../../api/file';
 import firebaseInstance from '../../../../services/firebase';
@@ -100,8 +101,8 @@ export default function ListFile({folder}) {
           <Table.HeadCell style={{width: '15%'}}>Kich thước</Table.HeadCell>
           <Table.HeadCell>
             <Button
-              style={{width: '60px'}}
-              size="xs"
+              variant="outlined"
+              color="primary"
               onClick={() => handleAddFile()}
             >
               <UploadFileIcon />

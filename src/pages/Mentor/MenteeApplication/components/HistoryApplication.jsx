@@ -51,7 +51,7 @@ export default function ListApplications({applications}) {
   };
 
   return (
-    <Table className="min-w-full divide-y divide-gray-200 dark:divide-gray-600">
+    <Table className="w-full divide-y divide-gray-200 dark:divide-gray-600">
       <Table.Head className="bg-gray-100 dark:bg-gray-700">
         {/* <Table.HeadCell>
           <Label htmlFor="select-all" className="sr-only">

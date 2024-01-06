@@ -1,5 +1,6 @@
 import React, {useState, useEffect} from 'react';
-import {Button, Label, Modal, TextInput} from 'flowbite-react';
+import {Button} from '@mui/material';
+import {Label, Modal, TextInput} from 'flowbite-react';
 import Select from 'react-select';
 import {fileApi, folderApi} from '../../../../api/file';
 import {format} from 'date-fns';
@@ -16,9 +17,7 @@ export default function AddFile({folderDeatil}) {
 
   useEffect(() => {
     const fetchFolders = async () => {
-      const res = await folderApi.getFoldersByMentorId(
-        user.id
-      );
+      const res = await folderApi.getFoldersByMentorId(user.id);
       console.log(res);
       setListFolder(res);
     };
@@ -69,7 +68,7 @@ export default function AddFile({folderDeatil}) {
 
   return (
     <>
-      <Button color="blue" onClick={() => setOpen(true)}>
+      <Button variant="contained" color="primary" onClick={() => setOpen(true)}>
         Thêm tài liệu
       </Button>
       <Modal style={{}} onClose={() => setOpen(false)} show={isOpen}>
@@ -107,7 +106,8 @@ export default function AddFile({folderDeatil}) {
         <Modal.Footer>
           <Button
             style={{alignSelf: 'flex-end', marginLeft: 'auto'}}
-            color="blue"
+            variant="contained"
+            color="primary"
             onClick={() => handleUploadFile()}
           >
             Upload

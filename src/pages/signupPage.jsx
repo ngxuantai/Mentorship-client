@@ -1,34 +1,35 @@
-import { Visibility, VisibilityOff } from "@mui/icons-material";
+import {Visibility, VisibilityOff} from '@mui/icons-material';
 import {
   FormControl,
   IconButton,
   InputAdornment,
   InputLabel,
   OutlinedInput,
-} from "@mui/material";
+} from '@mui/material';
 import { FloatingLabel } from "flowbite-react";
-import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import styled from "styled-components";
-import menteeApi from "../api/mentee";
-import { colors } from "../constants/colors";
-import firebaseInstance from "../services/firebase";
-import { useUserStore } from "../store/userStore";
+import {useState} from 'react';
+import {Link, useNavigate} from 'react-router-dom';
+import styled from 'styled-components';
+import menteeApi from '../api/mentee';
+import {colors} from '../constants/colors';
+import firebaseInstance from '../services/firebase';
+import {useUserStore} from '../store/userStore';
+import loginPic from '../assets/logo-no-text.png';
 
 function SignupPage() {
   const navigate = useNavigate();
-  const { user, setUser } = useUserStore();
+  const {user, setUser} = useUserStore();
   const [values, setValues] = useState({
-    firstName: "",
-    lastName: "",
-    email: "",
-    password: "",
-    confirmPassword: "",
+    firstName: '',
+    lastName: '',
+    email: '',
+    password: '',
+    confirmPassword: '',
   });
 
   const handleChange = (event) => {
-    const { name, value } = event.target;
-    setValues({ ...values, [name]: value });
+    const {name, value} = event.target;
+    setValues({...values, [name]: value});
   };
 
   const [showPassword, setShowPassword] = useState(false);
@@ -52,19 +53,19 @@ function SignupPage() {
       const mentee = await menteeApi.createMentee(values);
       await firebaseInstance.addUser(userFirebase.uid, {
         id: mentee.id,
-        role: "mentee",
+        role: 'mentee',
       });
-      setUser({ ...mentee, role: "mentee" });
-      navigate("/mentee");
+      setUser({...mentee, role: 'mentee'});
+      navigate('/mentee');
     } catch (er) {
-      console.log("er", er);
+      console.log('er', er);
     }
   };
 
   return (
     <Container>
       <div className="brand-logo">
-        {/* <img src={loginPic} alt="login picture" /> */}
+        <img src={loginPic} alt="login picture" />
       </div>
       <div className="signup-container">
         <section>
@@ -80,7 +81,7 @@ function SignupPage() {
                 autoComplete="off"
                 label="Tên"
                 variant="outlined"
-                sx={{ width: "100%", marginRight: 2, fontSize: "1rem" }}
+                sx={{width: '100%', marginRight: 2, fontSize: '1rem'}}
               />
               <FloatingLabel
                 name="lastName"
@@ -88,7 +89,7 @@ function SignupPage() {
                 autoComplete="off"
                 label="Họ"
                 variant="outlined"
-                sx={{ width: "100%", fontSize: "1rem" }}
+                sx={{width: '100%', fontSize: '1rem'}}
               />
             </div>
             <FloatingLabel
@@ -97,7 +98,7 @@ function SignupPage() {
               autoComplete="off"
               label="Email"
               variant="outlined"
-              sx={{ width: "100%", fontSize: "1rem" }}
+              sx={{width: '100%', fontSize: '1rem'}}
             />
             <FormControl variant="outlined">
               <InputLabel htmlFor="outlined-adornment-password">
@@ -106,7 +107,7 @@ function SignupPage() {
               <OutlinedInput
                 name="password"
                 onChange={(event) => handleChange(event)}
-                type={showPassword ? "text" : "password"}
+                type={showPassword ? 'text' : 'password'}
                 endAdornment={
                   <InputAdornment position="end">
                     <IconButton
@@ -129,7 +130,7 @@ function SignupPage() {
               <OutlinedInput
                 name="confirmPassword"
                 onChange={(event) => handleChange(event)}
-                type={showConfirmPassword ? "text" : "password"}
+                type={showConfirmPassword ? 'text' : 'password'}
                 endAdornment={
                   <InputAdornment position="end">
                     <IconButton
@@ -166,7 +167,7 @@ const Container = styled.div`
   width: 100vw;
   .brand-logo {
     width: 33%;
-    background-color: ${colors.ui.primary};
+    background-color: #1da1f2;
   }
   .signup-container {
     background-color: ${colors.ui.primary};

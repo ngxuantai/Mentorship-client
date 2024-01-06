@@ -1,19 +1,20 @@
-import { Divider } from "@mui/material";
-import Avatar from "@mui/material/Avatar";
-import Box from "@mui/material/Box";
-import Card from "@mui/material/Card";
-import CardContent from "@mui/material/CardContent";
-import { useTheme } from "@mui/material/styles";
-import Typography from "@mui/material/Typography";
-import moment from "moment";
+import {Divider} from '@mui/material';
+import Avatar from '@mui/material/Avatar';
+import Box from '@mui/material/Box';
+import Card from '@mui/material/Card';
+import CardContent from '@mui/material/CardContent';
+import CardHeader from '@mui/material/CardHeader';
+import {useTheme} from '@mui/material/styles';
+import Typography from '@mui/material/Typography';
+import moment from 'moment';
 
-import { useEffect, useRef, useState } from "react";
-import learningProgressApi from "../../../../api/learningProgress";
-import menteeApi from "../../../../api/mentee";
-import menteeApplicationApi from "../../../../api/menteeApplication";
-import { mappingPlanName } from "../../../../utils/dataHelper";
+import {useEffect, useRef, useState} from 'react';
+import learningProgressApi from '../../../../api/learningProgress';
+import menteeApi from '../../../../api/mentee';
+import menteeApplicationApi from '../../../../api/menteeApplication';
+import {mappingPlanName} from '../../../../utils/dataHelper';
 
-export function CardEvent({ event, onClick }) {
+export function CardEvent({event, onClick}) {
   const theme = useTheme();
   const cardRef = useRef(null);
   const [application, setApplication] = useState();
@@ -33,7 +34,7 @@ export function CardEvent({ event, onClick }) {
     );
   };
   const getEndDate = () => {
-    if (!application) return "";
+    if (!application) return '';
     const applicationDate = new Date(application.applicationDate);
     return applicationDate.setDate(
       applicationDate.getDate() + application.plan.weeks * 7
@@ -44,12 +45,12 @@ export function CardEvent({ event, onClick }) {
       if (!event) return;
 
       const applicationData = await fetchApplication();
-      console.log("applicationData", applicationData);
+      console.log('applicationData', applicationData);
 
       const mentee = await fetchMentee(applicationData.menteeProfile.id);
-      console.log("applicationData mentee", mentee);
+      console.log('applicationData mentee', mentee);
 
-      const applicationWithMentee = { ...applicationData, mentee };
+      const applicationWithMentee = {...applicationData, mentee};
       setApplication(applicationWithMentee);
       const progress = await fetchLearningProgress(applicationData.id);
       setLearingProgress(progress);
@@ -59,79 +60,68 @@ export function CardEvent({ event, onClick }) {
     <Card
       onClick={() => onClick(event)}
       sx={{
-        margin: "20px",
-        display: "flex",
-        width: "40%",
-        height: 180,
-        alignItems: "center",
-        position: "relative",
-        cursor: "pointer",
-        backgroundColor: `${event.color}`,
-        borderLeft: "5px solid #123b2a",
-        "&:hover": {
-          boxShadow: "0 4px 25px -6.125px rgba(0,0,0,0.3)",
-          transform: "translateY(-1px) translateX(-1px)",
-        },
+        display: 'flex',
+        // height: 180,
+        width: '40%',
+        alignItems: 'center',
+        position: 'relative',
+        cursor: 'pointer',
+        // backgroundColor: `${event.color}`,
+        // '&:hover': {
+        //   boxShadow: '0 4px 25px -6.125px rgba(0,0,0,0.3)',
+        //   transform: 'translateY(-1px) translateX(-1px)',
+        // },
       }}
     >
-      <Box
-        sx={{
-          display: "flex",
-          alignItems: "center",
-          flexDirection: "column",
-          flex: "0.5 5 auto",
-        }}
-      >
-        <CardContent>
-          <Avatar
-            style={{ width: 120, height: 120 }}
-            alt="Remy Sharp"
-            src="/static/images/avatar/1.jpg"
+      {application && (
+        <Box sx={{width: '100%'}}>
+          <CardHeader
+            avatar={
+              <Avatar
+                sx={{width: '70px', height: '70px'}}
+                aria-label="recipe"
+                src={application?.menteeProfile.avatar}
+              />
+            }
+            title={
+              application?.menteeProfile.firstName +
+              ' ' +
+              application?.menteeProfile.lastName
+            }
+            sx={{
+              width: '100%',
+              backgroundColor: `${event.color}`,
+              '.MuiCardHeader-title': {
+                fontSize: '22px',
+                fontWeight: 'bold',
+              },
+            }}
           />
-          <Typography component="div" variant="h6">
-            <strong>
-              Name {application?.mentee.lastName}{" "}
-              {application?.mentee.firstName}
-            </strong>
-          </Typography>
-        </CardContent>
-      </Box>
-
-      <Divider
-        // flexItem
-        orientation="vertical"
-        sx={{
-          bgcolor: "grey.500",
-          width: 3,
-          borderRadius: 25,
-          height: 100,
-          m: 1.5,
-        }}
-      ></Divider>
-      <Box sx={{ display: "flex", flexDirection: "column", flex: "3 5 auto" }}>
-        <Typography component="div" sx={{ marginLeft: 2 }} variant="h6">
-          Gói học: <strong>{mappingPlanName(application?.plan.name)}</strong>
-        </Typography>
-
-        <CardContent>
-          <Typography component="div" variant="h6">
-            Ngày kết thúc:{" "}
-            {learningProgress
-              ? //learningProgress.endDate is counted when user pay the learning plan
-                // not when application approved by mentor
-                moment(learningProgress?.endDate).format("DD-MM-yyyy")
-              : moment(getEndDate()).format("DD-MM-yyyy")}
-          </Typography>
-        </CardContent>
-        <CardContent>
-          <Typography component="div" variant="h6">
-            Số lượt gọi còn lại:{" "}
-            {`${
-              learningProgress?.callTimesLeft || application?.plan.callTimes
-            }`}
-          </Typography>
-        </CardContent>
-      </Box>
+          <Box
+            sx={{display: 'flex', flexDirection: 'column', flex: '3 5 auto'}}
+          >
+            <CardContent>
+              <Typography component="div" sx={{paddingBottom: '6px'}}>
+                Gói học: {mappingPlanName(application?.plan.name)}
+              </Typography>
+              <Typography component="div" sx={{paddingBottom: '6px'}}>
+                Số lượt gọi còn lại:{' '}
+                {`${
+                  learningProgress?.callTimesLeft || application?.plan.callTimes
+                }`}{' '}
+              </Typography>
+              <Typography component="div">
+                Ngày kết thúc:{' '}
+                {learningProgress
+                  ? //learningProgress.endDate is counted when user pay the learning plan
+                    // not when application approved by mentor
+                    moment(learningProgress?.endDate).format('DD-MM-yyyy')
+                  : moment(getEndDate()).format('DD-MM-yyyy')}{' '}
+              </Typography>
+            </CardContent>
+          </Box>
+        </Box>
+      )}
     </Card>
   );
 }

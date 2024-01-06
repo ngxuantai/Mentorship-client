@@ -5,6 +5,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import RemoveCircleIcon from '@mui/icons-material/RemoveCircle';
 import examApi from '../../../../../api/exam';
 import styled from 'styled-components';
+import {TextInput, Textarea} from 'flowbite-react';
 
 export default function OneAnsQues({examId, addQuestion, cancelAddQues}) {
   const [question, setQuestion] = useState('');
@@ -116,16 +117,14 @@ export default function OneAnsQues({examId, addQuestion, cancelAddQues}) {
   return (
     <Container>
       <label>Nội dung câu hỏi:</label>
-      <TextField
-        hiddenLabel
+      <TextInput
         type="text"
         value={question}
-        size="small"
         onChange={(e) => setQuestion(e.target.value)}
       />
       <label>Đáp án: </label>
       {options.map((item, index) => (
-        <OptionConatainer key={index}>
+        <OptionConatainer key={index} sx>
           <button
             style={{
               backgroundColor: item.isCorrect ? '#4caf50' : 'white',
@@ -152,23 +151,23 @@ export default function OneAnsQues({examId, addQuestion, cancelAddQues}) {
               {String.fromCharCode(65 + index)}
             </span>
           </button>
-          <TextField
-            hiddenLabel
-            size="small"
-            type="text"
-            sx={{width: '100%'}}
-            value={item.option}
-            onChange={(e) =>
-              setOptions([
-                ...options.slice(0, index),
-                {
-                  option: e.target.value,
-                  isCorrect: item.isCorrect,
-                },
-                ...options.slice(index + 1),
-              ])
-            }
-          />
+          <div style={{width: '100%'}}>
+            <TextInput
+              type="text"
+              style={{width: '100%'}}
+              value={item.option}
+              onChange={(e) =>
+                setOptions([
+                  ...options.slice(0, index),
+                  {
+                    option: e.target.value,
+                    isCorrect: item.isCorrect,
+                  },
+                  ...options.slice(index + 1),
+                ])
+              }
+            />
+          </div>
           <button
             type="button"
             style={{
@@ -192,7 +191,7 @@ export default function OneAnsQues({examId, addQuestion, cancelAddQues}) {
       >
         <Button
           size="small"
-          variant="outlined"
+          // variant="outlined"
           sx={{
             color: 'black',
             textTransform: 'none',
@@ -205,7 +204,6 @@ export default function OneAnsQues({examId, addQuestion, cancelAddQues}) {
         </Button>
         <Button
           size="small"
-          variant="outlined"
           sx={{
             color: 'black',
             textTransform: 'none',
@@ -214,26 +212,22 @@ export default function OneAnsQues({examId, addQuestion, cancelAddQues}) {
           }}
           onClick={() => setShowExplain(!showExplain)}
         >
-          Thêm giải thích
+          {showExplain ? 'Ẩn giải thích' : 'Thêm giải thích'}
         </Button>
       </div>
       {showExplain && (
-        <TextField
-          multiline
+        <Textarea
+          rows={4}
           label="Giải thích"
-          // size="small"
           type="text"
           value={explain}
           onChange={(e) => setExplain(e.target.value)}
           variant="outlined"
           size="small"
-          sx={{
+          style={{
             width: '100%',
             fontSize: '1rem',
-            '& textarea': {
-              minHeight: '8rem',
-              resize: 'vertical',
-            },
+            minHeight: '8rem',
           }}
         />
       )}
@@ -313,6 +307,7 @@ const OptionConatainer = styled.div`
   flex-direction: row;
   align-items: center;
   gap: 10px;
+  width: 100%;
   //   .option-letter {
   //     font-weight: bold;
   //     // width: 20px;
