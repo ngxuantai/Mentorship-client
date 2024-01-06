@@ -1,4 +1,4 @@
-import { Chip, FormControl, InputLabel, MenuItem, Select } from "@mui/material";
+import { Chip, FormControl, InputLabel, MenuItem, Select, Checkbox, ListItemText, OutlinedInput} from "@mui/material";
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import fieldApi from "../../../../api/field";
@@ -6,86 +6,83 @@ import mentorApi from "../../../../api/mentor";
 import skillApi from "../../../../api/skill";
 import { useUserStore } from "../../../../store/userStore";
 
+
+const ITEM_HEIGHT = 44;
+const ITEM_PADDING_TOP = 6;
+const MenuProps = {
+  PaperProps: {
+    style: {
+      maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
+      width: 250,
+    },
+  },
+};
+
 export default function MentorSkills() {
   const { user, updateUser } = useUserStore();
   console.log("user infor", user);
-  const [values, setValues] = React.useState({
-    bio: user.bio,
-    introduction: user.introduction,
-  });
+  // const [values, setValues] = useState({
+  //   bio: user.bio,
+  //   introduction: user.introduction,
+  // });
 
   const [fields, setFields] = useState([]);
+  const [skills, setSkills] = useState([]);
   const [mentorSkills, setMentorSkills] = useState([]);
-  const [selectedField, setSelectedField] = useState([]);
-  console.log("profile: field", fields);
-  useEffect(() => {
-    const getField = async () => {
-      const fieldsData = await fieldApi.getAllFields();
-      setFields(fieldsData);
-    };
+  //const [selectedField, setSelectedField] = useState([]);
+  //const [selectedSkills, setSelectedSkills] = useState([]);
+  const [selectedSkillsId, setSelectedSkillsId] = useState([]);
 
-    getField();
-  }, []);
-  const handleSelectedFieldChange = async (event) => {
-    const { name, value } = event.target;
-    setSelectedField(value);
+  console.log(user.skillIds);
 
-    console.log("fieldValue", value);
-  };
-  const handleSelectedSkillChange = async (event) => {
-    const { value } = event.target;
-
-    const isSkillExist = mentorSkills.some((skill) => skill.id === value.id);
-
-    if (!isSkillExist) {
-      setMentorSkills([...mentorSkills, value]);
-    }
-  };
   const handleSaveChange = async (event) => {
     event.preventDefault();
-    const newSkillIds = mentorSkills.map((skill) => skill.id);
-    const updatedUser = { ...user, skillIds: newSkillIds };
+    const updatedUser = { ...user, skillIds: selectedSkillsId };
     await updateUser(user.id, updatedUser);
-  };
 
-  const handleDeleteSkill = (skillId) => {
-    setMentorSkills(mentorSkills.filter((skill) => skill.id !== skillId));
-  };
 
-  const handleAddSkill = (skill) => {
-    setMentorSkills([...mentorSkills, skill]);
-  };
-
-  useEffect(() => {
-    const fetchFields = async () => {
-      const fieldsData = await fieldApi.getAllFields();
-      console.log("fieldsData", fieldsData);
-      if (fieldsData) {
-        const fieldsAndSkills = await Promise.all(
-          fieldsData.map(async (f) => {
-            const skills = await skillApi.getSkillsByFieldId(f.id);
-            return {
-              ...f,
-              skills,
-            };
-          })
-        );
-        setFields(fieldsAndSkills);
-      }
-    };
-
-    fetchFields();
-  }, []);
-  useEffect(() => {
     const fetchMentorSkills = async () => {
       const mentorSkillsData = await mentorApi.getMentorSkills(user.id);
       if (mentorSkillsData) {
         setMentorSkills(mentorSkillsData);
       }
+      //setSelectedSkillsId(mentorSkillsData.map((skill) => skill.id));
     };
 
     fetchMentorSkills();
+  };
+
+  useEffect(() => {
+    const fetchSkills = async () => {
+      const skillsData = await skillApi.getAllSkills();
+      const sortedSkills = skillsData.sort((a, b) =>
+        a.name.localeCompare(b.name)
+      );
+      setSkills(sortedSkills);
+    };
+    const fetchMentorSkills = async () => {
+      const mentorSkillsData = await mentorApi.getMentorSkills(user.id);
+      if (mentorSkillsData) {
+        setMentorSkills(mentorSkillsData);
+      }
+      setSelectedSkillsId(mentorSkillsData.map((skill) => skill.id));
+    };
+   
+    fetchSkills();
+    fetchMentorSkills();
+
   }, []);
+
+
+  const handleSkillChange = (event) => {
+    const {
+      target: { value, key },
+    } = event;
+    setSelectedSkillsId(typeof value === 'string' ? value.split(',') : value);
+  }
+
+  console.log("selectedSkillsId", selectedSkillsId);
+
   return (
     <Container>
       <Tittle>
@@ -110,7 +107,7 @@ export default function MentorSkills() {
         </TipsContainer> */}
         <InforContainer onSubmit={handleSaveChange}>
           <div style={{ display: "flex", flexDirection: "row" }}>
-            <FormControl style={{ width: "50%", marginRight: 24 }}>
+            {/* <FormControl style={{ width: "50%", marginRight: 24 }}>
               <InputLabel size="small">Field</InputLabel>
               <Select
                 name="field"
@@ -127,32 +124,40 @@ export default function MentorSkills() {
                   );
                 })}
               </Select>
-            </FormControl>
-            <FormControl style={{ width: "50%", marginRight: 24 }}>
-              <InputLabel size="small">Skill</InputLabel>
-              <Select
-                name="skill"
-                label="Skill"
-                onChange={handleSelectedSkillChange}
-                size="small"
-                defaultValue=""
-              >
-                {selectedField?.skills?.map((s) => {
-                  return (
-                    <MenuItem key={s.id} value={s}>
-                      {s.name}
-                    </MenuItem>
-                  );
-                })}
-              </Select>
-            </FormControl>
+            </FormControl> */}
+          <FormControl className="w-[50%]">
+            <InputLabel>Kỹ năng</InputLabel>
+            <Select className=""
+              required
+              value={selectedSkillsId}
+              onChange={handleSkillChange}
+              multiple
+              name="skill"
+              label="Skill"
+              input={<OutlinedInput label="Kỹ năng" />}
+              MenuProps={MenuProps}
+              renderValue={(selected) => {
+                return `${selected.length} kỹ năng`;
+              }}
+            >
+              {skills.map((skill) => (
+                <MenuItem key={skill.id} value={skill.id}>
+                  <Checkbox checked={selectedSkillsId.indexOf(skill.id) > -1} 
+                    onClick={() => handleCheckboxChange(skill)}/>
+                  <ListItemText primary={skill.name} />
+                </MenuItem>
+
+              ))}
+              
+            </Select>
+          </FormControl>
           </div>
           <div>
             {mentorSkills.map((skill) => (
               <Chip
                 key={skill.id}
                 label={skill.name}
-                onDelete={() => handleDeleteSkill(skill.id)}
+                //onDelete={() => handleDeleteSkill(skill.id)}
                 style={{ fontWeight: "bold", marginRight: 12 }}
               />
             ))}
