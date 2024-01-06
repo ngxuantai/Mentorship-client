@@ -16,6 +16,7 @@ import {UserRole} from '../constants';
 import {colors} from '../constants/colors';
 import firebaseInstance from '../services/firebase';
 import {useUserStore} from '../store/userStore';
+import loginPic from '../assets/logo-no-text.png';
 // import {useUserStore} from '../store/userStore';
 
 function LoginPage() {
@@ -84,7 +85,7 @@ function LoginPage() {
   return (
     <Container>
       <div className="brand-logo">
-        {/* <img src={loginPic} alt="login picture" /> */}
+        <img src={loginPic} alt="login picture" />
       </div>
       <div className="login-container">
         <section>
@@ -164,7 +165,7 @@ const Container = styled.div`
   width: 100vw;
   .brand-logo {
     width: 33%;
-    background-color: ${colors.ui.secondary};
+    background-color: #1da1f2;
   }
   .login-container {
     background-color: ${colors.ui.primary};

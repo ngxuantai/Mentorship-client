@@ -23,8 +23,8 @@ const Examination = () => {
   const [exams, setExams] = useState([]);
   const [folders, setFolders] = useState([]);
   const [addExam, setAddExam] = useState(false);
-  const [files, setFiles] = useState([]);
 
+  const [isNoFolder, setIsNoFolder] = useState(false);
   const [nameExam, setNameExam] = useState('');
 
   const {user} = useUserStore();
@@ -32,35 +32,27 @@ const Examination = () => {
   useEffect(() => {
     const fetchExams = async () => {
       const res = await examApi.getExamByMentorId(user.id);
-      console.log(res);
       setExams(res);
-    };
-
-    const fetchFiles = async () => {
-      const res = await fileApi.getFilesByMentorId(user.id);
-      console.log(res);
-      setFiles(res);
     };
 
     const fetchFolders = async () => {
       const res = await folderApi.getFoldersByMentorId(user.id);
-      console.log(res);
       setFolders(res);
+      if (res.length === 0) {
+        setIsNoFolder(true);
+      }
     };
 
     fetchExams();
     fetchFolders();
-    if (exams.length > 0 && folders.length > 0) {
-      setLoading(false);
-    }
-    // fetchFiles();
-
-    // fecthData();
   }, [user]);
 
   const handleOpenAddExam = () => {
-    // navigate(`/mentor/examination/${exams[0].id}`);
     setAddExam(true);
+    const timestamp = 1704250800000 / 1000; // Chia cho 1000 để chuyển đổi từ miligiây sang giây
+    const dateObject = new Date(timestamp * 1000); // Nhân cho 1000 để chuyển đổi từ giây sang miligiây
+
+    console.log(dateObject.toUTCString());
   };
 
   const handleAddExam = async () => {
@@ -79,103 +71,98 @@ const Examination = () => {
   };
 
   return (
-    <>
-      {/* {loading ? (
-        <ReactLoading type="spin" color="#fff" />
-      ) : (
-        
-      )} */}
-      <Container>
-        <ButtonContainer>
-          <Label style={{fontSize: '20px', fontWeight: 'bold'}}>
-            Danh sách đề thi
-          </Label>
-          <Button
-            variant="contained"
-            color="primary"
-            onClick={() => handleOpenAddExam()}
-          >
-            Thêm đề thi
-          </Button>
-        </ButtonContainer>
-        {exams.length > 0 ? (
-          <ExamContainer>
-            {exams.map((exam) => (
-              <CardExam key={exam.id} exam={exam} />
-            ))}
-            {addExam && (
-              <AddExamContainer>
-                <div>
-                  <div className="mb-2 block">
-                    <Label
-                      htmlFor="email1"
-                      value="Tên đề thi"
-                      style={{
-                        fontSize: '15px',
-                        fontWeight: 'bold',
-                      }}
-                    />
-                  </div>
-                  <TextInput
-                    id="name"
-                    name="name"
-                    type="text"
-                    placeholder="Tên đề thi"
-                    autoComplete="off"
-                    value={nameExam}
-                    onChange={(e) => setNameExam(e.target.value)}
+    <Container>
+      <ButtonContainer>
+        <Label style={{fontSize: '20px', fontWeight: 'bold'}}>
+          Danh sách đề thi
+        </Label>
+        <Button
+          variant="contained"
+          color="primary"
+          onClick={() => handleOpenAddExam()}
+        >
+          Thêm đề thi
+        </Button>
+      </ButtonContainer>
+      {exams.length > 0 ? (
+        <ExamContainer>
+          {exams.map((exam) => (
+            <CardExam key={exam.id} exam={exam} />
+          ))}
+          {addExam && (
+            <AddExamContainer>
+              <div>
+                <div className="mb-2 block">
+                  <Label
+                    htmlFor="email1"
+                    value="Tên đề thi"
+                    style={{
+                      fontSize: '15px',
+                      fontWeight: 'bold',
+                    }}
                   />
                 </div>
-                <div
-                  style={{
-                    display: 'flex',
-                    justifyContent: 'center',
-                    marginTop: '10px',
-                    gap: '10px',
-                  }}
+                <TextInput
+                  id="name"
+                  name="name"
+                  type="text"
+                  placeholder="Tên đề thi"
+                  autoComplete="off"
+                  value={nameExam}
+                  onChange={(e) => setNameExam(e.target.value)}
+                />
+              </div>
+              <div
+                style={{
+                  display: 'flex',
+                  justifyContent: 'center',
+                  marginTop: '10px',
+                  gap: '10px',
+                }}
+              >
+                <Button
+                  color="success"
+                  variant="contained"
+                  onClick={() => handleAddExam()}
+                  size="small"
                 >
-                  <Button
-                    color="success"
-                    variant="contained"
-                    onClick={() => handleAddExam()}
-                    size="small"
-                  >
-                    <CheckIcon fontSize="small" />
-                  </Button>
-                  <Button
-                    // size="xs"
-                    variant="outlined"
-                    color="error"
-                    // onClick={() => {
-                    //   setAddingFolder(false);
-                    //   setNewFolderName('');
-                    // }}
-                    size="small"
-                  >
-                    <CloseIcon fontSize="small" />
-                  </Button>
-                </div>
-              </AddExamContainer>
-            )}
-          </ExamContainer>
-        ) : (
-          <ReactLoading type="spin" color="blue"></ReactLoading>
-        )}
-        {folders.length > 0 ? (
-          <ListFolder folders={folders} />
-        ) : (
-          <>
-            <ButtonContainer>
-              <Label style={{fontSize: '20px', fontWeight: 'bold'}}>
-                Danh sách tài liệu
-              </Label>
-              <AddFile />
-            </ButtonContainer>
+                  <CheckIcon fontSize="small" />
+                </Button>
+                <Button
+                  variant="outlined"
+                  color="error"
+                  onClick={() => {
+                    setAddExam(false);
+                  }}
+                  size="small"
+                >
+                  <CloseIcon fontSize="small" />
+                </Button>
+              </div>
+            </AddExamContainer>
+          )}
+        </ExamContainer>
+      ) : (
+        <ReactLoading type="spin" color="blue"></ReactLoading>
+      )}
+      {folders.length > 0 ? (
+        <ListFolder folders={folders} />
+      ) : (
+        <>
+          <ButtonContainer>
+            <Label style={{fontSize: '20px', fontWeight: 'bold'}}>
+              Danh sách tài liệu
+            </Label>
+            <AddFile />
+          </ButtonContainer>
+          {isNoFolder ? (
             <Label>Chưa có tài liệu</Label>
-          </>
-        )}
-      </Container>
-    </>
+          ) : (
+            <ReactLoading type="spin" color="blue" />
+          )}
+        </>
+      )}
+    </Container>
   );
 };
 

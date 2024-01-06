@@ -5,7 +5,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import RemoveCircleIcon from '@mui/icons-material/RemoveCircle';
 import examApi from '../../../../../api/exam';
 import styled from 'styled-components';
-import {TextInput} from 'flowbite-react';
+import {TextInput, Textarea} from 'flowbite-react';
 
 export default function TrueFalseQues({examId, addQuestion, cancelAddQues}) {
   const [question, setQuestion] = useState('');
@@ -133,24 +133,21 @@ export default function TrueFalseQues({examId, addQuestion, cancelAddQues}) {
           }}
           onClick={() => setShowExplain(!showExplain)}
         >
-          Thêm giải thích
+          {showExplain ? 'Ẩn giải thích' : 'Thêm giải thích'}
         </Button>
       </div>
       {showExplain && (
-        <TextField
+        <Textarea
           multiline
           label="Giải thích"
           size="small"
           type="text"
           value={explain}
           onChange={(e) => setExplain(e.target.value)}
-          sx={{
+          style={{
             width: '100%',
             fontSize: '1rem',
-            '& textarea': {
-              minHeight: '8rem',
-              resize: 'vertical',
-            },
+            minHeight: '8rem',
           }}
         />
       )}
