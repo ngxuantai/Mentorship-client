@@ -82,71 +82,65 @@ export default function PersonalInfor() {
           </AvatarContainer>
           <InforContainer onSubmit={handleSaveChange}>
             <div className="grid grid-cols-2 space-x-4">
-              <FloatingLabel className="w-full"
-                label="Tên"
+              <FloatingLabel 
+                label="Họ"
                 name="firstName"
                 value={values.firstName}
                 onChange={(event) => handleChange(event)}
                 autoComplete="off"
-                placeholder="Tên"
                 variant="outlined"
                 required
               />
-              <FloatingLabel className="w-full"
-                label="Họ"
+              <FloatingLabel
+                label="Tên"
                 value={values.lastName}
                 name="lastName"
                 onChange={(event) => handleChange(event)}
                 autoComplete="off"
-                placeholder="Họ"
                 variant="outlined"
                 required
               />
             </div>
             <div className="grid grid-cols-2 space-x-4">
-              <FloatingLabel className="w-full"
+              <FloatingLabel 
                 label="Số điện thoại"
                 value={values.phoneNumber}
                 name="phoneNumber"
                 onChange={(event) => handleChange(event)}
                 autoComplete="off"
-                placeholder="Số điện thoại"
                 variant="outlined"
                 required
               />
-              <FloatingLabel className="w-full"
+              <FloatingLabel 
                 label="Email"
                 value={values.email}
                 name="email"
                 onChange={(event) => handleChange(event)}
                 autoComplete="off"
-                placeholder="Email"
                 variant="outlined"
                 required
               />
             </div>
             <div className="grid grid-cols-3 space-x-2">
-              <FloatingLabel className="w-full"
+              <FloatingLabel 
                 label="Nghề nghiệp"
                 name="jobTitle"
                 value={values.jobTitle}
                 onChange={(event) => handleChange(event)}
                 autoComplete="off"
-                placeholder="Nghề nghiệp"
                 variant="outlined"
                 required
               />
-                <FloatingLabel className="w-full"
+                <FloatingLabel 
                   label="LinkedIn"
                   name="linkedin"
                   value={values.linkedin}
                   onChange={(event) => handleChange(event)}
                   autoComplete="off"
-                  placeholder="Linked url"
                   variant="outlined"
                   required
                 />
-                <FloatingLabel className="w-full"
+                <FloatingLabel 
                   label="Sinh nhật"
                   name="dateOfBirth"
                   type="date"

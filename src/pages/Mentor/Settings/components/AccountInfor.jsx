@@ -43,7 +43,7 @@ export default function AccountInfor() {
       </Tittle>
       <ContentContainer>
         <InforContainer onSubmit={handleSaveChange}>
-          <FloatingLabel className="w-full"
+          <FloatingLabel
             name="password"
             value={values.password}
             onChange={handleChange}
@@ -54,7 +54,7 @@ export default function AccountInfor() {
             required
           />
 
-            <FloatingLabel className="w-full"
+            <FloatingLabel 
               type="password"
               value={values.confirmPassword}
               name="confirmPassword"

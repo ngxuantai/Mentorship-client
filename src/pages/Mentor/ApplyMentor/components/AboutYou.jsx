@@ -95,7 +95,7 @@ export default function AboutYou({ values, onInputChange, onButtonClick }) {
         </AvatarContainer>
         <InforContainer onSubmit={handleSubmit}>
           <div className="grid grid-cols-2 space-x-4">
-            <FloatingLabel className="w-full"
+            <FloatingLabel 
               label="Họ"
               variant="outlined"
               name="firstName"
@@ -105,7 +105,7 @@ export default function AboutYou({ values, onInputChange, onButtonClick }) {
               required
 
             />
-            <FloatingLabel className="w-full"
+            <FloatingLabel 
               label="Tên"
               variant="outlined"
               value={values.lastName}
@@ -116,7 +116,7 @@ export default function AboutYou({ values, onInputChange, onButtonClick }) {
             />
           </div>
           <div className="content grid grid-cols-2 space-x-4">
-            <FloatingLabel className="w-full"
+            <FloatingLabel 
               label="Email"
               variant="outlined"
               value={values.email}
@@ -125,7 +125,7 @@ export default function AboutYou({ values, onInputChange, onButtonClick }) {
               autoComplete="off"
               required
             />
-            <FloatingLabel className="w-full"
+            <FloatingLabel 
               label="Số điện thoại"
               variant="outlined"
               name="phoneNumber"
@@ -136,7 +136,7 @@ export default function AboutYou({ values, onInputChange, onButtonClick }) {
             />
           </div>
           <div className="content grid grid-cols-2 space-x-4">
-            <FloatingLabel className="w-full"
+            <FloatingLabel 
               variant="outlined"
               label="Nghề nghiệp"
               name="jobTitle"
@@ -145,7 +145,7 @@ export default function AboutYou({ values, onInputChange, onButtonClick }) {
               autoComplete="off"
               required
             />
-            <FloatingLabel className="w-full"
+            <FloatingLabel 
               variant="outlined"
               name="dateOfBirth"
               type="date"

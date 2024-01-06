@@ -3,30 +3,36 @@ import React from 'react';
 import styled from 'styled-components';
 import {Link, useNavigate} from 'react-router-dom';
 
-export default function CardInfor({name, role}) {
+export default function CardInfor({id,firstName, lastName, avatar, jobTitle}) {
   const navigate = useNavigate();
 
   const handleNavigateMentorProflie = () => {
-    navigate('/mentor/profile');
+    navigate(`/mentor/profile/${id}`);
   };
 
   return (
     <CardContainer onClick={() => handleNavigateMentorProflie()}>
       {/* <Avatar alt="Image Avatar" src={imageAvatar} /> */}
-      <Avatar sx={{width: '60px', height: '60px'}}>N</Avatar>
+      <Avatar sx={{width: '100px', height: '100px'}}
+        src={avatar}
+      >
+
+      </Avatar>
       <div className="name">
-        <h4>{name}</h4>
+        <h4 className='text-center'>{firstName} {lastName}</h4>
       </div>
       <div className="role">
-        <p>{role}</p>
+        <p>{jobTitle}</p>
       </div>
     </CardContainer>
   );
 }
 
 const CardContainer = styled.div`
-  height: 100%;
-  max-width: 180px;
+  height: 270px;
+  min-height: 270px;
+  max-height: 270px;
+  max-width: 220px;
   background-color: #fff;
   border-radius: 10px;
   padding: 1.2rem;
