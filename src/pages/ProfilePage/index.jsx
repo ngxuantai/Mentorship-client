@@ -94,7 +94,7 @@ function Profile() {
             <h6>
               {mentor.jobTitle} at {mentor.company}
             </h6>
-            <p>{mentor.introduction}</p>
+            <p>{mentor.bio}</p>
             <div style={{display: 'flex'}}>
               <Button
                 onClick={handleAddToWishList}
@@ -144,16 +144,10 @@ function Profile() {
         <hr style={{position: 'relative', zIndex: '-1'}} />
         <Row sm={4} className="d-flex justify-content-center">
           <Col sm={6}>
-            <h3>About</h3>
+            <h3>Giới thiệu</h3>
             <p>
               {' '}
-              Hi there! My name is Kristi Harper. I'm passionate about UX Design
-              and mentoring. I have hands-on experience as an end-to-end
-              designer. With effective leadership, strategic planning, and user
-              centered design methodologies, I help grow designers to their full
-              potential and drive success, resulting in getting hired. My
-              background is in B2B/B2C Responsive Websites, B2C Mobile Apps and
-              SaaS Web Portals.
+              {mentor.introduction}
             </p>
           </Col>
           <Col></Col>
