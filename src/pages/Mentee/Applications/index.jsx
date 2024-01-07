@@ -1,26 +1,28 @@
-import { Article } from "@mui/icons-material";
-import { format } from "date-fns";
-import { Checkbox, Label, Modal, Table } from "flowbite-react";
-import { useEffect, useState } from "react";
-import { Button } from "react-bootstrap";
-import { FaCopy } from "react-icons/fa";
-import { useNavigate } from "react-router";
-import menteeApplicationApi from "../../../api/menteeApplication";
-import mentorApi from "../../../api/mentor";
-import { useUserStore } from "../../../store/userStore";
+import {Article} from '@mui/icons-material';
+import {format} from 'date-fns';
+import {Checkbox, Label, Modal, Table} from 'flowbite-react';
+import {useEffect, useState} from 'react';
+import {Button} from 'react-bootstrap';
+import {FaCopy} from 'react-icons/fa';
+import {useNavigate} from 'react-router';
+import menteeApplicationApi from '../../../api/menteeApplication';
+import mentorApi from '../../../api/mentor';
+import {useUserStore} from '../../../store/userStore';
 import {
   handleCopyClick,
   mappingApplicationStatus,
   shortenId,
-} from "../../../utils/dataHelper";
+} from '../../../utils/dataHelper';
+import styled from 'styled-components';
 
 function Applications() {
   const [applicationList, setApplicationList] = useState([]);
   const navigate = useNavigate();
-  const { user } = useUserStore();
+  const {user} = useUserStore();
   const handleNavigateToSearchScreen = () => {
-    navigate("/mentor/search");
+    navigate('/mentor/search');
   };
+
   useEffect(() => {
     if (user) {
       const fetchApplicationsAndMentors = async () => {
@@ -45,11 +47,11 @@ function Applications() {
     }
   }, [user]);
   return (
-    <div style={{ height: 500 }}>
+    <Container>
       {/* <MenteeHeader></MenteeHeader> */}
-      <div
+      {/* <div
         className="w-full py-2 text-center"
-        style={{ backgroundColor: "#04b4ba" }}
+        // style={{ backgroundColor: "#04b4ba" }}
       >
         <h5 style={{ color: "white" }}>
           Muốn tăng tỉ lệ kiếm được mentor? {" "}
@@ -57,22 +59,36 @@ function Applications() {
             Hoàn thiện hồ sơ của bạn
           </a>{" "}
         </h5>
-      </div>
-      <div className="px-3 py-3">
-        <h3>Danh sách yêu cầu</h3>
-      </div>
+      </div> */}
+      <ButtonContainer className="px-3 py-3">
+        <Label style={{fontSize: '20px', fontWeight: 'bold'}}>
+          Danh sách đơn đăng ký
+        </Label>
+      </ButtonContainer>
       {applicationList.length > 0 ? (
-        <AllApplications applications={applicationList} />
+        <div
+          style={{
+            width: '95%',
+          }}
+        >
+          <AllApplications applications={applicationList} />
+        </div>
       ) : (
-        <div className="p-2 border rounded d-flex flex-column justify-content-center align-items-center text-center">
-          <Article style={{ fontSize: "50px" }} />
-          <p style={{ fontWeight: "500" }}>Không có yêu cầu nào</p>
+        <div
+          className="p-2 border rounded d-flex flex-column justify-content-center align-items-center text-center"
+          style={{
+            width: '95%',
+          }}
+        >
+          <Article style={{fontSize: '50px'}} />
+          <p style={{fontWeight: '500'}}>Không có đơn đăng ký nào</p>
           <p className="text-body-tertiary">
-            Khi bạn đăng ký học mentor nào, thông tin của họ sẽ xuất hiện tại đây
+            Khi bạn đăng ký học mentor nào, thông tin của đơn đăng ký sẽ xuất
+            hiện tại đây
           </p>
           <Button
             onClick={handleNavigateToSearchScreen}
-            style={{ fontWeight: "500" }}
+            style={{fontWeight: '500'}}
             variant="primary"
           >
             Tìm mentor
@@ -80,30 +96,24 @@ function Applications() {
         </div>
       )}
       {/* <AllApplications applications={applicationList} /> */}
-    </div>
+    </Container>
   );
 }
 
-const AllApplications = ({ applications }) => {
+const AllApplications = ({applications}) => {
   const [checkedItems, setCheckedItems] = useState({});
-  console.log("Allapplication", applications);
-  const handleChange = (event) => {
-    setCheckedItems({
-      ...checkedItems,
-      [event.target.name]: event.target.checked,
-    });
-  };
+  console.log('Allapplication', applications);
+  // const handleChange = (event) => {
+  //   setCheckedItems({
+  //     ...checkedItems,
+  //     [event.target.name]: event.target.checked,
+  //   });
+  // };
 
   return (
-    <div style={{ minHeight: 500 }}>
-      <Table className="min-w-full divide-y divide-gray-600 divide-gray-600">
-        <Table.Head className="bg-gray-100 bg-gray-700">
-          <Table.HeadCell>
-            <Label htmlFor="select-all" className="sr-only">
-              Select all
-            </Label>
-            <Checkbox id="select-all" name="select-all" />
-          </Table.HeadCell>
+    <div style={{minHeight: 500}}>
+      <Table className="w-full divide-y divide-gray-600">
+        <Table.Head className=" bg-gray-700">
           <Table.HeadCell>Id</Table.HeadCell>
           <Table.HeadCell>Tên mentor</Table.HeadCell>
           <Table.HeadCell>Ngày gửi</Table.HeadCell>
@@ -112,27 +122,10 @@ const AllApplications = ({ applications }) => {
           <Table.HeadCell></Table.HeadCell>
         </Table.Head>
 
-        <Table.Body className="divide-y divide-gray-200 bg-white divide-gray-700 bg-gray-800">
+        <Table.Body className="divide-y divide-gray-300 bg-white">
           {applications.map((application, index) => (
-            <Table.Row
-              key={index}
-              className="hover:bg-gray-100 hover:bg-gray-700"
-            >
-              <Table.Cell className="w-4 p-4">
-                <div className="flex items-center">
-                  <Checkbox
-                    checked={checkedItems[`checkbox-${index}`] || false} // Sử dụng trạng thái từ state
-                    onChange={handleChange} // Thêm hàm xử lý sự kiện thay đổi
-                    aria-describedby={`checkbox-${index}`}
-                    id={`checkbox-${index}`}
-                    name={`checkbox-${index}`} // Thêm thuộc tính name để xác định checkbox cụ thể nào đang được thay đổi
-                  />
-                  <label htmlFor={`checkbox-${index}`} className="sr-only">
-                    checkbox
-                  </label>
-                </div>
-              </Table.Cell>
-              <Table.Cell className="whitespace-nowrap p-4 text-base font-medium text-gray-900 text-white">
+            <Table.Row key={index} className="hover:bg-gray-100 ">
+              <Table.Cell className="whitespace-nowrap p-4 text-base font-medium text-gray-900 ">
                 <div className="flex items-center">
                   {shortenId(application.id)}
                   <button
@@ -149,31 +142,28 @@ const AllApplications = ({ applications }) => {
                   src={application?.mentor?.avatar}
                   alt={`${application.id} avatar`}
                 />
-                <div className="text-sm font-normal text-gray-500 text-gray-400">
-                  <div className="text-base font-semibold text-gray-900 text-white">
+                <div className="text-sm font-normal text-gray-900">
+                  <div className="text-base font-semibold text-gray-900">
                     {application.mentor.firstName} {application.mentor.lastName}
                   </div>
-                  <div className="text-sm font-normal text-gray-500 text-gray-400">
+                  <div className="text-sm font-normal text-gray-500">
                     {application.mentor.email}
                   </div>
                 </div>
               </Table.Cell>
-              <Table.Cell className="whitespace-nowrap p-4 text-base font-medium text-gray-900 text-white">
-                {format(new Date(application.applicationDate), "dd-MM-yyyy")}
+              <Table.Cell className="whitespace-nowrap p-4 text-base font-medium text-gray-900">
+                {format(new Date(application.applicationDate), 'dd-MM-yyyy')}
               </Table.Cell>
-              <Table.Cell className="whitespace-nowrap p-4 text-base font-normal text-gray-900 text-white">
-                <div
-                  style={{ fontWeight: "bold" }}
-                  className="flex items-center"
-                >
-                  <div className="mr-2 h-2.5 w-2.5 rounded-full bg-green-400"></div>{" "}
+              <Table.Cell className="whitespace-nowrap p-4 text-base font-normal text-gray-900">
+                <div style={{fontWeight: 'bold'}} className="flex items-center">
+                  <div className="mr-2 h-2.5 w-2.5 rounded-full bg-green-400"></div>{' '}
                   {mappingApplicationStatus(application.status)}
                 </div>
               </Table.Cell>
-              <Table.Cell className="whitespace-nowrap p-4 text-base font-medium text-gray-900 text-white">
+              <Table.Cell className="whitespace-nowrap p-4 text-base font-medium text-gray-900">
                 {application.fee} VNĐ
               </Table.Cell>
-              <Table.Cell className="whitespace-nowrap p-4 text-base font-medium text-gray-900 text-white">
+              <Table.Cell className="whitespace-nowrap p-4 text-base font-medium text-gray-900 ">
                 {/* <ViewApplicationDetailModal application={application} /> */}
               </Table.Cell>
             </Table.Row>
@@ -183,10 +173,30 @@ const AllApplications = ({ applications }) => {
     </div>
   );
 };
+
+const Container = styled.div`
+  padding-top: 2rem;
+  max-width: 90%;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  align-items: center;
+`;
+
+const ButtonContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  width: 95%;
+  padding: 0 1rem;
+`;
+
 export default Applications;
 
-const ViewApplicationDetailModal = function ({ application }) {
-  console.log("ViewApplicationDetailModal", application);
+const ViewApplicationDetailModal = function ({application}) {
+  console.log('ViewApplicationDetailModal', application);
   const profileInfor = application.mentor;
   const [isOpen, setOpen] = useState(false);
 
@@ -203,13 +213,13 @@ const ViewApplicationDetailModal = function ({ application }) {
           <div
             style={{
               flex: 1,
-              display: "flex",
-              flexDirection: "row",
-              color: "black",
+              display: 'flex',
+              flexDirection: 'row',
+              color: 'black',
             }}
           >
             <img
-              style={{ marginBottom: 20 }}
+              style={{marginBottom: 20}}
               src="https://picsum.photos/300/200"
               width={200}
               height={160}
@@ -253,12 +263,12 @@ const ViewApplicationDetailModal = function ({ application }) {
               </div>
             </div>
           </div>
-          <div style={{ marginTop: 12 }}>
+          <div style={{marginTop: 12}}>
             <Label htmlFor="department">Lý lịch</Label>
             <div className="mt-1">
               <p style={styles.text}>{profileInfor.bio}</p>
             </div>
-            <Label style={{ marginTop: 12 }} htmlFor="department">
+            <Label style={{marginTop: 12}} htmlFor="department">
               Chứng chỉ
             </Label>
           </div>
@@ -272,6 +282,6 @@ const ViewApplicationDetailModal = function ({ application }) {
 };
 const styles = {
   text: {
-    color: "black",
+    color: 'black',
   },
 };

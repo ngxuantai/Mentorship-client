@@ -12,7 +12,7 @@ import Tooltip from '@mui/material/Tooltip';
 import {Button, Progress} from 'flowbite-react';
 import {List} from 'flowbite-react';
 import moment from 'moment';
-
+import ReactLoading from 'react-loading';
 import {useEffect, useRef, useState} from 'react';
 import {useNavigate} from 'react-router';
 import learningProgressApi from '../../../../api/learningProgress';
@@ -62,15 +62,32 @@ const ListAppliedMentor = () => {
   };
 
   return (
-    <div
-      style={{
-        display: 'grid',
-        gridTemplateColumns: 'repeat(3, 1fr)',
-        gap: '12px',
-      }}
-    >
-      {renderMentorItems()}
-    </div>
+    <>
+      {progressList.length > 0 ? (
+        <div
+          style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(3, 1fr)',
+            gap: '12px',
+          }}
+        >
+          {renderMentorItems()}
+        </div>
+      ) : (
+        <div
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            width: '100%',
+            height: '100px',
+            margin: '0 auto',
+          }}
+        >
+          <ReactLoading type="spin" color="blue" />
+        </div>
+      )}
+    </>
   );
 };
 
@@ -100,7 +117,8 @@ function ProgressItem({progress, onClick}) {
   function handleCallClick() {}
 
   function handleChatClick() {
-    const combinedId = user.id > mentor.id ? user.id + mentor.id : mentor.id + user.id;
+    const combinedId =
+      user.id > mentor.id ? user.id + mentor.id : mentor.id + user.id;
     navigate(`/message/${combinedId}`);
   }
   function computeRemainPercent() {
@@ -148,7 +166,11 @@ function ProgressItem({progress, onClick}) {
       <Box sx={{width: '100%'}}>
         <CardHeader
           avatar={
-            <Avatar sx={{width: '70px', height: '70px'}} aria-label="recipe" src={mentor?.avatar}>
+            <Avatar
+              sx={{width: '70px', height: '70px'}}
+              aria-label="recipe"
+              src={mentor?.avatar}
+            >
               R
             </Avatar>
           }

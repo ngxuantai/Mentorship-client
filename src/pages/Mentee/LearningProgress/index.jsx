@@ -1,22 +1,48 @@
 import ListAppliedMentor from './components/ListMentorItem';
 import ListApplicationTest from './components/ListApplicationTest';
 import {Label} from 'flowbite-react';
+import styled from 'styled-components';
 
 function LearningProgress() {
   return (
-    <div>
-      <div className="px-5 py-5">
-        <Label style={{fontSize: '24px', fontWeight: 'bold'}}>
+    <Container>
+      <TitleContainer>
+        <Label style={{fontSize: '20px', fontWeight: 'bold'}}>
           Danh sách học thử
         </Label>
+      </TitleContainer>
+      <div style={{width: '95%'}}>
         <ListApplicationTest />
-        <Label style={{fontSize: '24px', fontWeight: 'bold'}}>
+      </div>
+      <TitleContainer>
+        <Label style={{fontSize: '20px', fontWeight: 'bold'}}>
           Tiến trình học của bạn
         </Label>
-        <ListAppliedMentor></ListAppliedMentor>
+      </TitleContainer>
+      <div style={{width: '95%'}}>
+        <ListAppliedMentor />
       </div>
-    </div>
+    </Container>
   );
 }
+
+const Container = styled.div`
+  padding: 2rem;
+  max-width: 95%;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  align-items: center;
+`;
+
+const TitleContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  width: 95%;
+  padding: 0 1rem;
+`;
 
 export default LearningProgress;

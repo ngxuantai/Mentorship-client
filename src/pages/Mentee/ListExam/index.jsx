@@ -3,20 +3,21 @@ import styled from 'styled-components';
 import menteeExamApi from '../../../api/menteeExam';
 import examApi from '../../../api/exam';
 import CardExam from './components/CardExam';
+import {useUserStore} from '../../../store/userStore';
 
 const Exam = () => {
   const [menteeExams, setMenteeExams] = useState([]);
+  const {user} = useUserStore();
+  console.log(user);
 
   useEffect(() => {
     const fetchExams = async () => {
-      const res = await menteeExamApi.getMenteeExamByMenteeId(
-        '658b162cae49ca742c25fd2a'
-      );
+      const res = await menteeExamApi.getMenteeExamByMenteeId(user.id);
       console.log(res);
       setMenteeExams(res);
     };
     fetchExams();
-  }, []);
+  }, [user]);
 
   const getInforExam = async (examId) => {
     const res = await examApi.getExamByExamId(examId);

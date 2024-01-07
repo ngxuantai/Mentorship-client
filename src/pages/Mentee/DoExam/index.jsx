@@ -1,23 +1,23 @@
-import React, { useEffect, useState } from "react";
-import { RadioGroup, FormControlLabel, Radio, Button } from "@mui/material";
-import styled from "styled-components";
-import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
-import { useParams } from "react-router-dom";
-import examApi from "../../../api/exam";
-import menteeExamApi from "../../../api/menteeExam";
-import { useNavigate } from "react-router-dom";
+import React, {useEffect, useState} from 'react';
+import {RadioGroup, FormControlLabel, Radio, Button} from '@mui/material';
+import styled from 'styled-components';
+import {ToastContainer, toast} from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import {useParams} from 'react-router-dom';
+import examApi from '../../../api/exam';
+import menteeExamApi from '../../../api/menteeExam';
+import {useNavigate} from 'react-router-dom';
 
 const DoExam = () => {
-  const { id } = useParams();
+  const {id} = useParams();
   const navigate = useNavigate();
 
   const [questions, setQuestions] = useState([]);
   const [answers, setAnswers] = useState([]);
-  const [newAnwers, setNewAnswers] = useState([]);
+  const [newAnswers, setNewAnswers] = useState([]);
 
   const toastOptions = {
-    position: "top-right",
+    position: 'top-right',
     autoClose: 3000,
     pauseOnHover: true,
     draggable: true,
@@ -27,10 +27,10 @@ const DoExam = () => {
     const fetchAnswers = async () => {
       const menteeExam = await menteeExamApi.getMenteeExamByMenteeExamId(id);
       const questionData = await examApi.getQuestionByExamId(menteeExam.examId);
-      console.log("questionData", questionData);
+      console.log('questionData', questionData);
       setQuestions(questionData);
       const answerData = await menteeExamApi.getAnswerByMenteeExamId(id);
-      console.log("answerData", answerData);
+      console.log('answerData', answerData);
       setAnswers(answerData);
     };
     fetchAnswers();
@@ -62,50 +62,72 @@ const DoExam = () => {
       setAnswers(updatedAnswers);
     } else {
       // Create new answer
-      const newAnswer = {
-        menteeExamId: id,
-        questionId: questionId,
-        isCorrect: question.options[optionIndex].isCorrect,
-        answeredOption: optionIndex,
-        createdAt: new Date(),
-      };
+      const checkAnswer = newAnswers.find(
+        (answer) => answer.questionId === questionId
+      );
+      if (checkAnswer) {
+        const updatedAnswers = newAnswers.map((answer) =>
+          answer.questionId === questionId
+            ? {
+                ...answer,
+                answeredOption: optionIndex,
+                isCorrect: question.options[optionIndex].isCorrect,
+              }
+            : answer
+        );
+        setNewAnswers(updatedAnswers);
+      } else {
+        const newAnswer = {
+          menteeExamId: id,
+          questionId: questionId,
+          isCorrect: question.options[optionIndex].isCorrect,
+          answeredOption: optionIndex,
+          createdAt: new Date(),
+        };
 
-      setNewAnswers([...newAnwers, newAnswer]);
+        setNewAnswers((prev) => [...prev, newAnswer]);
+      }
     }
   };
+
+  useEffect(() => {
+    console.log('newAnswers', newAnswers);
+  }, [newAnswers]);
 
   const handleSubmitExam = async () => {
     answers.map(async (answer) => {
       const res = await menteeExamApi.updateAnswer(answer.id, answer);
       console.log(res);
     });
-    newAnwers.map(async (answer) => {
+    newAnswers.map(async (answer) => {
       const res = await menteeExamApi.createAnswer(answer);
       console.log(res);
     });
-    toast.success("Nộp bài thành công", toastOptions);
+    if (newAnswers.length > 0) {
+      const res = await menteeExamApi.updateNumberAnswer(id, newAnswers.length);
+      console.log(res);
+    }
+    toast.success('Nộp bài thành công', toastOptions);
     setTimeout(() => {
-      navigate("/mentee/exam");
+      navigate('/mentee/exam');
     }, 3000);
   };
 
   return (
     <Container>
       <QuestionContainer>
-        <label style={{ fontSize: "28px", fontWeight: "bold" }}>
-          Bài tập 1
-        </label>
+        <label style={{fontSize: '28px', fontWeight: 'bold'}}>Bài tập 1</label>
         {questions.map((item, index) => (
           <Question key={index}>
-            <label style={{ fontWeight: "bold", marginRight: "4px" }}>
+            <label style={{fontWeight: 'bold', marginRight: '4px'}}>
               Câu {index + 1}:
             </label>
             <label>{item.content}</label>
             <br />
-            <label style={{ fontWeight: "bold", marginRight: "4px" }}>
+            <label style={{fontWeight: 'bold', marginRight: '4px'}}>
               Đáp án:
             </label>
-            <RadioGroup sx={{ marginLeft: "10px" }}>
+            <RadioGroup sx={{marginLeft: '10px'}}>
               {item.options.map((option, i) => (
                 <FormControlLabel
                   key={i}
@@ -116,7 +138,7 @@ const DoExam = () => {
                       onChange={() => handleAnswerChange(item.id, i)}
                     />
                   }
-                  label={String.fromCharCode(65 + i) + ". " + option.option}
+                  label={String.fromCharCode(65 + i) + '. ' + option.option}
                 />
               ))}
             </RadioGroup>
@@ -124,22 +146,22 @@ const DoExam = () => {
         ))}
         <div
           style={{
-            display: "flex",
-            flexDirection: "row",
-            justifyContent: "flex-end",
+            display: 'flex',
+            flexDirection: 'row',
+            justifyContent: 'flex-end',
           }}
         >
           <Button
             size="small"
             variant="contained"
             sx={{
-              backgroundColor: "#4caf50",
-              color: "white",
-              textTransform: "none",
-              fontSize: "16px",
-              "&:hover": {
+              backgroundColor: '#4caf50',
+              color: 'white',
+              textTransform: 'none',
+              fontSize: '16px',
+              '&:hover': {
                 opacity: 0.8,
-                backgroundColor: "#4caf50",
+                backgroundColor: '#4caf50',
               },
             }}
             onClick={() => handleSubmitExam()}
@@ -151,18 +173,18 @@ const DoExam = () => {
       <NumberContainer>
         <label
           style={{
-            fontSize: "20px",
-            fontWeight: "bold",
-            alignContent: "center",
+            fontSize: '20px',
+            fontWeight: 'bold',
+            alignContent: 'center',
           }}
         >
           Danh sách câu hỏi
         </label>
         <div
           style={{
-            display: "grid",
-            gridTemplateColumns: "repeat(5, 1fr)",
-            gap: "8px",
+            display: 'grid',
+            gridTemplateColumns: 'repeat(5, 1fr)',
+            gap: '8px',
           }}
         >
           {questions.map((item, index) => (

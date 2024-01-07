@@ -2,6 +2,7 @@ import React, {useEffect, useState} from 'react';
 import {List} from 'flowbite-react';
 import TestProgressItem from './TestProgressItem';
 import {ToastContainer, toast} from 'react-toastify';
+import ReactLoading from 'react-loading';
 import learningTestProgressApi from '../../../../api/learningTestProgress';
 import menteeApplicationApi from '../../../../api/menteeApplication';
 import mentorApi from '../../../../api/mentor';
@@ -23,9 +24,7 @@ export default function ListApplicationTest() {
   useEffect(() => {
     if (user) {
       const fetchProgress = async () => {
-        const data = await learningTestProgressApi.getByMenteeId(
-          user.id
-        );
+        const data = await learningTestProgressApi.getByMenteeId(user.id);
         if (data) {
           const list = data.sort((a, b) => {
             const dateA = new Date(a.endDate).getTime();
@@ -49,21 +48,39 @@ export default function ListApplicationTest() {
   };
 
   return (
-    <div
-      style={{
-        display: 'grid',
-        gridTemplateColumns: 'repeat(3, 1fr)',
-        gap: '12px',
-      }}
-    >
-      {testProgressList.map((progress) => (
-        <TestProgressItem
-          key={progress.id}
-          progress={progress}
-          cancelProgress={() => cancelProgress(progress)}
-        />
-      ))}
-      <ToastContainer />
-    </div>
+    <>
+      {testProgressList.length > 0 ? (
+        <div
+          style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(3, 1fr)',
+            gap: '12px',
+          }}
+        >
+          {testProgressList.map((progress) => (
+            <TestProgressItem
+              key={progress.id}
+              progress={progress}
+              cancelProgress={() => cancelProgress(progress)}
+            />
+          ))}
+
+          <ToastContainer />
+        </div>
+      ) : (
+        <div
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            width: '100%',
+            height: '100px',
+            margin: '0 auto',
+          }}
+        >
+          <ReactLoading type="spin" color="blue" />
+        </div>
+      )}
+    </>
   );
 }

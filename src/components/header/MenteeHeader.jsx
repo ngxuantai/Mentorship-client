@@ -22,6 +22,7 @@ const pages = [
   // { name: "Yêu cầu", link: "/mentee/inquires" },
   {name: 'Danh sách yêu cầu', link: '/mentee/applications'},
   {name: 'Nhắn tin', link: ''},
+  {name: 'Tài liệu', link: '/mentee/exam'},
   {name: 'Thanh toán', link: '/mentee/payment'},
   {name: 'Cài đặt', link: '/mentee/settings'},
 

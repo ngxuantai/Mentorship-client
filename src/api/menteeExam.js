@@ -49,12 +49,23 @@ const mneteeExamApi = {
       return null;
     }
   },
+  updateNumberAnswer: async (menteeExamId, numberAns) => {
+    try {
+      const url = `/api/menteeExam/updateNumberAns/${menteeExamId}`;
+      const res = await axiosClient.put(url, numberAns);
+      return res.data;
+    } catch (error) {
+      console.error(error);
+      return null;
+    }
+  },
   createAnswer: async (answer) => {
     try {
       const url = '/api/answer/create';
       console.log('answer', answer);
       const res = await axiosClient.post(url, answer);
       console.log('new answer data', res.data);
+
       return res.data;
     } catch (error) {
       console.error(error);
