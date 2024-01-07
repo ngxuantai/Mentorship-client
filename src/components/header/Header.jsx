@@ -11,6 +11,7 @@ import menteeApi from '../../api/mentee';
 import mentorApi from '../../api/mentor';
 import MenteeHeader from './MenteeHeader';
 import MentorHeader from './MentorHeader';
+import {useNavigate} from 'react-router';
 
 export default function Header() {
   const {user, setUser} = useUserStore();
@@ -73,6 +74,7 @@ export default function Header() {
 }
 function UnAuthHeader() {
   const [fields, setFields] = useState([]);
+  const navigate = useNavigate();
   useEffect(() => {
     const getField = async () => {
       const fieldsData = await fieldApi.getAllFields();
@@ -93,7 +95,7 @@ function UnAuthHeader() {
 
   return (
     <Container>
-      <div className="logo">
+      <div className="logo cursor-pointer" onClick={() => navigate('/')}>
         <img src={Logo} alt="logo" />
       </div>
       <div className="nav">
