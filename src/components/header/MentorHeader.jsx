@@ -15,6 +15,7 @@ import * as React from 'react';
 import {useNavigate} from 'react-router';
 import {useUserStore} from '../../store/userStore';
 import Logo from '../../assets/logo.png';
+import { set } from 'date-fns';
 
 const pages = [
   // { name: "Trang chủ", link: "/" },
@@ -37,9 +38,11 @@ const settings = [
 function MentorHeader() {
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
+  const [clicked, setClicked] = React.useState('Danh sách mentee');
   const {user, setUser, logout} = useUserStore();
   const navigate = useNavigate();
-  const handleNavigate = (link) => {
+  const handleNavigate = (link, name) => {
+    setClicked(name);
     navigate(link);
   };
   const handleOpenNavMenu = (event) => {
@@ -144,7 +147,7 @@ function MentorHeader() {
                 key={page.name}
                 onClick={() =>
                   handleNavigate(
-                    page.name === 'Nhắn tin' ? `/message/${user.id}` : page.link
+                    page.name === 'Nhắn tin' ? `/message/${user.id}` : page.link, page.name
                   )
                 }
                 sx={{
@@ -153,6 +156,8 @@ function MentorHeader() {
                   mx: 1,
                   color: 'white',
                   display: 'block',
+                  borderBottom: clicked === page.name ? '3px solid white' : null,
+                  transform: clicked === page.name ? 'scale(1.1)' : null,
                 }}
               >
                 {page.name}

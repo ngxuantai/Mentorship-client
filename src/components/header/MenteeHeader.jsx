@@ -40,9 +40,11 @@ const settings = [
 function MenteeHeader() {
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
+  const [clicked, setClicked] = React.useState('Trang chủ');
   const {user, setUser, logout} = useUserStore();
   const navigate = useNavigate();
-  const handleNavigate = (link) => {
+  const handleNavigate = (link, name) => {
+    setClicked(name);
     navigate(link);
   };
   const handleOpenNavMenu = (event) => {
@@ -147,7 +149,7 @@ function MenteeHeader() {
                 key={page.name}
                 onClick={() =>
                   handleNavigate(
-                    page.name === 'Nhắn tin' ? `/message/${user.id}` : page.link
+                    page.name === 'Nhắn tin' ? `/message/${user.id}` : page.link, page.name
                   )
                 }
                 sx={{
@@ -156,6 +158,8 @@ function MenteeHeader() {
                   mx: 1,
                   color: 'white',
                   display: 'block',
+                  borderBottom: clicked === page.name ? '3px solid white' : null,
+                  transform: clicked === page.name ? 'scale(1.1)' : null,
                 }}
               >
                 {page.name}
