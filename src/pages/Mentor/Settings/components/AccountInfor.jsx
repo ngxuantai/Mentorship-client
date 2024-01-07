@@ -1,15 +1,14 @@
-
-import { FloatingLabel } from "flowbite-react";
-import React from "react";
-import styled from "styled-components";
-import firebaseInstance from "../../../../services/firebase";
-import { useUserStore } from "../../../../store/userStore";
+import {FloatingLabel} from 'flowbite-react';
+import React from 'react';
+import styled from 'styled-components';
+import firebaseInstance from '../../../../services/firebase';
+import {useUserStore} from '../../../../store/userStore';
 
 export default function AccountInfor() {
-  const { user, updateUser } = useUserStore();
+  const {user, updateUser} = useUserStore();
   const [values, setValues] = React.useState({
-    password: "",
-    confirmPassword: "",
+    password: '',
+    confirmPassword: '',
   });
 
   const handleSaveChange = async (event) => {
@@ -20,20 +19,20 @@ export default function AccountInfor() {
         values.confirmPassword
       );
       resetForm();
-      alert("Thay đổi mật khẩu thành công");
+      alert('Thay đổi mật khẩu thành công');
     } catch (er) {
-      alert("Thay đổi mật khẩu thất bại");
+      alert('Thay đổi mật khẩu thất bại');
     }
   };
   const handleChange = (event) => {
-    const { name, value } = event.target;
+    const {name, value} = event.target;
 
-    setValues({ ...values, [name]: value });
+    setValues({...values, [name]: value});
   };
   const resetForm = () => {
     setValues({
-      password: "",
-      confirmPassword: "",
+      password: '',
+      confirmPassword: '',
     });
   };
   return (
@@ -52,18 +51,20 @@ export default function AccountInfor() {
             type="password"
             variant="outlined"
             required
+            style={{width: '60%'}}
           />
 
-            <FloatingLabel 
-              type="password"
-              value={values.confirmPassword}
-              name="confirmPassword"
-              onChange={handleChange}
-              autoComplete="off"
-              label="Mật khẩu mới"
-              variant="outlined"
-              required
-            />
+          <FloatingLabel
+            type="password"
+            value={values.confirmPassword}
+            name="confirmPassword"
+            onChange={handleChange}
+            autoComplete="off"
+            label="Mật khẩu mới"
+            variant="outlined"
+            required
+            style={{width: '60%'}}
+          />
 
           <button>Lưu thay đổi</button>
         </InforContainer>
@@ -73,7 +74,7 @@ export default function AccountInfor() {
 }
 
 const Container = styled.div`
-  max-width: 900px;
+  max-width: 1200px;
   width: 90%;
 `;
 const TipsContainer = styled.div`

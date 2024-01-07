@@ -1,13 +1,13 @@
-import { Avatar, FormControlLabel, Switch} from "@mui/material";
-import { FloatingLabel } from "flowbite-react";
-import React, { useRef } from "react";
-import styled from "styled-components";
-import firebaseInstance from "../../../../services/firebase";
-import { useUserStore } from "../../../../store/userStore";
+import {Avatar, FormControlLabel, Switch} from '@mui/material';
+import {FloatingLabel} from 'flowbite-react';
+import React, {useRef} from 'react';
+import styled from 'styled-components';
+import firebaseInstance from '../../../../services/firebase';
+import {useUserStore} from '../../../../store/userStore';
 
 export default function PersonalInfor() {
-  const { user, updateUser } = useUserStore();
-  console.log("user infor", user);
+  const {user, updateUser} = useUserStore();
+  console.log('user infor', user);
   const [selectedImage, setSelectedImage] = React.useState(user.avatar);
   const [values, setValues] = React.useState({
     firstName: user.firstName,
@@ -39,21 +39,21 @@ export default function PersonalInfor() {
   const handleSaveChange = async (event) => {
     event.preventDefault();
     const avatarUrl = values.avatar
-      ? await firebaseInstance.storeImage("avatar", values.avatar)
+      ? await firebaseInstance.storeImage('avatar', values.avatar)
       : user.avatar;
     console.log(`Đã chọn tệp:`, avatarUrl);
-    const updatedUser = { ...user, ...values, avatar: avatarUrl };
+    const updatedUser = {...user, ...values, avatar: avatarUrl};
     await updateUser(user.id, updatedUser);
   };
   const handleChange = (event) => {
-    const { name, value } = event.target;
-    console.log("name", name, value);
+    const {name, value} = event.target;
+    console.log('name', name, value);
     // Xử lý trường dateOfBirth riêng lẻ
-    if (name === "dateOfBirth") {
+    if (name === 'dateOfBirth') {
       const selectedDate = new Date(value);
-      setValues({ ...values, [name]: selectedDate });
+      setValues({...values, [name]: selectedDate});
     } else {
-      setValues({ ...values, [name]: value });
+      setValues({...values, [name]: value});
     }
   };
   return (
@@ -62,27 +62,27 @@ export default function PersonalInfor() {
         <h3>Hồ sơ của bạn</h3>
       </Tittle>
       <ContentContainer>
-        <h5 style={{ fontWeight: "bold" }}>Thông tin cá nhân</h5>
-        <div style={{ display: "flex", flexDirection: "row" }}>
+        <h5 style={{fontWeight: 'bold'}}>Thông tin cá nhân</h5>
+        <div style={{display: 'flex', flexDirection: 'row'}}>
           <AvatarContainer>
             <div onClick={handleButtonClick} className="avatar-change">
               <Avatar
                 //render selected image here
                 src={selectedImage}
-                sx={{ width: "100px", height: "100px" }}
+                sx={{width: '150px', height: '150px'}}
               />
               {/* <button onClick={handleButtonClick}>Chọn tệp</button> */}
             </div>
             <input
               type="file"
               ref={fileInputRef}
-              style={{ display: "none" }}
+              style={{display: 'none'}}
               onChange={handleFileChange}
             />
           </AvatarContainer>
           <InforContainer onSubmit={handleSaveChange}>
             <div className="grid grid-cols-2 space-x-4">
-              <FloatingLabel 
+              <FloatingLabel
                 label="Họ"
                 name="firstName"
                 value={values.firstName}
@@ -102,7 +102,7 @@ export default function PersonalInfor() {
               />
             </div>
             <div className="grid grid-cols-2 space-x-4">
-              <FloatingLabel 
+              <FloatingLabel
                 label="Số điện thoại"
                 value={values.phoneNumber}
                 name="phoneNumber"
@@ -111,7 +111,7 @@ export default function PersonalInfor() {
                 variant="outlined"
                 required
               />
-              <FloatingLabel 
+              <FloatingLabel
                 label="Email"
                 value={values.email}
                 name="email"
@@ -122,7 +122,7 @@ export default function PersonalInfor() {
               />
             </div>
             <div className="grid grid-cols-3 space-x-2">
-              <FloatingLabel 
+              <FloatingLabel
                 label="Nghề nghiệp"
                 name="jobTitle"
                 value={values.jobTitle}
@@ -131,28 +131,24 @@ export default function PersonalInfor() {
                 variant="outlined"
                 required
               />
-                <FloatingLabel 
-                  label="LinkedIn"
-                  name="linkedin"
-                  value={values.linkedin}
-                  onChange={(event) => handleChange(event)}
-                  autoComplete="off"
-                  variant="outlined"
-                  required
-                />
-                <FloatingLabel 
-                  label="Sinh nhật"
-                  name="dateOfBirth"
-                  type="date"
-                  value={values.dateOfBirth}
-                  onChange={(event) => handleChange(event)}
-                  value={
-                    values.dateOfBirth
-                      ? values.dateOfBirth.toISOString().substring(0, 10)
-                      : ""
-                  }
-                  variant="outlined"
-                />
+              <FloatingLabel
+                label="LinkedIn"
+                name="linkedin"
+                value={values.linkedin}
+                onChange={(event) => handleChange(event)}
+                autoComplete="off"
+                variant="outlined"
+                required
+              />
+              <FloatingLabel
+                label="Sinh nhật"
+                name="dateOfBirth"
+                type="date"
+                // value={values.dateOfBirth}
+                onChange={(event) => handleChange(event)}
+                value={values.dateOfBirth ? values.dateOfBirth : ''}
+                variant="outlined"
+              />
             </div>
             {/* <Typography variant="body1" color="error">
               Unavailable
@@ -164,7 +160,7 @@ export default function PersonalInfor() {
                   onChange={(event) => {
                     if (
                       window.confirm(
-                        "Bạn có chắc chắn muốn thay đổi trạng thái của mình không?"
+                        'Bạn có chắc chắn muốn thay đổi trạng thái của mình không?'
                       )
                     ) {
                       setValues({
@@ -179,8 +175,8 @@ export default function PersonalInfor() {
               }
               label={
                 values.isUnavailable
-                  ? "Bạn đã tắt chế độ nhận yêu cầu từ mentee mới "
-                  : "Bạn đang mở chế độ nhận yêu cầu từ mentee mới"
+                  ? 'Bạn đã tắt chế độ nhận yêu cầu từ mentee mới '
+                  : 'Bạn đang mở chế độ nhận yêu cầu từ mentee mới'
               }
             />
             <button>Lưu thay đổi</button>
@@ -192,7 +188,7 @@ export default function PersonalInfor() {
 }
 
 const Container = styled.div`
-  max-width: 900px;
+  max-width: 1200px;
   width: 90%;
 `;
 

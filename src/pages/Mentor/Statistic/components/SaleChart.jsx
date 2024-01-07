@@ -1,15 +1,15 @@
-import { getMonth } from "date-fns";
-import { useEffect, useState } from "react";
-import Chart from "react-apexcharts";
-import menteeApplicationApi from "../../../../api/menteeApplication";
-import paymentApi from "../../../../api/payment";
-import YearPicker from "../../../../components/YearPicker";
-import { PlanType } from "../../../../constants";
-import { useUserStore } from "../../../../store/userStore";
-import formatCurrency from "../../../../utils/currency";
+import {getMonth} from 'date-fns';
+import {useEffect, useState} from 'react';
+import Chart from 'react-apexcharts';
+import menteeApplicationApi from '../../../../api/menteeApplication';
+import paymentApi from '../../../../api/payment';
+import YearPicker from '../../../../components/YearPicker';
+import {PlanType} from '../../../../constants';
+import {useUserStore} from '../../../../store/userStore';
+import formatCurrency from '../../../../utils/currency';
 
 export default function SalesChart() {
-  const { user } = useUserStore();
+  const {user} = useUserStore();
   const [year, setYear] = useState(new Date().getFullYear());
   const [total, setTotal] = useState(0);
   const [standard, setStandard] = useState([]);
@@ -70,29 +70,29 @@ export default function SalesChart() {
     }
   }, [year, user]);
 
-  const borderColor = "#F3F4F6";
-  const labelColor = "#6B7280";
+  const borderColor = '#F3F4F6';
+  const labelColor = '#6B7280';
   const opacityFrom = 0.45;
   const opacityTo = 0;
 
   const options = {
     stroke: {
-      curve: "smooth",
+      curve: 'smooth',
     },
     chart: {
-      type: "area",
-      fontFamily: "Inter, sans-serif",
+      type: 'area',
+      fontFamily: 'Inter, sans-serif',
       foreColor: labelColor,
       toolbar: {
         show: false,
       },
     },
     fill: {
-      type: "gradient",
+      type: 'gradient',
       gradient: {
         opacityFrom,
         opacityTo,
-        type: "vertical",
+        type: 'vertical',
       },
     },
     dataLabels: {
@@ -100,8 +100,8 @@ export default function SalesChart() {
     },
     tooltip: {
       style: {
-        fontSize: "14px",
-        fontFamily: "Inter, sans-serif",
+        fontSize: '14px',
+        fontFamily: 'Inter, sans-serif',
       },
     },
     grid: {
@@ -115,7 +115,7 @@ export default function SalesChart() {
     },
     markers: {
       size: 5,
-      strokeColors: "#ffffff",
+      strokeColors: '#ffffff',
       hover: {
         size: undefined,
         sizeOffset: 3,
@@ -123,23 +123,23 @@ export default function SalesChart() {
     },
     xaxis: {
       categories: [
-        "Tháng 1",
-        "Tháng 2",
-        "Tháng 3",
-        "Tháng 4",
-        "Tháng 5",
-        "Tháng 6",
-        "Tháng 7",
-        "Tháng 8",
-        "Tháng 9",
-        "Tháng 10",
-        "Tháng 11",
-        "Tháng 12",
+        'Tháng 1',
+        'Tháng 2',
+        'Tháng 3',
+        'Tháng 4',
+        'Tháng 5',
+        'Tháng 6',
+        'Tháng 7',
+        'Tháng 8',
+        'Tháng 9',
+        'Tháng 10',
+        'Tháng 11',
+        'Tháng 12',
       ],
       labels: {
         style: {
           colors: [labelColor],
-          fontSize: "14px",
+          fontSize: '14px',
           fontWeight: 500,
         },
       },
@@ -151,7 +151,7 @@ export default function SalesChart() {
       },
       crosshairs: {
         show: true,
-        position: "back",
+        position: 'back',
         stroke: {
           color: borderColor,
           width: 1,
@@ -163,7 +163,7 @@ export default function SalesChart() {
       labels: {
         style: {
           colors: [labelColor],
-          fontSize: "14px",
+          fontSize: '14px',
           fontWeight: 500,
         },
         formatter: function (value) {
@@ -172,9 +172,9 @@ export default function SalesChart() {
       },
     },
     legend: {
-      fontSize: "14px",
+      fontSize: '14px',
       fontWeight: 500,
-      fontFamily: "Inter, sans-serif",
+      fontFamily: 'Inter, sans-serif',
       labels: {
         colors: [labelColor],
       },
@@ -197,31 +197,38 @@ export default function SalesChart() {
   };
   const series = [
     {
-      name: "Gói lite",
+      name: 'Gói lite',
       data: lite,
-      color: "#007BFF",
+      color: '#007BFF',
     },
     {
-      name: "Gói standard",
+      name: 'Gói standard',
       data: standard,
-      color: "#28A745",
+      color: '#28A745',
     },
     {
-      name: "Gói pro",
+      name: 'Gói pro',
 
       // data: pro
       data: [6218, 6156, 6526, 6356, 6256, 6056],
-      color: "#DC3545",
+      color: '#DC3545',
     },
   ];
   return (
-    <div style={{ display: "flex", flexDirection: "column" }}>
-      <h3 style={{ fontWeight: "bold" }}>Báo cáo doanh thu</h3>
+    <div
+      style={{
+        display: 'flex',
+        flexDirection: 'column',
+        width: '100%',
+        // margin: '0 auto',
+      }}
+    >
+      <h3 style={{fontWeight: 'bold'}}>Báo cáo doanh thu</h3>
       <YearPicker value={year} onChange={(e) => setYear(e.target.value)} />
-      <h4 style={{ alignSelf: "flex-end" }}>
+      <h4 style={{alignSelf: 'flex-end'}}>
         Tổng cộng <strong>{formatCurrency(total)}</strong>
       </h4>
-      <Chart height={420} options={options} series={series} type="area" />;
+      <Chart height={420} options={options} series={series} type="area" />
     </div>
   );
 }

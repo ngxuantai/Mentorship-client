@@ -1,11 +1,19 @@
-import { Chip, FormControl, InputLabel, MenuItem, Select, Checkbox, ListItemText, OutlinedInput} from "@mui/material";
-import React, { useEffect, useState } from "react";
-import styled from "styled-components";
-import fieldApi from "../../../../api/field";
-import mentorApi from "../../../../api/mentor";
-import skillApi from "../../../../api/skill";
-import { useUserStore } from "../../../../store/userStore";
-
+import {
+  Chip,
+  FormControl,
+  InputLabel,
+  MenuItem,
+  Select,
+  Checkbox,
+  ListItemText,
+  OutlinedInput,
+} from '@mui/material';
+import React, {useEffect, useState} from 'react';
+import styled from 'styled-components';
+import fieldApi from '../../../../api/field';
+import mentorApi from '../../../../api/mentor';
+import skillApi from '../../../../api/skill';
+import {useUserStore} from '../../../../store/userStore';
 
 const ITEM_HEIGHT = 44;
 const ITEM_PADDING_TOP = 6;
@@ -19,8 +27,8 @@ const MenuProps = {
 };
 
 export default function MentorSkills() {
-  const { user, updateUser } = useUserStore();
-  console.log("user infor", user);
+  const {user, updateUser} = useUserStore();
+  console.log('user infor', user);
   // const [values, setValues] = useState({
   //   bio: user.bio,
   //   introduction: user.introduction,
@@ -37,9 +45,8 @@ export default function MentorSkills() {
 
   const handleSaveChange = async (event) => {
     event.preventDefault();
-    const updatedUser = { ...user, skillIds: selectedSkillsId };
+    const updatedUser = {...user, skillIds: selectedSkillsId};
     await updateUser(user.id, updatedUser);
-
 
     const fetchMentorSkills = async () => {
       const mentorSkillsData = await mentorApi.getMentorSkills(user.id);
@@ -67,21 +74,19 @@ export default function MentorSkills() {
       }
       await setSelectedSkillsId(mentorSkillsData.map((skill) => skill.id));
     };
-   
+
     fetchSkills();
     fetchMentorSkills();
-
   }, []);
-
 
   const handleSkillChange = (event) => {
     const {
-      target: { value, key },
+      target: {value, key},
     } = event;
     setSelectedSkillsId(typeof value === 'string' ? value.split(',') : value);
-  }
+  };
 
-  console.log("selectedSkillsId", selectedSkillsId);
+  console.log('selectedSkillsId', selectedSkillsId);
 
   return (
     <Container>
@@ -106,7 +111,7 @@ export default function MentorSkills() {
           </ul>
         </TipsContainer> */}
         <InforContainer onSubmit={handleSaveChange}>
-          <div style={{ display: "flex", flexDirection: "row" }}>
+          <div style={{display: 'flex', flexDirection: 'row'}}>
             {/* <FormControl style={{ width: "50%", marginRight: 24 }}>
               <InputLabel size="small">Field</InputLabel>
               <Select
@@ -125,32 +130,33 @@ export default function MentorSkills() {
                 })}
               </Select>
             </FormControl> */}
-          <FormControl className="w-[50%]">
-            <InputLabel>Kỹ năng</InputLabel>
-            <Select className=""
-              required
-              value={selectedSkillsId}
-              onChange={handleSkillChange}
-              multiple
-              name="skill"
-              label="Skill"
-              input={<OutlinedInput label="Kỹ năng" />}
-              MenuProps={MenuProps}
-              renderValue={(selected) => {
-                return `${selected.length} kỹ năng`;
-              }}
-            >
-              {skills.map((skill) => (
-                <MenuItem key={skill.id} value={skill.id}>
-                  <Checkbox checked={selectedSkillsId.indexOf(skill.id) > -1} 
-                    onClick={() => handleCheckboxChange(skill)}/>
-                  <ListItemText primary={skill.name} />
-                </MenuItem>
-
-              ))}
-              
-            </Select>
-          </FormControl>
+            <FormControl className="w-[50%]">
+              <InputLabel>Kỹ năng</InputLabel>
+              <Select
+                className=""
+                required
+                value={selectedSkillsId}
+                onChange={handleSkillChange}
+                multiple
+                name="skill"
+                label="Skill"
+                input={<OutlinedInput label="Kỹ năng" />}
+                MenuProps={MenuProps}
+                renderValue={(selected) => {
+                  return `${selected.length} kỹ năng`;
+                }}
+              >
+                {skills.map((skill) => (
+                  <MenuItem key={skill.id} value={skill.id}>
+                    <Checkbox
+                      checked={selectedSkillsId.indexOf(skill.id) > -1}
+                      onClick={() => handleCheckboxChange(skill)}
+                    />
+                    <ListItemText primary={skill.name} />
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
           </div>
           <div>
             {mentorSkills.map((skill) => (
@@ -158,7 +164,7 @@ export default function MentorSkills() {
                 key={skill.id}
                 label={skill.name}
                 //onDelete={() => handleDeleteSkill(skill.id)}
-                style={{ fontWeight: "bold", marginRight: 12 }}
+                style={{fontWeight: 'bold', marginRight: 12}}
               />
             ))}
           </div>
@@ -171,7 +177,7 @@ export default function MentorSkills() {
 }
 
 const Container = styled.div`
-  max-width: 900px;
+  max-width: 1200px;
   width: 90%;
 `;
 const TipsContainer = styled.div`

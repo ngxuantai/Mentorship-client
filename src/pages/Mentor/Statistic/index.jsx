@@ -1,7 +1,7 @@
-import { useEffect, useState } from "react";
-import styled from "styled-components";
-import MenteeChart from "./components/MenteeChart";
-import SalesChart from "./components/SaleChart";
+import {useEffect, useState} from 'react';
+import styled from 'styled-components';
+import MenteeChart from './components/MenteeChart';
+import SalesChart from './components/SaleChart';
 
 export default function Statistic() {
   const [notifications, setNotifications] = useState({
@@ -23,9 +23,12 @@ export default function Statistic() {
 const Container = styled.div`
   display: flex;
   flex-direction: column;
-  font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+  font-family: 'Roboto', 'Helvetica', 'Arial', sans-serif;
   gap: 2rem;
   padding: 2rem;
+  margin: 0 auto;
+  max-width: 1200px;
+  width: 90%;
 `;
 
 const EmailContainer = styled.div`

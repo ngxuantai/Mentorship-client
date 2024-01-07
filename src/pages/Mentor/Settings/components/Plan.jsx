@@ -1,14 +1,15 @@
-import { Button } from "flowbite-react";
-import { useEffect, useState } from "react";
-import styled from "styled-components";
-import paymentApi from "../../../../api/payment";
-import planApi from "../../../../api/plan";
-import { PlanType } from "../../../../constants";
-import { useUserStore } from "../../../../store/userStore";
-import PlanItem from "./PlanItem";
+import {Button} from 'flowbite-react';
+import {useEffect, useState} from 'react';
+import styled from 'styled-components';
+import paymentApi from '../../../../api/payment';
+import planApi from '../../../../api/plan';
+import {PlanType} from '../../../../constants';
+import {useUserStore} from '../../../../store/userStore';
+import PlanItem from './PlanItem';
+import ReactLoading from 'react-loading';
 
 const Plan = () => {
-  const { user } = useUserStore();
+  const {user} = useUserStore();
   const [plans, setPlans] = useState([]);
   const [planLite, setPlanLite] = useState({});
   const [planStandard, setPlanStandard] = useState({});
@@ -18,23 +19,23 @@ const Plan = () => {
   useEffect(() => {
     const fetchPlans = async () => {
       const res = await planApi.getPlanByMentorId(user.id);
-      console.log("fetchPlans", res);
+      console.log('fetchPlans', res);
       setPlans(res);
     };
     // get request payment
-    const fetchPayment = async () => {
-      const res = await paymentApi.getRequestUrl({
-        menteeId: "658551f06a7e6920f9112a4a",
-        menteeApplicattion: "6586b6070d0111d78c392fc8",
-        amount: 100000,
-        description: "thanh toan",
-      });
-      console.log(res);
-      setUrl(res);
-    };
+    // const fetchPayment = async () => {
+    //   const res = await paymentApi.getRequestUrl({
+    //     menteeId: '658551f06a7e6920f9112a4a',
+    //     menteeApplicattion: '6586b6070d0111d78c392fc8',
+    //     amount: 100000,
+    //     description: 'thanh toan',
+    //   });
+    //   console.log(res);
+    //   setUrl(res);
+    // };
 
     fetchPlans();
-    fetchPayment();
+    // fetchPayment();
   }, []);
 
   useEffect(() => {
@@ -59,7 +60,7 @@ const Plan = () => {
   };
   const handleUpdatePlan = async (updatedPlan) => {
     if (!checkIsOnePlanActive()) {
-      alert("Phải có ít nhất 1 gói học hoạt động");
+      alert('Phải có ít nhất 1 gói học hoạt động');
       return;
     }
     const checkPlan = plans.find((plan) => plan.id === updatedPlan.id);
@@ -74,37 +75,24 @@ const Plan = () => {
     }
   };
 
-  const [url, setUrl] = useState("");
+  const [url, setUrl] = useState('');
 
   return (
     <Container>
-      {/* <TipsContainer>
-        <p
-          style={{
-            display: "flex",
-            flexDirection: "row",
-            alignItems: "center",
-          }}
-        >
-          <PrivacyTipIcon style={{ color: "#3f83f8", fontSize: "16px" }} /> Lưu
-          ý
-        </p>
-        <p style={{ fontWeight: "500", marginLeft: 24 }}>
-          Số lần gọi phải chia hết cho số tuần học
-        </p>
-      </TipsContainer> */}
-
       <ContentContainer>
         {plans?.length === 0 ? (
-          <p>Chưa có kế hoạch dạy</p>
+          // <p>Chưa có kế hoạch dạy</p>
+          <div style={{margin: '0 auto'}}>
+            <ReactLoading type="spin" color="blue" />
+          </div>
         ) : (
           <>
             {show ? (
               <div
                 style={{
-                  display: "grid",
-                  gridTemplateColumns: "repeat(3, 1fr)",
-                  gap: "8px",
+                  display: 'grid',
+                  gridTemplateColumns: 'repeat(3, 1fr)',
+                  gap: '8px',
                 }}
               >
                 <PlanItem
@@ -113,7 +101,7 @@ const Plan = () => {
                       name: PlanType.LITE,
                       callTimes: 0,
                       price: 0,
-                      description: "",
+                      description: '',
                     }
                   }
                   onUpdatePlan={handleUpdatePlan}
@@ -124,7 +112,7 @@ const Plan = () => {
                       name: PlanType.STANDARD,
                       callTimes: 0,
                       price: 0,
-                      description: "",
+                      description: '',
                     }
                   }
                   onUpdatePlan={handleUpdatePlan}
@@ -135,7 +123,7 @@ const Plan = () => {
                       name: PlanType.PRO,
                       callTimes: 0,
                       price: 0,
-                      description: "",
+                      description: '',
                     }
                   }
                   onUpdatePlan={handleUpdatePlan}
@@ -150,6 +138,7 @@ const Plan = () => {
 };
 
 const Container = styled.div`
+  max-width: 1200px;
   width: 90%;
   margin: 0 auto;
 `;

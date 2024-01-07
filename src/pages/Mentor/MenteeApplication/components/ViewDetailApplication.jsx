@@ -109,8 +109,10 @@ export default function ViewApplicationDetail({
         </div>
       </Button>
       <Modal style={{}} onClose={() => setOpen(false)} show={isOpen}>
-        <Modal.Header className="border-b border-gray-200 !p-6 dark:border-gray-700">
-          <strong>Thông tin học viên</strong>
+        <Modal.Header>
+          <Label style={{fontWeight: 'bold', fontSize: '20px'}}>
+            Thông tin học viên
+          </Label>
         </Modal.Header>
         <Modal.Body>
           <div

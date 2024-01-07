@@ -29,7 +29,9 @@ import {applicationToExcelData} from '../../../utils/excelDataHelper';
 import {exportExcel} from '../../../utils/excelHelper';
 import ListApplications from './components/ListApplications';
 import HistoryApplication from './components/HistoryApplication';
+import {ApprovalStatus} from '../../../constants';
 import styled from 'styled-components';
+import ReactLoading from 'react-loading';
 
 const dropdownOption = [
   {value: 'id', label: 'Id'},
@@ -40,10 +42,11 @@ const ApplicationListPage = () => {
   const {user} = useUserStore();
   const [searchTerm, setSearchTerm] = useState('');
   const [applicationList, setApplicationList] = useState([]);
+  const [applicationProvedList, setApplicationProvedList] = useState([]);
   const [events, setEvents] = useState([]);
   const [mentorEvents, setMentorEvents] = useState([]);
   const [selectedApplications, setSelectedApplication] = useState({});
-  const [selectedOption, setSelectedOption] = useState(dropdownOption[1]);
+  const [selectedOption, setSelectedOption] = useState('nameMentee');
   console.log('mentorEvents', mentorEvents);
 
   const [show, setShow] = useState(false);
@@ -92,50 +95,86 @@ const ApplicationListPage = () => {
     };
 
     fetchAndSetApplications();
-  }, []);
+    const appliNoApproved = menteeApplications.filter(
+      (a) => a.status === ApprovalStatus.PENDING
+    );
+    setApplicationList(appliNoApproved);
+    setApplicationProvedList(menteeAppliApproved);
+  }, [user]);
 
   useEffect(() => {
     const delayDebounceFn = setTimeout(() => {
       if (searchTerm) {
-        const results = applicationsWithUser.filter((application) =>
-          application[selectedOption.value]
-            .toLowerCase()
-            .includes(searchTerm.toLowerCase())
-        );
+        const results = menteeAppliApproved.filter((application) => {
+          const searchTermLower = searchTerm.toLowerCase();
+          if (selectedOption === 'nameMentee') {
+            return (
+              application.menteeProfile.firstName
+                .toLowerCase()
+                .includes(searchTermLower) ||
+              application.menteeProfile.lastName
+                .toLowerCase()
+                .includes(searchTermLower)
+            );
+          } else if (selectedOption === 'idMentee') {
+            return application.id.toLowerCase().includes(searchTermLower);
+          }
+
+          return false;
+        });
         console.log('applicationList', results, applicationList, searchTerm);
-        setApplicationList(results);
+        if (results) {
+          const appliNoApproved = results.filter(
+            (a) => a.status === ApprovalStatus.PENDING
+          );
+          console.log('appliNoApproved', appliNoApproved);
+          setApplicationList(appliNoApproved);
+          const appliApproved = results.filter(
+            (a) =>
+              a.status === ApprovalStatus.APPROVED ||
+              a.status === ApprovalStatus.REJECTED
+          );
+          console.log('appliApproved', appliApproved);
+          setApplicationProvedList(appliApproved);
+        }
+
+        // setApplicationList(results);
       } else {
-        setApplicationList(menteeApplications);
+        const appliNoApproved = menteeApplications.filter(
+          (a) => a.status === ApprovalStatus.PENDING
+        );
+        setApplicationList(appliNoApproved);
+        setApplicationProvedList(menteeAppliApproved);
       }
     }, 1200);
     return () => clearTimeout(delayDebounceFn);
   }, [searchTerm, menteeApplications]);
 
-  const options = {
-    title: 'Select date',
-    autoHide: true,
-    todayBtn: false,
-    clearBtn: true,
-    clearBtnText: 'Clear',
-    maxDate: new Date('2030-01-01'),
-    minDate: new Date('1950-01-01'),
-    icons: {
-      // () => ReactElement | JSX.Element
-    },
-    datepickerClassNames: 'top-12',
-    defaultDate: new Date(),
-    language: 'en',
-    disabledDates: [],
-    weekDays: ['Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa', 'Su'],
-    inputNameProp: 'date',
-    inputIdProp: 'date',
-    inputPlaceholderProp: 'Select Date',
-    inputDateFormatProp: {
-      day: 'numeric',
-      month: 'long',
-      year: 'numeric',
-    },
-  };
+  // const options = {
+  //   title: 'Select date',
+  //   autoHide: true,
+  //   todayBtn: false,
+  //   clearBtn: true,
+  //   clearBtnText: 'Clear',
+  //   maxDate: new Date('2030-01-01'),
+  //   minDate: new Date('1950-01-01'),
+  //   icons: {
+  //     // () => ReactElement | JSX.Element
+  //   },
+  //   datepickerClassNames: 'top-12',
+  //   defaultDate: new Date(),
+  //   language: 'en',
+  //   disabledDates: [],
+  //   weekDays: ['Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa', 'Su'],
+  //   inputNameProp: 'date',
+  //   inputIdProp: 'date',
+  //   inputPlaceholderProp: 'Select Date',
+  //   inputDateFormatProp: {
+  //     day: 'numeric',
+  //     month: 'long',
+  //     year: 'numeric',
+  //   },
+  // };
 
   const checkIfHasEventOverLap = (newEvents) => {
     return newEvents.some((e) => checkIfEventOverlap(events, e));
@@ -256,15 +295,52 @@ const ApplicationListPage = () => {
           <Tab label="Lịch sử duyệt" value={1} style={{fontWeight: 'bold'}} />
         </Tabs>
         {value === 0 && (
-          <ListApplications
-            checkedItems={selectedApplications}
-            applications={menteeApplications}
-            resetSelectedItems={resetSelectedItems}
-            onSelectedItems={handleSetSelectedItem}
-          />
+          <>
+            {applicationList.length > 0 ? (
+              <ListApplications
+                applications={applicationList}
+                selectedApplications={selectedApplications}
+                setSelectedApplication={setSelectedApplication}
+                resetSelectedItems={resetSelectedItems}
+                handleSetSelectedItem={handleSetSelectedItem}
+              />
+            ) : (
+              <div
+                style={{
+                  display: 'flex',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  height: '100px',
+                }}
+              >
+                {menteeApplications.length > 0 ? (
+                  <div>
+                    <label>Không có đơn đăng kí</label>
+                  </div>
+                ) : (
+                  <ReactLoading type="spin" color="blue" />
+                )}
+              </div>
+            )}
+          </>
         )}
         {value === 1 && (
-          <HistoryApplication applications={menteeAppliApproved} />
+          <>
+            {applicationProvedList.length > 0 ? (
+              <HistoryApplication applications={applicationProvedList} />
+            ) : (
+              <div
+                style={{
+                  display: 'flex',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  height: '100px',
+                }}
+              >
+                <label>Không có đơn đăng kí</label>
+              </div>
+            )}
+          </>
         )}
       </div>
       {/* <Pagination /> */}

@@ -74,7 +74,7 @@ export default function OtherInfor() {
 }
 
 const Container = styled.div`
-  max-width: 900px;
+  max-width: 1200px;
   width: 90%;
 `;
 const TipsContainer = styled.div`

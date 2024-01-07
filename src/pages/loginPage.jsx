@@ -76,7 +76,7 @@ function LoginPage() {
         if (user.role === 'mentee') {
           navigate('/mentee');
         } else if (user.role === 'mentor') {
-          navigate('/mentor');
+          navigate('/mentor/list-mentee');
         }
       }
     })();

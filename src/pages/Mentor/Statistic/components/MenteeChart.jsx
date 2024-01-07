@@ -1,30 +1,30 @@
-import { getMonth } from "date-fns";
-import { useEffect, useState } from "react";
-import Chart from "react-apexcharts";
-import "svgmap/dist/svgMap.min.css";
+import {getMonth} from 'date-fns';
+import {useEffect, useState} from 'react';
+import Chart from 'react-apexcharts';
+import 'svgmap/dist/svgMap.min.css';
 
-import learningProgressApi from "../../../../api/learningProgress";
-import menteeApplicationApi from "../../../../api/menteeApplication";
-import YearPicker from "../../../../components/YearPicker";
-import { PlanType } from "../../../../constants";
-import { useUserStore } from "../../../../store/userStore";
+import learningProgressApi from '../../../../api/learningProgress';
+import menteeApplicationApi from '../../../../api/menteeApplication';
+import YearPicker from '../../../../components/YearPicker';
+import {PlanType} from '../../../../constants';
+import {useUserStore} from '../../../../store/userStore';
 
 export default function MenteeChart() {
-  const { user } = useUserStore();
+  const {user} = useUserStore();
   const [year, setYear] = useState(new Date().getFullYear());
   const [data, setData] = useState([]);
   const [total, setTotal] = useState(0);
   const [standard, setStandard] = useState([]);
   const [lite, setLite] = useState([]);
   const [pro, setPro] = useState([]);
-  const borderColor = "#F3F4F6";
-  const labelColor = "#6B7280";
+  const borderColor = '#F3F4F6';
+  const labelColor = '#6B7280';
 
   const mappingChartData = (data) => {
     const liteData = filterDataByPlanName(data, PlanType.LITE);
     const standardData = filterDataByPlanName(data, PlanType.STANDARD);
     const proData = filterDataByPlanName(data, PlanType.PRO);
-    console.log("mappingChartData", { liteData, standardData, proData });
+    console.log('mappingChartData', {liteData, standardData, proData});
     setLite(liteData);
     setStandard(standardData);
     setPro(proData);
@@ -77,8 +77,8 @@ export default function MenteeChart() {
 
   const options = {
     chart: {
-      type: "bar",
-      fontFamily: "Inter, sans-serif",
+      type: 'bar',
+      fontFamily: 'Inter, sans-serif',
       foreColor: labelColor,
       toolbar: {
         show: false,
@@ -87,8 +87,8 @@ export default function MenteeChart() {
     plotOptions: {
       bar: {
         horizontal: false,
-        columnWidth: "55%",
-        endingShape: "rounded",
+        columnWidth: '55%',
+        endingShape: 'rounded',
       },
     },
     dataLabels: {
@@ -97,7 +97,7 @@ export default function MenteeChart() {
     stroke: {
       show: true,
       width: 2,
-      colors: ["transparent"],
+      colors: ['transparent'],
     },
     grid: {
       show: true,
@@ -110,23 +110,23 @@ export default function MenteeChart() {
     },
     xaxis: {
       categories: [
-        "Tháng 1",
-        "Tháng 2",
-        "Tháng 3",
-        "Tháng 4",
-        "Tháng 5",
-        "Tháng 6",
-        "Tháng 7",
-        "Tháng 8",
-        "Tháng 9",
-        "Tháng 10",
-        "Tháng 11",
-        "Tháng 12",
+        'Tháng 1',
+        'Tháng 2',
+        'Tháng 3',
+        'Tháng 4',
+        'Tháng 5',
+        'Tháng 6',
+        'Tháng 7',
+        'Tháng 8',
+        'Tháng 9',
+        'Tháng 10',
+        'Tháng 11',
+        'Tháng 12',
       ],
       labels: {
         style: {
           colors: [labelColor],
-          fontSize: "14px",
+          fontSize: '14px',
           fontWeight: 500,
         },
       },
@@ -141,13 +141,13 @@ export default function MenteeChart() {
       labels: {
         style: {
           colors: [labelColor],
-          fontSize: "14px",
+          fontSize: '14px',
           fontWeight: 500,
         },
         labels: {
           style: {
             colors: [labelColor],
-            fontSize: "14px",
+            fontSize: '14px',
             fontWeight: 500,
           },
         },
@@ -161,38 +161,45 @@ export default function MenteeChart() {
     },
     tooltip: {
       style: {
-        fontSize: "14px",
-        fontFamily: "Inter, sans-serif",
+        fontSize: '14px',
+        fontFamily: 'Inter, sans-serif',
       },
     },
   };
 
   const series = [
     {
-      name: "Gói lite",
+      name: 'Gói lite',
       data: lite,
-      color: "#007BFF",
+      color: '#007BFF',
     },
     {
-      name: "Gói standard",
+      name: 'Gói standard',
       data: standard,
-      color: "#28A745",
+      color: '#28A745',
     },
     {
-      name: "Gói pro",
+      name: 'Gói pro',
 
       // data: pro
       data: [23, 12, 43, 24, 44, 12],
-      color: "#DC3545",
+      color: '#DC3545',
     },
   ];
 
   return (
-    <div style={{ display: "flex", flexDirection: "column" }}>
-      <h3 style={{ fontWeight: "bold" }}>Số học viên</h3>
+    <div
+      style={{
+        display: 'flex',
+        flexDirection: 'column',
+        width: '90%',
+        margin: '0 auto',
+      }}
+    >
+      <h3 style={{fontWeight: 'bold'}}>Số học viên</h3>
 
       <YearPicker value={year} onChange={(e) => setYear(e.target.value)} />
-      <h4 style={{ alignSelf: "flex-end" }}>
+      <h4 style={{alignSelf: 'flex-end'}}>
         Tổng cộng <strong>{total} học viên</strong>
       </h4>
       <Chart height={420} options={options} series={series} type="bar" />

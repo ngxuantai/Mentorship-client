@@ -14,6 +14,7 @@ import Typography from '@mui/material/Typography';
 import * as React from 'react';
 import {useNavigate} from 'react-router';
 import {useUserStore} from '../../store/userStore';
+import Logo from '../../assets/logo.png';
 
 const pages = [
   // { name: "Trang chủ", link: "/" },
@@ -74,24 +75,13 @@ function MentorHeader() {
     >
       <Container maxWidth="xl">
         <Toolbar disableGutters>
-          <AdbIcon sx={{display: {xs: 'none', md: 'flex'}, mr: 1}} />
-          <Typography
-            variant="h6"
-            noWrap
-            component="a"
-            href="#app-bar-with-responsive-menu"
-            sx={{
-              mr: 2,
-              display: {xs: 'none', md: 'flex'},
-              fontFamily: 'monospace',
-              fontWeight: 700,
-              letterSpacing: '.3rem',
-              color: 'inherit',
-              textDecoration: 'none',
-            }}
-          >
-            LOGO
-          </Typography>
+          <div>
+            <img
+              style={{maxWidth: '70px', height: 'auto'}}
+              src={Logo}
+              alt="logo"
+            />
+          </div>
 
           <Box sx={{flexGrow: 1, display: {xs: 'flex', md: 'none'}}}>
             <IconButton
@@ -152,7 +142,11 @@ function MentorHeader() {
             {pages.map((page) => (
               <Button
                 key={page.name}
-                onClick={() => handleNavigate(page.name=== 'Nhắn tin' ? `/message/${user.id}` : page.link)}
+                onClick={() =>
+                  handleNavigate(
+                    page.name === 'Nhắn tin' ? `/message/${user.id}` : page.link
+                  )
+                }
                 sx={{
                   fontWeight: 'bold',
                   my: 2,

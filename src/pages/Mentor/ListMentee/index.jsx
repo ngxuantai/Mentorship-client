@@ -65,13 +65,8 @@ const ListMentee = () => {
       if (searchTerm) {
         // setIsLoading(true);
         const results = menteeAppliApproved.filter((application) => {
-          console.log('searchTerm', searchTerm);
-          console.log('selectedOption', selectedOption);
-          console.log('application', application);
           const searchTermLower = searchTerm.toLowerCase();
-
           if (selectedOption === 'nameMentee') {
-            // const fullName = `${application.menteeProfile.firstName} ${application.menteeProfile.lastName}`;
             return (
               application.menteeProfile.firstName
                 .toLowerCase()
@@ -84,7 +79,7 @@ const ListMentee = () => {
             return application.id.toLowerCase().includes(searchTermLower);
           }
 
-          return false; // Nếu không phải là 'nameMentee' hoặc 'idMentee'
+          return false;
         });
 
         // console.log('applicationList', results, applicationList, searchTerm);

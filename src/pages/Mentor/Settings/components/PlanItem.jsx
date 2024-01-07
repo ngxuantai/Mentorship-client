@@ -6,12 +6,12 @@ import {
   FormControlLabel,
   Switch,
   Typography,
-} from "@mui/material";
-import { FloatingLabel } from "flowbite-react";
-import { useEffect, useState } from "react";
-import { PlanType } from "../../../../constants/index";
-import currencyFormatter from "../../../../utils/moneyConverter";
-const PlanItem = ({ plan, onUpdatePlan }) => {
+} from '@mui/material';
+import {FloatingLabel} from 'flowbite-react';
+import {useEffect, useState} from 'react';
+import {PlanType} from '../../../../constants/index';
+import currencyFormatter from '../../../../utils/moneyConverter';
+const PlanItem = ({plan, onUpdatePlan}) => {
   const [editedPlan, setEditedPlan] = useState(plan);
   const [isPlanModified, setIsPlanModified] = useState(false);
   useEffect(() => {
@@ -28,13 +28,13 @@ const PlanItem = ({ plan, onUpdatePlan }) => {
   const getPlanName = (plan) => {
     switch (plan.name) {
       case PlanType.LITE:
-        return "Lite";
+        return 'Lite';
       case PlanType.STANDARD:
-        return "Standard";
+        return 'Standard';
       case PlanType.PRO:
-        return "Pro";
+        return 'Pro';
       default:
-        return "";
+        return '';
     }
   };
 
@@ -60,7 +60,7 @@ const PlanItem = ({ plan, onUpdatePlan }) => {
   };
 
   const onInputChange = (event) => {
-    const { name, value } = event.tartget;
+    const {name, value} = event.tartget;
     setEditedPlan({
       ...editedPlan,
       [name]: value,
@@ -78,12 +78,12 @@ const PlanItem = ({ plan, onUpdatePlan }) => {
     <Card
       variant="outlined"
       style={{
-        marginBottom: "20px",
-        boxShadow: "0px 3px 15px rgba(0,0,0,0.2)",
+        marginBottom: '20px',
+        boxShadow: '0px 3px 15px rgba(0,0,0,0.2)',
       }}
     >
       <CardContent>
-        <Typography variant="h5" component="div" style={{ fontWeight: "bold" }}>
+        <Typography variant="h5" component="div" style={{fontWeight: 'bold'}}>
           {getPlanName(plan)}
         </Typography>
         <FloatingLabel
@@ -91,7 +91,7 @@ const PlanItem = ({ plan, onUpdatePlan }) => {
           variant="outlined"
           value={editedPlan.callTimes}
           onChange={handleCallTimesChange}
-
+          style={{width: '100%', fontSize: '1rem'}}
         />
         <FloatingLabel
           label="Số tuần học"
@@ -99,7 +99,7 @@ const PlanItem = ({ plan, onUpdatePlan }) => {
           name="weeks"
           value={editedPlan.weeks}
           onChange={onInputChange}
-
+          style={{width: '100%', fontSize: '1rem'}}
         />
         <FloatingLabel
           label="Học phí"
@@ -107,20 +107,20 @@ const PlanItem = ({ plan, onUpdatePlan }) => {
           value={currencyFormatter(editedPlan.price)}
           onChange={(event) => {
             // Chuyển đổi giá trị nhập vào thành số và cập nhật trạng thái
-            const value = Number(event.target.value.replace(/\D/g, ""));
+            const value = Number(event.target.value.replace(/\D/g, ''));
             handlePriceChange(value);
           }}
-
+          style={{width: '100%', fontSize: '1rem'}}
         />
         <FloatingLabel
           label="Mô tả"
           variant="outlined"
           value={editedPlan.description}
           onChange={handleDescriptionChange}
-
+          style={{width: '100%', fontSize: '1rem'}}
         />
       </CardContent>
-      <div className="flex justify-between px-4">
+      <div className="flex justify-between px-3">
         <PlanSwitch plan={plan} onTogglePlan={handleTogglePlan}></PlanSwitch>
         <CardActions>
           <Button
@@ -137,12 +137,12 @@ const PlanItem = ({ plan, onUpdatePlan }) => {
   );
 };
 
-const PlanSwitch = ({ plan, onTogglePlan }) => {
+const PlanSwitch = ({plan, onTogglePlan}) => {
   const [isActive, setIsActive] = useState(plan.isActive);
 
   const handleToggle = (event) => {
     setIsActive(event.target.checked);
-    onTogglePlan({ ...plan, isActive: event.target.checked });
+    onTogglePlan({...plan, isActive: event.target.checked});
   };
 
   return (
@@ -150,7 +150,7 @@ const PlanSwitch = ({ plan, onTogglePlan }) => {
       control={
         <Switch checked={isActive} onChange={handleToggle} name="isActive" />
       }
-      label={isActive ? "Gói học đang hoạt động" : "Gói học không hoạt động"}
+      label={isActive ? 'Gói học đang hoạt động' : 'Gói học không hoạt động'}
     />
   );
 };
