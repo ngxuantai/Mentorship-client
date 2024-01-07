@@ -44,6 +44,7 @@ export default function PersonalInfor() {
     console.log(`Đã chọn tệp:`, avatarUrl);
     const updatedUser = {...user, ...values, avatar: avatarUrl};
     await updateUser(user.id, updatedUser);
+    alert('Thay đổi thông tin thành công');
   };
   const handleChange = (event) => {
     const {name, value} = event.target;

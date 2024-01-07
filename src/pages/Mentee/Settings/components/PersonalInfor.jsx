@@ -39,8 +39,9 @@ export default function PersonalInfor() {
       ? await firebaseInstance.storeImage("avatar", values.avatar)
       : user.avatar;
     console.log(`Đã chọn tệp:`, avatarUrl);
-    const updatedUser = { ...user, avatar: avatarUrl };
+    const updatedUser = { ...user,...values, avatar: avatarUrl };
     await updateUser(user.id, updatedUser);
+    alert("Thay đổi thông tin thành công");
   };
   const handleChange = (event) => {
     const { name, value } = event.target;
