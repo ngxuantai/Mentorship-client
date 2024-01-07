@@ -60,7 +60,7 @@ function Applications() {
           </a>{" "}
         </h5>
       </div> */}
-      <ButtonContainer className="px-3 py-3">
+      <ButtonContainer>
         <Label style={{fontSize: '20px', fontWeight: 'bold'}}>
           Danh sách đơn đăng ký
         </Label>

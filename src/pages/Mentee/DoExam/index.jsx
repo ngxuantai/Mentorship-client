@@ -107,10 +107,8 @@ const DoExam = () => {
       const res = await menteeExamApi.updateNumberAnswer(id, newAnswers.length);
       console.log(res);
     }
-    toast.success('Nộp bài thành công', toastOptions);
-    setTimeout(() => {
-      navigate('/mentee/exam');
-    }, 3000);
+    // toast.success('Nộp bài thành công', toastOptions);
+    navigate('/mentee/exam-finish');
   };
 
   return (

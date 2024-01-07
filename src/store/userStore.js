@@ -15,7 +15,6 @@ export const useUserStore = create((set) => ({
     try {
       if (user.role === UserRole.MENTEE) {
         const updatedMentee = await menteeApi.updateMentee(id, updatedUser);
-
         set({user: updatedMentee});
       } else if (user.role === UserRole.MENTOR) {
         // Handle mentor update logic here if needed

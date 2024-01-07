@@ -10,6 +10,7 @@ import ApplyProcess from './pages/Mentee/ApplyProcess/';
 import InformationForm from './pages/Mentee/ApplyProcess/InformationForm';
 import DashBoard from './pages/Mentee/DashBoard';
 import DoExam from './pages/Mentee/DoExam';
+import ExamFinish from './pages/Mentee/ExamFinish';
 import Inquires from './pages/Mentee/Inquires';
 import LearningProgress from './pages/Mentee/LearningProgress';
 import ListExam from './pages/Mentee/ListExam';
@@ -96,6 +97,7 @@ function App() {
         <Route path="/mentee/rating" element={<RatingComment />} />
         <Route path="/mentee/exam" element={<ListExam />} />
         <Route path="/mentee/exam/:id" element={<DoExam />} />
+        <Route path="/mentee/exam-finish" element={<ExamFinish />} />
         <Route path="/mentee/payment" element={<Payment />} />
 
         <Route path="/videochat/:id" element={<VideoChat />} />

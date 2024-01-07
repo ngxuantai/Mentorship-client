@@ -8,14 +8,18 @@ import {ApprovalStatus} from '../../../../constants';
 import {useMenteeAppliStore} from '../../../../store/menteeAppliStore';
 import examApi from '../../../../api/exam';
 import mneteeExamApi from '../../../../api/menteeExam';
+import menteeFileApi from '../../../../api/menteeFile';
 import {ToastContainer, toast} from 'react-toastify';
+import {fileApi} from '../../../../api/file';
 
 export default function AddExam({application}) {
   const [isOpen, setOpen] = useState(false);
   const [isShow, setShow] = useState(false);
 
   const [listExam, setListExam] = useState([]);
-  const [selectedOptions, setSelectedOptions] = useState([]);
+  const [selectedExam, setSelectedExam] = useState([]);
+  const [listFile, setListFile] = useState([]);
+  const [selectedFile, setSelectedFile] = useState([]);
 
   const toastOptions = {
     position: 'top-right',
@@ -42,7 +46,19 @@ export default function AddExam({application}) {
         console.log('failed to fetch exam list: ', error);
       }
     };
+
+    const fetchListFile = async () => {
+      try {
+        const response = await fileApi.getFilesByMentorId(application.mentorId);
+        console.log('response', response);
+        setListFile(response);
+      } catch (error) {
+        console.log('failed to fetch exam list: ', error);
+      }
+    };
+
     fetchListExam();
+    fetchListFile();
   }, []);
 
   useEffect(() => {
@@ -60,12 +76,16 @@ export default function AddExam({application}) {
     };
   }, []);
 
-  const handleSelectChange = (selectedOptions) => {
-    setSelectedOptions(selectedOptions);
+  const handleSelectExamChange = (selectedExam) => {
+    setSelectedExam(selectedExam);
+  };
+
+  const handleSelectFileChange = (selectedFile) => {
+    setSelectedFile(selectedFile);
   };
 
   const handleSentExam = async () => {
-    selectedOptions.map(async (option) => {
+    selectedExam.map(async (option) => {
       try {
         const examId = option.value;
         const mentorId = application.mentorId;
@@ -80,16 +100,47 @@ export default function AddExam({application}) {
         console.log('failed to create mentee exam: ', error);
       }
     });
-    setSelectedOptions([]);
+    setSelectedExam([]);
     setOpen(false);
     toast.success('Gửi bài tập thành công', toastOptions);
   };
+
+  const handleSentFile = async () => {
+    selectedFile.map(async (option) => {
+      try {
+        const fileId = option.value;
+        const mentorId = application.mentorId;
+        const menteeId = application.menteeProfile.id;
+        const response = await menteeFileApi.createMenteeFile(
+          fileId,
+          mentorId,
+          menteeId
+        );
+        console.log('response', response);
+      } catch (error) {
+        console.log('failed to create mentee exam: ', error);
+      }
+    });
+    setSelectedFile([]);
+    setOpen(false);
+    toast.success('Gửi tài liệu thành công', toastOptions);
+  };
+
+  const handleSent = () => {
+    // if (selectedExam.length > 0) {
+    //   handleSentExam();
+    // }
+    if (selectedFile.length > 0) {
+      handleSentFile();
+    }
+  };
+
   return (
     <>
       <Button color="blue" onClick={() => setOpen(true)}>
         <div className="flex items-center gap-x-2">
           <PiExamFill className="text-lg" />
-          Gửi bài tập
+          Gửi tài liệu
         </div>
       </Button>
       <Modal style={{}} onClose={() => setOpen(false)} show={isOpen}>
@@ -97,9 +148,9 @@ export default function AddExam({application}) {
           className="border-b border-gray-200 dark:border-gray-700"
           style={{padding: '1.5rem'}}
         >
-          <strong>Gửi bài tập</strong>
+          <strong>Gửi bài tập, tài liệu</strong>
         </Modal.Header>
-        <div className="mb-6" style={{flex: '1 1 0%', padding: '1.5rem'}}>
+        <div style={{flex: '1 1 0%', padding: '1.5rem'}}>
           <div>
             <div className="flex justify-between items-center">
               <div className="flex items-center gap-x-2">
@@ -110,12 +161,34 @@ export default function AddExam({application}) {
             <div className="mt-4">
               <Label className="mb-2">Chọn bài tập</Label>
               <Select
-                value={selectedOptions}
+                value={selectedExam}
                 options={listExam.map((exam) => ({
                   value: exam.id,
                   label: exam.name,
                 }))}
-                onChange={handleSelectChange}
+                onChange={handleSelectExamChange}
+                isMulti
+              />
+            </div>
+          </div>
+        </div>
+        <div className="mb-6" style={{padding: '1.5rem'}}>
+          <div>
+            <div className="flex justify-between items-center">
+              <div className="flex items-center gap-x-2">
+                <PiExamFill className="text-lg" />
+                <strong>Danh sách tài liệu</strong>
+              </div>
+            </div>
+            <div className="mt-4">
+              <Label className="mb-2">Chọn tài liệu</Label>
+              <Select
+                value={selectedFile}
+                options={listFile.map((file) => ({
+                  value: file.id,
+                  label: file.name,
+                }))}
+                onChange={handleSelectFileChange}
                 isMulti
               />
             </div>
@@ -138,7 +211,7 @@ export default function AddExam({application}) {
             <Button
               style={{alignSelf: 'flex-end', marginLeft: 'auto'}}
               color="blue"
-              onClick={() => handleSentExam()}
+              onClick={() => handleSent()}
             >
               Gửi
             </Button>

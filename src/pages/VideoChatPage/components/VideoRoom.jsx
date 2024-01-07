@@ -23,12 +23,12 @@ import {
 import 'quill/dist/quill.snow.css';
 import ReactQuill from 'react-quill';
 import {set} from 'date-fns';
-import { useUserStore } from '../../../store/userStore';
+import {useUserStore} from '../../../store/userStore';
 import menteeApi from '../../../api/mentee';
 import mentorApi from '../../../api/mentor';
-import { UserRole } from '../../../constants';
+import {UserRole} from '../../../constants';
 import firebaseInstance from '../../../services/firebase';
-import { shortenId } from '../../../utils/dataHelper';
+import {shortenId} from '../../../utils/dataHelper';
 
 const APP_ID = '5ad93fd0de6d4b74b2b1e150004c3ebe';
 // const TOKEN = '007eJxTYLiS8LPjXZuu7OwShRd3zIJuZKoqKe04IyDOcS3ompgP23UFhlQTC6NUA4O0pLQUYxPDFINEC5MUM2NTMzOLRAvLZKNEqTfNqQ2BjAx3ZzszMEIhiM/JEJaZkprvnJFYwsAAALMxIFs=';
@@ -277,14 +277,15 @@ function VideoRoom(props) {
 
   const handleEndCall = (e) => {
     e.preventDefault();
-    if (timer < 3600 && user.role === UserRole.MENTOR){
-      if (confirm('Thời gian học chưa đủ 1h, bạn có muốn kết thúc học không?') === true)
-      {
+    if (timer < 3600 && user.role === UserRole.MENTOR) {
+      if (
+        confirm('Thời gian học chưa đủ 1h, bạn có muốn kết thúc học không?') ===
+        true
+      ) {
         navigate(`/message/${roomName}`);
         navigate(0);
-      }      
-    }
-    else {
+      }
+    } else {
       navigate(`/message/${roomName}`);
       navigate(0);
     }
@@ -328,18 +329,16 @@ function VideoRoom(props) {
       if (res === false) {
         await firebaseInstance.createNotes(user.id);
 
-        firebaseInstance.updateNotes(user.id, roomName,{
-            title: noteTitle,
-            text: noteText,
-          })       
+        firebaseInstance.updateNotes(user.id, roomName, {
+          title: noteTitle,
+          text: noteText,
+        });
+      } else {
+        firebaseInstance.updateNotes(user.id, roomName, {
+          title: noteTitle,
+          text: noteText,
+        });
       }
-      else{
-        firebaseInstance.updateNotes(user.id, roomName,{
-            title: noteTitle,
-            text: noteText,
-          })
-      }
-
     } catch (error) {
       console.log(error);
     }
@@ -429,7 +428,7 @@ function VideoRoom(props) {
 
   useEffect(() => {
     let interval;
-  
+
     if (isTimerRunning) {
       interval = setInterval(() => {
         setTimer((prevTimer) => prevTimer + 1);
@@ -437,7 +436,6 @@ function VideoRoom(props) {
     }
     return () => {
       clearInterval(interval);
-
     };
   }, [isTimerRunning]);
 
@@ -451,15 +449,15 @@ function VideoRoom(props) {
     setTimer(0);
   };
 
-
   const formatTime = (timeInSeconds) => {
     const hours = Math.floor(timeInSeconds / 3600);
     const minutes = Math.floor((timeInSeconds % 3600) / 60);
     const seconds = timeInSeconds % 60;
 
-    return `${hours}:${minutes < 10 ? '0' : ''}${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+    return `${hours}:${minutes < 10 ? '0' : ''}${minutes}:${
+      seconds < 10 ? '0' : ''
+    }${seconds}`;
   };
-
 
   return (
     <div className="video-room-container bg-gradient-to-r from-primary-900 to-blue-300 w-screen p-2 h-screen overflow-auto">
@@ -469,31 +467,27 @@ function VideoRoom(props) {
         </div>
         <div className="text-white font-bold text-3xl">{shortenRoomName}</div>
       </div>
-      <div className='flex justify-center items-center'>
+      <div className="flex justify-center items-center">
         {user.role === UserRole.MENTOR && (
-          <div className='flex justify-center items-center mt-4'>
-          <button className='bg-white text-primary-700 rounded-full py-2 px-4 transition duration-150 ease-in-out hover:transition-all hover:scale-110 hover:bg-slate-300'>
-            {isTimerRunning 
-              ? (
+          <div className="flex justify-center items-center mt-4">
+            <button className="bg-white text-primary-700 rounded-full py-2 px-4 transition duration-150 ease-in-out hover:transition-all hover:scale-110 hover:bg-slate-300">
+              {isTimerRunning ? (
                 <div onClick={stopTimer}>
-                  <Pause />  
-                  <span className='font-bold'>Tạm dừng</span>           
-                </div>               
-              )  
-              : (
+                  <Pause />
+                  <span className="font-bold">Tạm dừng</span>
+                </div>
+              ) : (
                 <div onClick={startTimer}>
                   <PlayArrow />
-                  <span className='font-bold'>Bắt đầu học</span>
+                  <span className="font-bold">Bắt đầu học</span>
                 </div>
-              )
-            }
-          </button>
-                  <div className='font-bold text-white text-lg mx-3'> 
-                  {formatTime(timer)}
-                </div>
+              )}
+            </button>
+            <div className="font-bold text-white text-lg mx-3">
+              {formatTime(timer)}
+            </div>
           </div>
         )}
-
       </div>
 
       <div className="flex justify-between mt-3">
