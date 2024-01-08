@@ -102,9 +102,9 @@ function UnAuthHeader() {
         <MenuContainer>
           <span>
             <Link to="/mentor/search">Tìm kiếm mentor</Link>
-            <KeyboardArrowDownIcon style={{fontSize: '1rem'}} />
+            {/* <KeyboardArrowDownIcon style={{fontSize: '1rem'}} /> */}
           </span>
-          <div className="custom-menu">
+          {/* <div className="custom-menu">
             {fields.map((field) => (
               <div className="menu-column" key={field.id}>
                 <div className="menu-header">{field.name}</div>
@@ -119,7 +119,7 @@ function UnAuthHeader() {
                 </ul>
               </div>
             ))}
-          </div>
+          </div> */}
         </MenuContainer>
         <div>
           <span className="btn-login">

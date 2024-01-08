@@ -1,11 +1,11 @@
-import { format } from "date-fns";
-import { Checkbox, Label, Table } from "flowbite-react";
-import { useState } from "react";
-import { FaCopy } from "react-icons/fa";
-import { ApprovalStatus } from "../../../../constants";
-import { handleCopyClick, shortenId } from "../../../../utils/dataHelper";
-import RejectedApplication from "./RejectedApplication";
-import ViewDetailApplication from "./ViewDetailApplication";
+import {format} from 'date-fns';
+import {Checkbox, Label, Table} from 'flowbite-react';
+import {useState} from 'react';
+import {FaCopy} from 'react-icons/fa';
+import {ApprovalStatus} from '../../../../constants';
+import {handleCopyClick, shortenId} from '../../../../utils/dataHelper';
+import RejectedApplication from './RejectedApplication';
+import ViewDetailApplication from './ViewDetailApplication';
 
 export default function ListApplications({
   checkedItems,
@@ -19,7 +19,7 @@ export default function ListApplications({
   const handleChange = (event) => {
     onSelectedItems(event);
   };
-  console.log("checkbox", checkedItems);
+  console.log('checkbox', checkedItems);
 
   const handleSelectAll = () => {
     // const newCheckedItems = {};
@@ -32,33 +32,33 @@ export default function ListApplications({
   const getStatusColor = (status) => {
     switch (status) {
       case ApprovalStatus.PENDING:
-        return "bg-yellow-500"; // Hoặc màu khác tùy thuộc vào yêu cầu của bạn
+        return 'bg-yellow-500'; // Hoặc màu khác tùy thuộc vào yêu cầu của bạn
       case ApprovalStatus.APPROVED:
-        return "bg-green-400";
+        return 'bg-green-400';
       case ApprovalStatus.REJECTED:
-        return "bg-red-500";
+        return 'bg-red-500';
       default:
-        return "";
+        return '';
     }
   };
 
   const getStatusText = (status) => {
     switch (status) {
       case ApprovalStatus.PENDING:
-        return "Đang chờ duyệt";
+        return 'Đang chờ duyệt';
       case ApprovalStatus.APPROVED:
-        return "Đã duyệt";
+        return 'Đã duyệt';
       case ApprovalStatus.REJECTED:
-        return "Bị từ chối";
+        return 'Bị từ chối';
       default:
-        return "";
+        return '';
     }
   };
 
   return (
     <Table className="min-w-full divide-y divide-gray-200 dark:divide-gray-600">
       <Table.Head className="bg-gray-100 dark:bg-gray-700">
-        <Table.HeadCell>
+        {/* <Table.HeadCell>
           <Label htmlFor="select-all" className="sr-only">
             Select all
           </Label>
@@ -68,7 +68,7 @@ export default function ListApplications({
             checked={selectAll}
             onChange={handleSelectAll}
           />
-        </Table.HeadCell>
+        </Table.HeadCell> */}
         <Table.HeadCell>Id</Table.HeadCell>
         <Table.HeadCell>Tên</Table.HeadCell>
         <Table.HeadCell>Ngày gửi</Table.HeadCell>
@@ -82,7 +82,7 @@ export default function ListApplications({
             key={index}
             className="hover:bg-gray-100 dark:hover:bg-gray-700"
           >
-            <Table.Cell className="w-4 p-4">
+            {/* <Table.Cell className="w-4 p-4">
               <div className="flex items-center">
                 <Checkbox
                   checked={checkedItems[`${application.id}`] || false} // Sử dụng trạng thái từ state
@@ -95,7 +95,7 @@ export default function ListApplications({
                   checkbox
                 </label>
               </div>
-            </Table.Cell>
+            </Table.Cell> */}
             <Table.Cell className="whitespace-nowrap p-4 text-base font-medium text-gray-900 dark:text-white">
               <div className="flex items-center">
                 {shortenId(application.id)}
@@ -116,13 +116,13 @@ export default function ListApplications({
               <div className="text-sm font-normal text-gray-500 dark:text-gray-400">
                 <div className="text-base font-semibold text-gray-900 dark:text-white">
                   {application.menteeProfile.firstName +
-                    " " +
+                    ' ' +
                     application.menteeProfile.lastName}
                 </div>
               </div>
             </Table.Cell>
             <Table.Cell className="whitespace-nowrap p-4 text-base font-medium text-gray-900 dark:text-white">
-              {format(new Date(application.applicationDate), "dd-MM-yyyy")}
+              {format(new Date(application.applicationDate), 'dd-MM-yyyy')}
             </Table.Cell>
             <Table.Cell className="whitespace-nowrap p-4 text-base font-normal text-gray-900 dark:text-white">
               <div className="flex items-center">

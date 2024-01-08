@@ -24,9 +24,9 @@ export default function SkillFilterButton({filters, onFilterChange}) {
   const [personName, setPersonName] = useState([]);
   const [skills, setSkills] = useState([]);
 
-  // const location = useLocation();
-  // const queryParams = new URLSearchParams(location.search);
-  // const skill = queryParams.get('skill');
+  const location = useLocation();
+  const queryParams = new URLSearchParams(location.search);
+  const skill = queryParams.get('skill');
 
   useEffect(() => {
     const fetchSkills = async () => {
@@ -40,14 +40,14 @@ export default function SkillFilterButton({filters, onFilterChange}) {
     fetchSkills();
   }, []);
 
-  // useEffect(() => {
-  //   if (skill === null) {
-  //     // update selected skill
-  //     setPersonName([]);
-  //   } else {
-  //     console.log('SKILL', skill);
-  //   }
-  // }, [skill]);
+  useEffect(() => {
+    if (skill === null) {
+      // update selected skill
+      setPersonName([]);
+    } else {
+      console.log('SKILL', skill);
+    }
+  }, [skill]);
 
   const handleChange = (event) => {
     const {

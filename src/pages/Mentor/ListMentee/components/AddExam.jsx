@@ -127,9 +127,9 @@ export default function AddExam({application}) {
   };
 
   const handleSent = () => {
-    // if (selectedExam.length > 0) {
-    //   handleSentExam();
-    // }
+    if (selectedExam.length > 0) {
+      handleSentExam();
+    }
     if (selectedFile.length > 0) {
       handleSentFile();
     }

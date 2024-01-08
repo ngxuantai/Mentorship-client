@@ -66,24 +66,25 @@ export default function TestProgressItem({progress, cancelProgress}) {
       // xử lý thanh toán
     } else {
       // xử lý nhắn tin
-      const combinedId = user.id > mentor.id ? user.id + mentor.id : mentor.id + user.id;
-      navigate(`/message/${combinedId}`)
+      const combinedId =
+        user.id > mentor.id ? user.id + mentor.id : mentor.id + user.id;
+      navigate(`/message/${combinedId}`);
       console.log(combinedId);
     }
-  }
+  };
 
   const computeRemainPercent = () => {
     const startDate = new Date(progress.startDate).getTime();
     const endDate = new Date(progress.endDate).getTime();
     const current = new Date().getTime();
     if (progress.end < current) {
-      setRemainingPercent(0);
+      setRemainingPercent(100);
     } else {
       const percent = (
         ((current - startDate) / (endDate - startDate)) *
         100
       ).toFixed(2);
-      setRemainingPercent(0);
+      setRemainingPercent(percent);
     }
   };
 
@@ -118,7 +119,11 @@ export default function TestProgressItem({progress, cancelProgress}) {
       <Box sx={{width: '100%'}}>
         <CardHeader
           avatar={
-            <Avatar sx={{width: '70px', height: '70px'}} aria-label="recipe" src={mentor?.avatar}>
+            <Avatar
+              sx={{width: '70px', height: '70px'}}
+              aria-label="recipe"
+              src={mentor?.avatar}
+            >
               R
             </Avatar>
           }

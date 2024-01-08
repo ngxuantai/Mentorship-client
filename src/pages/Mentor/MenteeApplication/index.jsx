@@ -313,12 +313,19 @@ const ApplicationListPage = () => {
                   height: '100px',
                 }}
               >
-                {menteeApplications.length > 0 ? (
+                {menteeApplications.length == 0 ? (
                   <div>
                     <label>Không có đơn đăng kí</label>
                   </div>
                 ) : (
-                  <ReactLoading type="spin" color="blue" />
+                  <>
+                    {menteeApplications.length ==
+                      menteeAppliApproved.length && (
+                      <div>
+                        <label>Không có đơn đăng kí</label>
+                      </div>
+                    )}
+                  </>
                 )}
               </div>
             )}

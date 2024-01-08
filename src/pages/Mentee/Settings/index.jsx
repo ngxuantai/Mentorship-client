@@ -1,10 +1,10 @@
-import Tab from "@mui/material/Tab";
-import Tabs from "@mui/material/Tabs";
-import React from "react";
-import styled from "styled-components";
-import Payment from "./components/Payment";
+import Tab from '@mui/material/Tab';
+import Tabs from '@mui/material/Tabs';
+import React from 'react';
+import styled from 'styled-components';
+import Payment from './components/Payment';
 
-import Profiles from "./components/Profiles";
+import Profiles from './components/Profiles';
 
 export default function MenteeSettings() {
   const [value, setValue] = React.useState(0);
@@ -13,9 +13,9 @@ export default function MenteeSettings() {
     setValue(newValue);
   };
   return (
-    <div style={{ margin: "auto" }}>
+    <div style={{margin: 'auto'}}>
       <Container>
-        <Tabs
+        {/* <Tabs
           value={value}
           onChange={handleChange}
           style={{ fontWeight: "bold", padding: "0 14rem" }}
@@ -24,7 +24,8 @@ export default function MenteeSettings() {
           <Tab label="Thanh toán" value={1} />
         </Tabs>
         {value === 0 && <Profiles />}
-        {value === 1 && <Payment />}
+        {value === 1 && <Payment />} */}
+        <Profiles />
       </Container>
     </div>
   );

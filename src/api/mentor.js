@@ -5,8 +5,8 @@ const mentorApi = {
     try {
       const url = '/api/mentor/get';
       const res = await axiosClient.get(url);
-      console.log('mentor res data', res.data.data);
-      return res.data.data;
+      console.log('mentor res data', res.data);
+      return res.data;
     } catch (error) {
       console.error(error);
       return null;
