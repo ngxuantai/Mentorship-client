@@ -18,6 +18,7 @@ import {useEffect, useRef, useState} from 'react';
 import {useNavigate} from 'react-router';
 import menteeApplicationApi from '../../../../api/menteeApplication';
 import mentorApi from '../../../../api/mentor';
+import paymentApi from '../../../../api/payment';
 import {mappingPlanName} from '../../../../utils/dataHelper';
 import {convertTimestampRange} from '../../../../utils/dateConverter';
 import {useUserStore} from '../../../../store/userStore';
@@ -61,9 +62,16 @@ export default function TestProgressItem({progress, cancelProgress}) {
     }
   };
 
-  const handleButton = () => {
+  const handleButton = async () => {
     if (endTry) {
       // xử lý thanh toán
+      const res = await paymentApi.getRequestUrl({
+        menteeId: application.menteeProfile.id,
+        menteeApplicattion: application.id,
+        amount: application.fee,
+        description: 'thanh toan',
+      });
+      window.location.href = res;
     } else {
       // xử lý nhắn tin
       const combinedId =

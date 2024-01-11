@@ -88,7 +88,7 @@ export default function HistoryPayment() {
             </Table.Cell>
             <Table.Cell className="whitespace-nowrap p-4 text-base font-medium text-gray-900 dark:text-white">
               <div className="flex items-center">
-                {shortenId(payment.id)}
+                {shortenId(payment.menteeApplicationId)}
                 <button
                   onClick={() => handleCopyClick(payment.id)}
                   className="ml-2"

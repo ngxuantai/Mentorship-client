@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {List} from 'flowbite-react';
+import {Label, List} from 'flowbite-react';
 import TestProgressItem from './TestProgressItem';
 import {ToastContainer, toast} from 'react-toastify';
 import ReactLoading from 'react-loading';
@@ -13,6 +13,7 @@ import {convertTimestampRange} from '../../../../utils/dateConverter';
 export default function ListApplicationTest() {
   const {user, setUser} = useUserStore();
   const [testProgressList, setTestProgressList] = useState([]);
+  const [isNoData, setIsNoData] = useState(false);
 
   const toastOptions = {
     position: 'top-right',
@@ -32,7 +33,11 @@ export default function ListApplicationTest() {
             return dateB - dateA;
           });
           console.log('getLearningTestProgressByMenteeId', List);
-          setTestProgressList(list);
+          const result = list.filter((item) => item.isPaid === false);
+          if (result.length === 0) {
+            setIsNoData(true);
+          }
+          setTestProgressList(result);
         }
       };
       fetchProgress();
@@ -78,7 +83,17 @@ export default function ListApplicationTest() {
             margin: '0 auto',
           }}
         >
-          <ReactLoading type="spin" color="blue" />
+          {isNoData ? (
+            <Label
+              style={{
+                fontSize: '18px',
+              }}
+            >
+              Hiện không có học thử
+            </Label>
+          ) : (
+            <ReactLoading type="spin" color="blue" />
+          )}
         </div>
       )}
     </>
