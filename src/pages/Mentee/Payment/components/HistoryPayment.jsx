@@ -6,10 +6,13 @@ import {handleCopyClick, shortenId} from '../../../../utils/dataHelper';
 import mentorApi from '../../../../api/mentor';
 import paymentApi from '../../../../api/payment';
 import {PaymentStatus} from '../../../../constants';
+import {useUserStore} from '../../../../store/userStore';
+import {useMenteeAppliStore} from '../../../../store/menteeAppliStore';
 import usePaymentStore from '../../../../store/paymentStore';
 import currencyFormatter from '../../../../utils/moneyConverter';
 
 export default function HistoryPayment() {
+  const {user} = useUserStore();
   const [mentorInfo, setMentorInfo] = useState([]);
   const [url, setUrl] = useState('');
   // const {setPayment} = usePaymentStore();
@@ -46,9 +49,7 @@ export default function HistoryPayment() {
 
   useEffect(() => {
     const fecthData = async () => {
-      const data = await paymentApi.getPaymentsByUserId(
-        '65825627600fc966c46f60f8'
-      );
+      const data = await paymentApi.getPaymentsByUserId(user.id);
       console.log(data);
       setListPayment(data);
     };

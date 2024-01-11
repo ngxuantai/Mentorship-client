@@ -48,7 +48,7 @@ export default function TestProgressItem({progress, cancelProgress}) {
   const checkEndDate = () => {
     const endDate = new Date(progress.endDate).getTime();
     const current = new Date().getTime();
-    if (endDate >= current) {
+    if (endDate <= current) {
       setEndTry(true);
     }
   };
@@ -92,6 +92,7 @@ export default function TestProgressItem({progress, cancelProgress}) {
     fetchMentor();
     fetchApplication();
     computeRemainPercent();
+    checkEndDate();
   }, []);
 
   useEffect(() => {
@@ -167,6 +168,7 @@ export default function TestProgressItem({progress, cancelProgress}) {
           }}
         >
           <CancelTestProgress
+            endTry={endTry}
             progress={progress}
             cancelProgress={cancelProgress}
           />

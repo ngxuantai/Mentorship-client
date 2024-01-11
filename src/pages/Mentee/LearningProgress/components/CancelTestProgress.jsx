@@ -4,7 +4,7 @@ import {Modal, Button, Label, TextInput} from 'flowbite-react';
 import learningTestProgressApi from '../../../../api/learningTestProgress';
 import {ToastContainer, toast} from 'react-toastify';
 
-export default function CancelTestProgress({progress, cancelProgress}) {
+export default function CancelTestProgress({endTry, progress, cancelProgress}) {
   const [showModal, setShowModal] = useState(false);
   const [showAddReason, setShowAddReason] = useState(false);
   const [reason, setReason] = useState('');
@@ -45,7 +45,9 @@ export default function CancelTestProgress({progress, cancelProgress}) {
   return (
     <>
       <Tooltip title="Kết thúc">
-        <Button onClick={() => setShowModal(true)}>Kết thúc</Button>
+        <Button disabled={endTry} onClick={() => setShowModal(true)}>
+          Kết thúc
+        </Button>
       </Tooltip>
       <Modal show={showModal} onClose={() => Close()}>
         <Modal.Header className="p-6 text-base">Kết thúc học thử</Modal.Header>

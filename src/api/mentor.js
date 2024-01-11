@@ -6,7 +6,11 @@ const mentorApi = {
       const url = '/api/mentor/get';
       const res = await axiosClient.get(url);
       console.log('mentor res data', res.data);
-      return res.data;
+      if (res.data) {
+        const mentors = res.data.filter((a) => a.isLocked === false);
+        return mentors;
+      }
+      // return res.data;
     } catch (error) {
       console.error(error);
       return null;

@@ -13,7 +13,7 @@ import {
   HiX,
 } from 'react-icons/hi';
 // import {useApplicationStore} from '../../store/application';
-// import {useUserStore} from '../../store/user';
+import {useUserStore} from '../../../store/userStore';
 import {Tabs, Tab} from '@mui/material';
 import ListPayment from './components/ListPayment';
 import HistoryPayment from './components/HistoryPayment';
@@ -32,13 +32,15 @@ const ListMentee = () => {
   const [show, setShow] = useState(false);
   const [warningVisible, setWarningVisible] = useState(true); // Add this line
 
-  const {menteeApplications, menteeAppliApproved, getMenteeAppliByMentorId} =
+  const {user} = useUserStore();
+  const {menteeApplications, menteeAppliApproved, getMenteeAppliByMenteeId} =
     useMenteeAppliStore();
 
   useEffect(() => {
     const fetchAndSetApplications = async () => {
       try {
-        await getMenteeAppliByMentorId('65840127a47c189dd995cdf3');
+        console.log('user', user);
+        await getMenteeAppliByMenteeId(user.id);
       } catch (er) {
         console.error(er);
       }
@@ -93,7 +95,8 @@ const ListMentee = () => {
       </ButtonContainer>
       {value === 0 && (
         <div style={{width: '90%'}}>
-          <ListPayment applications={menteeAppliApproved} />
+          {/* <ListPayment applications={menteeAppliApproved} /> */}
+          <ListPayment />
         </div>
       )}
       <div style={{width: '90%'}}>{value === 1 && <HistoryPayment />}</div>

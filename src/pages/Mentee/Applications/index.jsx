@@ -8,6 +8,7 @@ import {useNavigate} from 'react-router';
 import menteeApplicationApi from '../../../api/menteeApplication';
 import mentorApi from '../../../api/mentor';
 import {useUserStore} from '../../../store/userStore';
+import {useMenteeAppliStore} from '../../../store/menteeAppliStore';
 import {
   handleCopyClick,
   mappingApplicationStatus,
@@ -17,61 +18,70 @@ import styled from 'styled-components';
 
 function Applications() {
   const [applicationList, setApplicationList] = useState([]);
-  const navigate = useNavigate();
   const {user} = useUserStore();
+  const {menteeApplications, menteeAppliApproved, getMenteeAppliByMenteeId} =
+    useMenteeAppliStore();
+  const [mentorInfo, setMentorInfo] = useState([]);
+
+  const navigate = useNavigate();
   const handleNavigateToSearchScreen = () => {
     navigate('/mentor/search');
   };
 
   useEffect(() => {
-    if (user) {
-      const fetchApplicationsAndMentors = async () => {
-        const applications =
-          await menteeApplicationApi.getMenteeApplicationByMenteeId(user.id);
-        const mentors = await mentorApi.getAllMentors();
-        if (mentors) {
-          const applicationsWithMentor = applications.map((a) => {
-            const findMentor = mentors.find((m) => m.id === a.mentorId);
-            if (findMentor) {
-              return {
-                ...a,
-                mentor: findMentor,
-              };
-            }
-            return a;
-          });
-          setApplicationList(applicationsWithMentor);
-        }
-      };
-      fetchApplicationsAndMentors();
-    }
+    const fetchAndSetApplications = async () => {
+      try {
+        console.log('user', user);
+        await getMenteeAppliByMenteeId(user.id);
+      } catch (er) {
+        console.error(er);
+      }
+    };
+
+    fetchAndSetApplications();
   }, [user]);
+
+  const getMentorInfor = async (mentorId) => {
+    const res = await mentorApi.getMentorById(mentorId);
+    return res;
+  };
+
+  useEffect(() => {
+    const fetchMentorInfo = async (mentorId, index) => {
+      const mentorInfo = await getMentorInfor(mentorId);
+      setMentorInfo((prevState) => ({
+        ...prevState,
+        [index]: mentorInfo,
+      }));
+    };
+
+    menteeApplications.forEach((application, index) => {
+      console.log(application);
+      fetchMentorInfo(application.mentorId, index);
+    });
+  }, [menteeApplications]);
+
   return (
     <Container>
-      {/* <MenteeHeader></MenteeHeader> */}
-      {/* <div
-        className="w-full py-2 text-center"
-        // style={{ backgroundColor: "#04b4ba" }}
-      >
-        <h5 style={{ color: "white" }}>
-          Muốn tăng tỉ lệ kiếm được mentor? {" "}
-          <a href="/mentee/settings" style={{ color: 'purple' }}>
-            Hoàn thiện hồ sơ của bạn
-          </a>{" "}
-        </h5>
-      </div> */}
       <ButtonContainer>
         <Label style={{fontSize: '20px', fontWeight: 'bold'}}>
           Danh sách đơn đăng ký
         </Label>
       </ButtonContainer>
-      {applicationList.length > 0 ? (
+      {menteeApplications.length > 0 ? (
         <div
           style={{
             width: '95%',
           }}
         >
-          <AllApplications applications={applicationList} />
+          {mentorInfo ? (
+            <AllApplications
+              applications={menteeApplications}
+              mentorInfo={mentorInfo}
+            />
+          ) : (
+            <></>
+          )}
         </div>
       ) : (
         <div
@@ -100,9 +110,10 @@ function Applications() {
   );
 }
 
-const AllApplications = ({applications}) => {
+const AllApplications = ({applications, mentorInfo}) => {
   const [checkedItems, setCheckedItems] = useState({});
   console.log('Allapplication', applications);
+  console.log('mentorInfo', mentorInfo);
   // const handleChange = (event) => {
   //   setCheckedItems({
   //     ...checkedItems,
@@ -139,15 +150,15 @@ const AllApplications = ({applications}) => {
               <Table.Cell className="mr-12 flex items-center space-x-6 whitespace-nowrap p-4 lg:mr-0">
                 <img
                   className="h-10 w-10 rounded-full"
-                  src={application?.mentor?.avatar}
+                  src={mentorInfo[index]?.avatar}
                   alt={`${application.id} avatar`}
                 />
                 <div className="text-sm font-normal text-gray-900">
                   <div className="text-base font-semibold text-gray-900">
-                    {application.mentor.firstName} {application.mentor.lastName}
+                    {mentorInfo[index]?.firstName} {mentorInfo[index]?.lastName}
                   </div>
                   <div className="text-sm font-normal text-gray-500">
-                    {application.mentor.email}
+                    {mentorInfo[index]?.email}
                   </div>
                 </div>
               </Table.Cell>

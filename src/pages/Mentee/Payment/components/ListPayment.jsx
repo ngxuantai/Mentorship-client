@@ -6,13 +6,33 @@ import {handleCopyClick, shortenId} from '../../../../utils/dataHelper';
 import mentorApi from '../../../../api/mentor';
 import paymentApi from '../../../../api/payment';
 import {PaymentStatus} from '../../../../constants';
+import {useUserStore} from '../../../../store/userStore';
+import {useMenteeAppliStore} from '../../../../store/menteeAppliStore';
 import usePaymentStore from '../../../../store/paymentStore';
 import currencyFormatter from '../../../../utils/moneyConverter';
 
-export default function ListPayment({applications}) {
+export default function ListPayment() {
   const [mentorInfo, setMentorInfo] = useState([]);
+  const [menteeAppli, setMenteeAppli] = useState([]);
   const [url, setUrl] = useState('');
+
+  const {user} = useUserStore();
+  const {menteeApplications, menteeAppliApproved, getMenteeAppliByMenteeId} =
+    useMenteeAppliStore();
   const {setPayment} = usePaymentStore();
+
+  useEffect(() => {
+    const fetchAndSetApplications = async () => {
+      try {
+        console.log('user', user);
+        await getMenteeAppliByMenteeId(user.id);
+      } catch (er) {
+        console.error(er);
+      }
+    };
+
+    fetchAndSetApplications();
+  }, [user]);
 
   // const getStatusColor = (status, isPaid, approvedDate) => {
   //   const currentDate = new Date();
@@ -65,12 +85,12 @@ export default function ListPayment({applications}) {
   const isPaymentOverdue = (approvedDate) => {
     const currentDate = new Date();
     const approved = new Date(approvedDate);
-    return currentDate - approved > 3 * 86400000;
+    return currentDate - approved > 10 * 86400000;
   };
 
   const getMentorInfor = async (mentorId) => {
     const res = await mentorApi.getMentorById(mentorId);
-    console.log(res);
+    // console.log(res);
     return res;
   };
 
@@ -83,10 +103,15 @@ export default function ListPayment({applications}) {
       }));
     };
 
-    applications.forEach((application, index) => {
+    menteeAppliApproved.forEach((application, index) => {
+      console.log(application);
       fetchMentorInfo(application.mentorId, index);
     });
-  }, [applications]);
+    // setMenteeAppli(
+    //   applications.filter((a) => Date(a.approvedDate) - Date() >= 7 * 86400000)
+    // );
+    // console.log(new Date() - new Date(applications[0].approvedDate));
+  }, [menteeAppliApproved]);
 
   const handleCheckOut = async (application) => {
     const res = await paymentApi.getRequestUrl({
@@ -110,72 +135,74 @@ export default function ListPayment({applications}) {
       </Table.Head>
 
       <Table.Body className="divide-y divide-gray-200 bg-white dark:divide-gray-700 dark:bg-gray-800">
-        {applications.map((application, index) => (
-          <Table.Row
-            key={index}
-            className="hover:bg-gray-100 dark:hover:bg-gray-700"
-          >
-            <Table.Cell className="whitespace-nowrap p-4 text-base font-medium text-gray-900 dark:text-white">
-              <div className="flex items-center">
-                {shortenId(application.id)}
-                <button
-                  onClick={() => handleCopyClick(application.id)}
-                  className="ml-2"
-                >
-                  <FaCopy className="text-xl" />
-                </button>
-              </div>
-            </Table.Cell>
-            <Table.Cell className="mr-12 flex items-center space-x-6 whitespace-nowrap p-4 lg:mr-0">
-              <img
-                className="h-10 w-10 rounded-full"
-                src={mentorInfo[index]?.avatar || ''}
-                alt={`${mentorInfo[index]?.firstName} ${mentorInfo[index]?.lastName} avatar`}
-              />
-              <div className="text-sm font-normal text-gray-500 dark:text-gray-400">
-                <div className="text-base font-semibold text-gray-900 dark:text-white">
-                  {mentorInfo[index]?.firstName} {mentorInfo[index]?.lastName}
+        {menteeAppliApproved
+          .filter((a) => new Date() - new Date(a.approvedDate) >= 7 * 86400000)
+          .map((application, index) => (
+            <Table.Row
+              key={index}
+              className="hover:bg-gray-100 dark:hover:bg-gray-700"
+            >
+              <Table.Cell className="whitespace-nowrap p-4 text-base font-medium text-gray-900 dark:text-white">
+                <div className="flex items-center">
+                  {shortenId(application.id)}
+                  <button
+                    onClick={() => handleCopyClick(application.id)}
+                    className="ml-2"
+                  >
+                    <FaCopy className="text-xl" />
+                  </button>
                 </div>
-              </div>
-            </Table.Cell>
-            <Table.Cell className="whitespace-nowrap p-4 text-base font-medium text-gray-900 dark:text-white">
-              {currencyFormatter(application.fee)}
-            </Table.Cell>
-            <Table.Cell className="whitespace-nowrap p-4 text-base font-medium text-gray-900 dark:text-white">
-              {format(
-                add(new Date(application.approvedDate), {days: 3}),
-                'dd/MM/yyyy'
-              )}
-            </Table.Cell>
-            <Table.Cell className="whitespace-nowrap p-4 text-base font-normal text-gray-900 dark:text-white">
-              <div className="flex items-center">
-                <div
-                  className={`mr-2 h-2.5 w-2.5 rounded-full ${getStatusColor(
-                    application.isPaid,
-                    application.approvedDate
-                  )}`}
-                ></div>
-                {getStatusText(application.isPaid, application.approvedDate)}
-              </div>
-            </Table.Cell>
-            <Table.Cell>
-              <div className="flex items-center gap-x-3 whitespace-nowrap">
-                <Button
-                  disabled={
-                    application.isPaid === true ||
-                    getStatusText(
+              </Table.Cell>
+              <Table.Cell className="mr-12 flex items-center space-x-6 whitespace-nowrap p-4 lg:mr-0">
+                <img
+                  className="h-10 w-10 rounded-full"
+                  src={mentorInfo[index]?.avatar || ''}
+                  alt={`${mentorInfo[index]?.firstName} ${mentorInfo[index]?.lastName} avatar`}
+                />
+                <div className="text-sm font-normal text-gray-500 dark:text-gray-400">
+                  <div className="text-base font-semibold text-gray-900 dark:text-white">
+                    {mentorInfo[index]?.firstName} {mentorInfo[index]?.lastName}
+                  </div>
+                </div>
+              </Table.Cell>
+              <Table.Cell className="whitespace-nowrap p-4 text-base font-medium text-gray-900 dark:text-white">
+                {currencyFormatter(application.fee)}
+              </Table.Cell>
+              <Table.Cell className="whitespace-nowrap p-4 text-base font-medium text-gray-900 dark:text-white">
+                {format(
+                  add(new Date(application.approvedDate), {days: 10}),
+                  'dd/MM/yyyy'
+                )}
+              </Table.Cell>
+              <Table.Cell className="whitespace-nowrap p-4 text-base font-normal text-gray-900 dark:text-white">
+                <div className="flex items-center">
+                  <div
+                    className={`mr-2 h-2.5 w-2.5 rounded-full ${getStatusColor(
                       application.isPaid,
                       application.approvedDate
-                    ) === 'Quá hạn thanh toán'
-                  }
-                  onClick={() => handleCheckOut(application)}
-                >
-                  Thanh toán
-                </Button>
-              </div>
-            </Table.Cell>
-          </Table.Row>
-        ))}
+                    )}`}
+                  ></div>
+                  {getStatusText(application.isPaid, application.approvedDate)}
+                </div>
+              </Table.Cell>
+              <Table.Cell>
+                <div className="flex items-center gap-x-3 whitespace-nowrap">
+                  <Button
+                    disabled={
+                      application.isPaid === true ||
+                      getStatusText(
+                        application.isPaid,
+                        application.approvedDate
+                      ) === 'Quá hạn thanh toán'
+                    }
+                    onClick={() => handleCheckOut(application)}
+                  >
+                    Thanh toán
+                  </Button>
+                </div>
+              </Table.Cell>
+            </Table.Row>
+          ))}
       </Table.Body>
     </Table>
   );

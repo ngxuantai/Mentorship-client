@@ -20,6 +20,18 @@ export const useMenteeAppliStore = create((set) => ({
       console.error(error);
     }
   },
+  getMenteeAppliByMenteeId: async (menteeId) => {
+    try {
+      const menteeApplications =
+        await menteeApplicationApi.getMenteeApplicationByMenteeId(menteeId);
+      const menteeAppliApproved = menteeApplications.filter(
+        (app) => app.status === 1 || app.status === 2
+      );
+      set({menteeApplications, menteeAppliApproved});
+    } catch (error) {
+      console.error(error);
+    }
+  },
   updateMenteeAppliStatus: async (id, status) => {
     try {
       const updatedMenteeApplication =
